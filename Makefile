@@ -1,0 +1,59 @@
+NAME = miniRT
+
+CC = cc
+# CFLAGS = -Wall -Wextra -Werror -fsanitize=address -O1
+CFLAGS = -Wall -Wextra -Werror
+
+MINIRT_SRCS = miniRT.c
+MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
+VPATH = src:lib:lib/libft
+
+# includes for mlx mac
+# INCLUDES = -I/opt/X11/include -Imlx
+# includes for mlx linux
+# INCLUDES = -I/usr/include -Imlx -O3
+
+# mlxflags for mac
+# MLX_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
+# mlxflags for linux
+# MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
+
+# MLX_DIR = ./mlx
+# MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
+# MLX_LIB = $(MLX_DIR)/libmlx.a
+
+### LIBFT
+LIBFT = libft.a
+LIBFT_DIR = ./libft
+LIBFT_LIB = $(LIBFT_DIR)/$(LIBFT)
+LIBR = $(LIBFT_LIB)
+### LIBFT
+
+MAKE_LIBR = make --no-print-directory -C
+
+RM = rm -rf
+
+LB = ar rcs
+
+all: $(LIBFT_LIB) $(NAME)
+
+$(NAME): $(MINIRT_OBJS)
+		$(CC) $(CFLAGS) $(MINIRT_OBJS) $(LIBFT_LIB) -o $(NAME)
+
+$(LIBFT_LIB):
+	$(MAKE_LIBR) $(LIBFT_DIR)
+
+# $(MLX_LIB):
+# 	$(MAKE_LIBR) $(MLX_DIR)
+# 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+clean:
+	$(RM) $(MINIRT_OBJS)
+
+fclean: clean
+	$(RM) $(NAME)
+	$(RM) $(NAME) $(MINIRT_OBJS)
+	$(MAKE_LIBR) $(LIBFT_DIR) fclean
+
+re: fclean all
+	clear
