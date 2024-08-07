@@ -4,7 +4,13 @@ CC = cc
 # CFLAGS = -Wall -Wextra -Werror -fsanitize=address -O1
 CFLAGS = -Wall -Wextra -Werror
 
-MINIRT_SRCS = miniRT.c
+MINIRT_SRCS = 	./src/miniRT.c \
+				./src/parse/check_args.c \
+				./src/parse/check_objects.c \
+				./src/parse/create_objects.c \
+				./src/parse/fill_settings.c \
+				./src/parse/free_utils.c \
+				./src/parse/print_utils.c
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
 VPATH = src:lib:lib/libft
 
