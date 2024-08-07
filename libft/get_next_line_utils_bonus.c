@@ -28,7 +28,7 @@ char	*ft_strdup(char *str)
 	return (s);
 }
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen_gnl(const char *str)
 {
 	size_t	a;
 

@@ -49,6 +49,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t len);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 int		ft_atoi(const char *str);
 float 	ft_strtof(const char *str);
+double 	ft_strtod(const char *str);
 
 void	*ft_calloc(size_t number, size_t size);
 char	*ft_strdup(const char *str);
