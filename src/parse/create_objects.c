@@ -5,9 +5,11 @@ void create_objects(t_meta *meta_data, char **argv)
     static int pl;
     static int sp;
     static int cy;
+    static int cn;
     t_cy *temp_cy;
     t_pl *temp_pl;
     t_sp *temp_sp;
+    t_cn *temp_cn;
 
     if (ft_strncmp(argv[0], "pl", 2) == 0 && ft_strlen(argv[0]) == 2)
     {
@@ -48,6 +50,19 @@ void create_objects(t_meta *meta_data, char **argv)
         }
         cy++;
     }
+    else if (ft_strncmp(argv[0], "cn", 2) == 0 && ft_strlen(argv[0]) == 2)
+    {
+        if (cn == 0)
+            meta_data->cn = create_cn(meta_data, argv);
+        else
+        {
+            temp_cn = meta_data->cn;
+            while (temp_cn->next != NULL)
+                temp_cn = temp_cn->next;
+            temp_cn->next = create_cn(meta_data, argv);
+        }
+        cn++;
+    }
 }
 
 t_pl    *create_pl(t_meta *meta_data, char **argv)
@@ -66,7 +81,10 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
     }
     pl = malloc(sizeof(t_pl));
     if (!pl)
+    {
+        free_exit(meta_data);
         exit(EXIT_FAILURE);
+    }
     coord = ft_split(argv[1], ',');
     pl->coord = check_coord(&meta_data, pl, argv, coord);
     free_pointer(coord);
@@ -95,7 +113,10 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
     }
     sp = malloc(sizeof(t_sp));
     if (!sp)
+    {
+        free_exit(meta_data);
         exit(EXIT_FAILURE);
+    }
     coord = ft_split(argv[1], ',');
     sp->coord = check_coord(&meta_data, sp, argv, coord);
     free_pointer(coord);
@@ -124,7 +145,10 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
     }
     cy = malloc(sizeof(t_cy));
     if (!cy)
+    {
+        free_exit(meta_data);
         exit(EXIT_FAILURE);
+    }
     coord = ft_split(argv[1], ',');
     cy->coord = check_coord(&meta_data, cy, argv, coord);
     free_pointer(coord);
@@ -139,4 +163,40 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
     cy->next = NULL;
     ft_printf(G" OK \n"RST);
     return (cy);
+}
+
+t_cn    *create_cn(t_meta *meta_data, char **argv)
+{
+    char    **coord;
+    char    **axis;
+    char    **colour;
+    t_cn    *cn;
+
+    ft_printf(G"\tCONE OBJECT ...\t\t"RST);
+    if (pointer_count(argv) != 6)
+    {
+        ft_printf("Incorrect CN data <cn X,Y,Z Axis Angle Height RGB>\n");
+        free_exit(meta_data);
+        exit(EXIT_FAILURE);
+    }
+    cn = malloc(sizeof(t_cn));
+    if (!cn)
+    {
+        free_exit(meta_data);
+        exit(EXIT_FAILURE);
+    }
+    coord = ft_split(argv[1], ',');
+    cn->coord = check_coord(&meta_data, cn, argv, coord);
+    free_pointer(coord);
+    axis = ft_split(argv[2], ',');
+    cn->axis = check_norm(&meta_data, cn, argv, axis);
+    free_pointer(axis);
+    colour = ft_split(argv[5], ',');
+    cn->colour = check_colour(&meta_data, cn, argv, colour);
+    free_pointer(colour);
+    cn->height = check_double(&meta_data, cn, argv, argv[4]);
+    cn->angle = check_double(&meta_data, cn, argv, argv[3]);
+    cn->next = NULL;
+    ft_printf(G" OK \n"RST);
+    return (cn);
 }

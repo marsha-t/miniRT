@@ -72,10 +72,12 @@ void    free_objects(t_meta *meta_data)
     t_sp    *sp;
     t_cy    *cy;
     t_pl    *pl;
+    t_cn    *cn;
 
     sp = meta_data->sp;
     cy = meta_data->cy;
     pl = meta_data->pl;
+    cn = meta_data->cn;
     while (meta_data->sp != NULL)
     {
         sp = sp->next;
@@ -93,5 +95,11 @@ void    free_objects(t_meta *meta_data)
         pl = pl->next;
         free(meta_data->pl);
         meta_data->pl = pl;
+    }
+    while (meta_data->cn != NULL)
+    {
+        cn = cn->next;
+        free(meta_data->cn);
+        meta_data->cn = cn;
     }
 }

@@ -14,13 +14,14 @@
 
 int main(int argc, char **argv)
 {
-    static t_meta meta_data;
+    t_meta meta_data;
 
     print_banner();
     parse_data(&meta_data, argc, argv);
     print_cylinders(&meta_data);
     print_spheres(&meta_data);
     print_planes(&meta_data);
+    print_cones(&meta_data);
     free_exit(&meta_data);
     return (0);
 }
@@ -52,11 +53,16 @@ void    read_data(t_meta *meta_data, char *argv)
         }
         while (singleline[index++] != '\n')
             ;
-        while (ft_isspace(singleline[index - 1]) > 0)
+        while (index >= 1 && ft_isspace(singleline[index - 1]) > 0)
         {
             singleline[index - 1] = '\0';
             index--;
         }
-        ft_fill_data(meta_data, singleline);
+        if ((singleline[0] != '\n') && singleline[0] != '#' && (ft_strlen(singleline) > 0))
+            ft_fill_data(meta_data, singleline);
+        else if (singleline[0] == '\n' || singleline[0] == '#')
+            free(singleline);
+        else
+            free(singleline);
     }
 }

@@ -52,6 +52,7 @@ typedef struct s_light
     t_vector coord;
     double brightness;
     t_colour colour;
+    struct s_light  *next;
 }  t_light;
 
 typedef struct s_sp
@@ -80,6 +81,16 @@ typedef struct s_cy
   struct s_cy  *next;
 } t_cy;
 
+typedef struct s_cn
+{
+  t_vector  coord;
+  t_vector  axis;
+  double  angle;
+  double  height;
+  t_colour colour;
+  struct s_cn  *next;
+} t_cn;
+
 typedef struct s_meta
 {
   t_amlight  *amlight;
@@ -88,12 +99,12 @@ typedef struct s_meta
   t_sp  *sp;
   t_pl  *pl;
   t_cy  *cy;
+  t_cn  *cn;
 } t_meta;
 
 void    print_banner();
 void    fill_camera(t_meta *meta_data, char **argv);
 void    fill_ambient(t_meta *meta_data, char **argv);
-void    fill_light(t_meta *meta_data, char **argv);
 int     pointer_count(char **argv);
 void    ft_fill_data(t_meta *meta_data, char *singleline);
 void    read_data(t_meta *meta_data, char *argv);
@@ -109,9 +120,11 @@ void    free_pointerlist(int num, ...);
 int	    ft_strlen_dp(char **s);
 
 void    create_objects(t_meta *meta_data, char **argv);
+t_light    *create_light(t_meta *meta_data, char **argv);
 t_cy    *create_cy(t_meta *meta_data, char **argv);
 t_pl    *create_pl(t_meta *meta_data, char **argv);
 t_sp    *create_sp(t_meta *meta_data, char **argv);
+t_cn    *create_cn(t_meta *meta_data, char **argv);
 
 t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv);
 bool        check_colour_val(t_meta *meta_data, char **src, int arg_count, char **argv);
@@ -124,4 +137,5 @@ int         check_int(t_meta **meta_data, char *str);
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
 void        print_planes(t_meta *meta_data);
+void        print_cones(t_meta *meta_data);
 #endif

@@ -39,6 +39,19 @@ void    print_planes(t_meta *meta_data)
     }
 }
 
+void    print_cones(t_meta *meta_data)
+{
+    t_cn *current_cn = meta_data->cn;
+
+    while (current_cn != NULL)
+    {
+        printf("cn: (%f, %f, %f) (%f, %f, %f)\n",\
+            current_cn->coord.x, current_cn->coord.y,current_cn->coord.z, \
+            current_cn->axis.x, current_cn->axis.y, current_cn->axis.z);
+        current_cn = current_cn->next;
+    }
+}
+
 void    print_banner()
 {
     ft_printf(Y" _____________________________________\n");
