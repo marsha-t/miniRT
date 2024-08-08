@@ -52,6 +52,19 @@ void    print_cones(t_meta *meta_data)
     }
 }
 
+void    print_light(t_meta *meta_data)
+{
+    t_light *current_light = meta_data->light;
+
+    while (current_light != NULL)
+    {
+        printf("light: (%f, %f, %f) (%d, %d, %d)\n",\
+            current_light->coord.x, current_light->coord.y,current_light->coord.z, \
+            current_light->colour.r, current_light->colour.g, current_light->colour.b);
+        current_light = current_light->next;
+    }
+}
+
 void    print_banner()
 {
     ft_printf(Y" _____________________________________\n");

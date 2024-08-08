@@ -100,6 +100,13 @@ typedef struct s_meta
   t_pl  *pl;
   t_cy  *cy;
   t_cn  *cn;
+  bool  amlight_allocated;
+  bool  camera_allocated;
+  bool  light_allocated;
+  bool  sp_allocated;
+  bool  pl_allocated;
+  bool  cy_allocated;
+  bool  cn_allocated;
 } t_meta;
 
 void    print_banner();
@@ -109,6 +116,7 @@ int     pointer_count(char **argv);
 void    ft_fill_data(t_meta *meta_data, char *singleline);
 void    read_data(t_meta *meta_data, char *argv);
 void	  parse_data(t_meta *data, int argc, char **argv);
+void    meta_data_init(t_meta *meta_data);
 
 void    ft_check_args(int argc, char **argv);
 void    check_fd(char *argv);
@@ -138,4 +146,5 @@ void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
 void        print_planes(t_meta *meta_data);
 void        print_cones(t_meta *meta_data);
+void        print_light(t_meta *meta_data);
 #endif

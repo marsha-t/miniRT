@@ -16,11 +16,11 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
                 argv[arg_count][index] != '.' && argv[arg_count][index] != '-' \
                 && argv[arg_count][index] != '+')
             {
-                free_exit(*meta_data);
                 if (temp != NULL)
                     free(temp);
                 free_pointerlist(2, src, argv);
                 ft_printf(RED"Incorrect XYZ input values\n"RST);
+                free_exit(*meta_data);
                 exit(EXIT_FAILURE);
             }
         }
@@ -35,6 +35,8 @@ t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
 {
     t_vector    vec;
     int         arg_count;
+    double      temp_val;
+    static int  count_zeroes;
 
     arg_count = -1;
     while(argv[++arg_count])
@@ -45,10 +47,23 @@ t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
                 free(temp);
             exit(EXIT_FAILURE);
         }
+        temp_val = ft_strtod(argv[arg_count]);
+        if (temp_val == (double)0)
+            count_zeroes++;
+        if (count_zeroes >= 3)
+        {
+            free_exit(*meta_data);
+            ft_printf(RED"A Incorrect normal vector input values\n"RST);
+            free_pointerlist(2, src, argv);
+            if (temp != NULL)
+                free(temp);
+            exit(EXIT_FAILURE);
+        }
     }
     vec.x = ft_strtod(argv[0]);
     vec.y = ft_strtod(argv[1]);
     vec.z = ft_strtod(argv[2]);
+    count_zeroes = 0;
     return (vec);
 }
 
@@ -97,7 +112,7 @@ int    check_int(t_meta **meta_data, char *str)
 bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv)
 {
     double temp;
-    int index;
+    int index;\
 
     index = -1;
     while(argv[arg_count][++index])
@@ -112,7 +127,7 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
             return (false);
         }
     }
-    temp = ft_strtod(argv[arg_count]);
+    temp = ft_strtod(argv[arg_count]);\
     if (temp < -1 || temp > 1 || arg_count >= 3)
     {
         free_exit(meta_data);

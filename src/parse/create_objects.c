@@ -14,7 +14,10 @@ void create_objects(t_meta *meta_data, char **argv)
     if (ft_strncmp(argv[0], "pl", 2) == 0 && ft_strlen(argv[0]) == 2)
     {
         if (pl == 0)
+        {
             meta_data->pl = create_pl(meta_data, argv);
+            meta_data->pl_allocated = true;
+        }
         else
         {
             temp_pl = meta_data->pl;
@@ -27,7 +30,10 @@ void create_objects(t_meta *meta_data, char **argv)
     else if (ft_strncmp(argv[0], "sp", 2) == 0 && ft_strlen(argv[0]) == 2)
     {
         if (sp == 0)
+        {
             meta_data->sp = create_sp(meta_data, argv);
+            meta_data->sp_allocated = true;
+        }
         else
         {
             temp_sp = meta_data->sp;
@@ -40,7 +46,10 @@ void create_objects(t_meta *meta_data, char **argv)
     else if (ft_strncmp(argv[0], "cy", 2) == 0 && ft_strlen(argv[0]) == 2)
     {
         if (cy == 0)
+        {
             meta_data->cy = create_cy(meta_data, argv);
+            meta_data->cy_allocated = true;
+        }
         else
         {
             temp_cy = meta_data->cy;
@@ -53,7 +62,10 @@ void create_objects(t_meta *meta_data, char **argv)
     else if (ft_strncmp(argv[0], "cn", 2) == 0 && ft_strlen(argv[0]) == 2)
     {
         if (cn == 0)
+        {
             meta_data->cn = create_cn(meta_data, argv);
+            meta_data->cn_allocated = true;
+        }
         else
         {
             temp_cn = meta_data->cn;
@@ -75,13 +87,15 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
     ft_printf(G"\tPLANE OBJECT ...\t"RST);
     if (pointer_count(argv) != 4)
     {
-        ft_printf("Incorrect PL data <cy X,Y,Z NVector diameter height RGB>\n");
+        ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB>\n"RST);
+        free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
     }
     pl = malloc(sizeof(t_pl));
     if (!pl)
     {
+        free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
     }
@@ -109,11 +123,14 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
     if (pointer_count(argv) != 4)
     {
         ft_printf(RED"Incorrect SP data <sp X,Y,Z diameter RGB>\n"RST);
+        free_pointer(argv);
+        free_exit(meta_data);
         exit(EXIT_FAILURE);
     }
     sp = malloc(sizeof(t_sp));
     if (!sp)
     {
+        free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
     }
@@ -139,13 +156,15 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
     ft_printf(G"\tCYLINDER OBJECT ...\t"RST);
     if (pointer_count(argv) != 6)
     {
-        ft_printf("Incorrect CY data <cy X,Y,Z NVector diameter height RGB>\n");
+        ft_printf(RED"Incorrect CY data <cy X,Y,Z NVector diameter height RGB>\n"RST);
+        free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
     }
     cy = malloc(sizeof(t_cy));
     if (!cy)
     {
+        free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
     }
@@ -175,13 +194,15 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
     ft_printf(G"\tCONE OBJECT ...\t\t"RST);
     if (pointer_count(argv) != 6)
     {
-        ft_printf("Incorrect CN data <cn X,Y,Z Axis Angle Height RGB>\n");
+        ft_printf(RED"Incorrect CN data <cn X,Y,Z Axis Angle Height RGB>\n"RST);
+        free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
     }
     cn = malloc(sizeof(t_cn));
     if (!cn)
     {
+        free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
     }

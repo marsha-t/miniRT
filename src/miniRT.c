@@ -17,13 +17,33 @@ int main(int argc, char **argv)
     t_meta meta_data;
 
     print_banner();
+    meta_data_init(&meta_data);
     parse_data(&meta_data, argc, argv);
     print_cylinders(&meta_data);
     print_spheres(&meta_data);
     print_planes(&meta_data);
     print_cones(&meta_data);
+    print_light(&meta_data);
     free_exit(&meta_data);
     return (0);
+}
+
+void    meta_data_init(t_meta *meta_data)
+{
+    meta_data->amlight = NULL;
+    meta_data->camera = NULL;
+    meta_data->light = NULL;
+    meta_data->sp = NULL;
+    meta_data->pl = NULL;
+    meta_data->cy = NULL;
+    meta_data->cn = NULL;
+    meta_data->light_allocated = false;
+    meta_data->camera_allocated = false;
+    meta_data->amlight_allocated = false;
+    meta_data->sp_allocated = false;
+    meta_data->pl_allocated = false;
+    meta_data->cy_allocated = false;
+    meta_data->cn_allocated = false;
 }
 
 void	parse_data(t_meta *meta_data, int argc, char **argv)
