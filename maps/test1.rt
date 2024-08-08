@@ -25,3 +25,4 @@ cy 11150.0,110.0,11120.6 0,0,1.0 114.2 121.42 10,0,255
 # 5) invalid number of arguments for A, C, L, pl, sp, cy, cn
 # 6) arbitrary lines
 # 7) correct number of inputs (coords 3, norm 3, colour 3)
+# 8) norm values if all inputs are 0s
