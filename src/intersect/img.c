@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/08 11:26:17 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/08 21:18:34 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ void	gen_img(t_meta *meta_data)
 		}
 		determine colour
 		{
+			calculate ambient light
+			go through each light
+			{
+				if in shadow, skip
+				if not, final colour += diffuse + specular
+			}
+		
 		}
 		put_pixel()
 	}
@@ -39,6 +46,7 @@ void	gen_img(t_meta *meta_data)
 	ray_dir(0, 0, meta_data);
 	print_vector("ray dir: ", &meta_data->pixel.ray);
 	intersect_closest(meta_data);
+	gen_final_colour(meta_data);
 }
 
 /*	init_pixel initialises the pixel struct to default values

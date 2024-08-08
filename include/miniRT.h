@@ -119,10 +119,11 @@ typedef struct s_pixel
 {
 	t_vector	ray;
 	double		t;
-
 	void *obj;
 	int			surface;
 	t_vector	intersect;
+  t_vector  shadow;
+  t_colour  final;
 	/*	
     or
 		int			surface; e.g.,
@@ -213,6 +214,10 @@ void	intersect_cn_curve(t_meta *meta_data, t_cn *cone);
 void	update_t_cn_curve(t_meta *meta_data, t_cn *cone, double t);
 void	intersect_cn_base(t_meta *meta_data, t_cn *cone);
 void	get_ray_pt(t_vector *dest, t_meta *meta_data, double t);
+
+// Calculate final colour at intersection: final_colour.c
+void	gen_final_colour(t_meta *meta_data);
+void	get_ambient(t_meta *meta_data);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);

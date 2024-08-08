@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/08 20:43:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/08 21:25:11 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 	- intersect_<shape> will update pixel data on value of t for closest intersection
 	- compute closest intersection
 */
-// WIP: update function to cover cone
 void	intersect_closest(t_meta *meta_data)
 {
 	t_sp	*sphere;
