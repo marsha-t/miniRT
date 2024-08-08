@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/08 11:27:00 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/08 20:37:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	prepare_obj(t_meta *meta_data)
 		prepare_pl(meta_data->pl);
 	if (meta_data->cy)
 		prepare_cy(meta_data->cy);
+	if (meta_data->cn)
+		prepare_cn(meta_data->cn);
 }
 
 /*	prepare_sp adds derived parameters to sphere nodes
@@ -124,11 +126,13 @@ void	prepare_pl(t_pl *start)
 /*	prepare_cy adds derived parameters to cylinder nodes
 	- normalise colours
 	- centers of bottom and top base of cylinder
+	- radius
 	*/
 void	prepare_cy(t_cy *start)
 {
 	t_cy		*curr;
 	t_vector	temp;
+
 	curr = start;
 	while (curr)
 	{
@@ -139,6 +143,28 @@ void	prepare_cy(t_cy *start)
 		curr->colour.g_n = curr->colour.g / 255;
 		curr->colour.b_n = curr->colour.b / 255;
 		curr->radius = curr->diameter / 2;
+		curr = curr->next;
+	}
+}
+/*	prepare_cn adds derived parameters to cone nodes
+	- normalise colours
+	- radius of base
+	- base center
+	*/
+void	prepare_cn(t_cn *start)
+{
+	t_cn		*curr;
+	t_vector	temp;
+
+	curr = start;
+	while (curr)
+	{
+		curr->radius = curr->height * tan(curr->angle);
+		vec_multiply_scalar(&temp, &curr->axis, curr->height);
+		vec_add(&curr->base, &curr->coord, &temp);
+		curr->colour.r_n = curr->colour.r / 255;
+		curr->colour.g_n = curr->colour.g / 255;
+		curr->colour.b_n = curr->colour.b / 255;
 		curr = curr->next;
 	}
 }

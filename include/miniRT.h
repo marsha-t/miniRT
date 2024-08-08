@@ -101,6 +101,20 @@ typedef struct s_cy
   struct s_cy  *next;
 } t_cy;
 
+
+typedef struct s_cn
+{
+  t_vector  coord;
+  t_vector  axis;
+  double  angle;
+  double  radius;
+  double  height;
+  t_vector  base;
+  t_colour colour;
+  bool  exclude;
+  struct s_cn  *next;
+} t_cn;
+
 typedef struct s_pixel
 {
 	t_vector	ray;
@@ -125,6 +139,7 @@ typedef struct s_meta
   t_sp  *sp;
   t_pl  *pl;
   t_cy  *cy;
+  t_cn  *cn;
   double		aspect_ratio;
 	double		img_width;
 	double		img_height;
@@ -178,6 +193,7 @@ void	prepare_obj(t_meta *meta_data);
 void	prepare_sp(t_sp *start);
 void	prepare_pl(t_pl *start);
 void	prepare_cy(t_cy *start);
+void	prepare_cn(t_cn *start);
 
 // Prepare image: img.c
 void	gen_img(t_meta *meta_data);
@@ -192,6 +208,10 @@ void	intersect_cy(t_meta *meta_data, t_cy *cylinder);
 void	intersect_cy_curve(t_meta *meta_data, t_cy *cylinder);
 void	update_t_cy_curve(t_meta *meta_data, t_cy *cylinder, double t);
 void	intersect_cy_base(t_meta *meta_data, t_cy *cylinder);
+void	intersect_cn(t_meta *meta_data, t_cn *cone);
+void	intersect_cn_curve(t_meta *meta_data, t_cn *cone);
+void	update_t_cn_curve(t_meta *meta_data, t_cn *cone, double t);
+void	intersect_cn_base(t_meta *meta_data, t_cn *cone);
 void	get_ray_pt(t_vector *dest, t_meta *meta_data, double t);
 
 // Vector operations: vector_op.c
