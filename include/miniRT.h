@@ -10,12 +10,22 @@
 # define C      "\033[1;36m"   /* Bold Cyan */
 # define W      "\033[1;37m"   /* Bold White */
 
+# define SF_SPHERE 1
+# define SF_PLANE 2
+# define SF_CY_CURVE 3
+# define SF_CY_BASE_B 4
+# define SF_CY_BASE_T 5
+# define SF_CONE_CURVE 6
+# define SF_CONE_BASE 7
+
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <errno.h>
+# include <float.h>
+# include <stdint.h>
 # include "../libft/libft.h"
 # include "../libft/ft_printf.h"
 # include "../libft/get_next_line.h"
@@ -25,11 +35,14 @@ typedef struct s_colour
     int  r;
     int  g;
     int  b;
+    double r_n;
+    double g_n;
+    double b_n;
 }  t_colour;
 
 typedef struct t_vector
 {
-  double  x; // do we need double?
+  double  x;
   double  y;
   double  z;
 } t_vector;
@@ -52,6 +65,7 @@ typedef struct s_light
     t_vector coord;
     double brightness;
     t_colour colour;
+    struct s_light *next;
 }  t_light;
 
 typedef struct s_sp
@@ -59,6 +73,8 @@ typedef struct s_sp
   t_vector  coord;
   double diameter;
   t_colour  colour;
+	double radius;
+  bool  exclude;
   struct s_sp  *next;
 } t_sp;
 
@@ -67,6 +83,7 @@ typedef struct s_pl
   t_vector  coord;
   t_vector  normal;
   t_colour colour;
+  bool  exclude;
   struct s_pl  *next;
 } t_pl;
 
@@ -75,10 +92,30 @@ typedef struct s_cy
   t_vector  coord;
   t_vector  axis;
   double diameter;
+  double  radius;
   double  height;
   t_colour colour;
+  t_vector base_bottom;
+	t_vector base_top;
+  bool  exclude;
   struct s_cy  *next;
 } t_cy;
+
+typedef struct s_pixel
+{
+	t_vector	ray;
+	double		t;
+
+	void *obj;
+	int			surface;
+	t_vector	intersect;
+	/*	
+    or
+		int			surface; e.g.,
+						sphere/plane/cy curve/cy bottom base/cy top base/cone curve/cone base
+		int			nth_obj; e.g., 0 = 1st in linked list
+	*/
+}				t_pixel;
 
 typedef struct s_meta
 {
@@ -88,6 +125,13 @@ typedef struct s_meta
   t_sp  *sp;
   t_pl  *pl;
   t_cy  *cy;
+  double		aspect_ratio;
+	double		img_width;
+	double		img_height;
+	t_vector	img_up;
+	t_vector	img_right;
+	t_vector	img_center;
+  t_pixel pixel;
 } t_meta;
 
 void    print_banner();
@@ -124,4 +168,46 @@ int         check_int(t_meta **meta_data, char *str);
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
 void        print_planes(t_meta *meta_data);
+
+// Prepare derived parameters: prepare.c
+void	prepare_data(t_meta *meta_data);
+void	prepare_img(t_meta *meta_data);
+void	img_basis_vec(t_meta *meta_data);
+void	prepare_light(t_meta *meta_data);
+void	prepare_obj(t_meta *meta_data);
+void	prepare_sp(t_sp *start);
+void	prepare_pl(t_pl *start);
+void	prepare_cy(t_cy *start);
+
+// Prepare image: img.c
+void	gen_img(t_meta *meta_data);
+void	init_pixel(t_pixel *pixel);
+void  ray_dir(int i, int j, t_meta *meta_data);
+
+// Calculate closest intersection: intersect.c
+void	intersect_closest(t_meta *meta_data);
+void	intersect_sp(t_meta *meta_data, t_sp *sphere);
+void	intersect_pl(t_meta *meta_data, t_pl *plane);
+void	intersect_cy(t_meta *meta_data, t_cy *cylinder);
+void	intersect_cy_curve(t_meta *meta_data, t_cy *cylinder);
+void	update_t_cy_curve(t_meta *meta_data, t_cy *cylinder, double t);
+void	intersect_cy_base(t_meta *meta_data, t_cy *cylinder);
+void	get_ray_pt(t_vector *dest, t_meta *meta_data, double t);
+
+// Vector operations: vector_op.c
+double	vec_dot_product(t_vector *a, t_vector *b);
+double	vec_len(t_vector *vec);
+void	vec_subtract(t_vector *dest, t_vector *a, t_vector *b);
+void	vec_add(t_vector *dest, t_vector *a, t_vector *b);
+void  vec_multiply_scalar(t_vector *dest, t_vector *vec, double n);
+void	vec_normalise(t_vector *vec);
+void	vec_cross_product(t_vector *dest, t_vector *a, t_vector *b);
+
+// Vector utility functions: vector_utils.c
+void	print_vector(char *str, t_vector *vec);
+int	vec_cmp_num(t_vector *vec, double x, double y, double z);
+
+// Miscellaneous math functions: misc_math.c
+double	deg_to_rad(int degree);
+
 #endif

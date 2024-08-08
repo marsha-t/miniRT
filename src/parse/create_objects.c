@@ -76,6 +76,7 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
     colour = ft_split(argv[3], ',');
     pl->colour = check_colour(&meta_data, pl, argv, colour);
     free_pointer(colour);
+    pl->exclude = 0;
     pl->next = NULL;
     ft_printf(G" OK \n"RST);
     return (pl);
@@ -103,6 +104,7 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
     sp->colour = check_colour(&meta_data, sp, argv, colour);
     free_pointer(colour);
     sp->diameter = check_double(&meta_data, sp, argv, argv[2]);
+    sp->exclude = 0;
     sp->next = NULL;
     ft_printf(G" OK \n"RST);
     return (sp);
@@ -136,6 +138,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
     free_pointer(colour);
     cy->diameter = check_double(&meta_data, cy, argv, argv[3]);
     cy->height = check_double(&meta_data, cy, argv, argv[4]);
+    cy->exclude = 0;
     cy->next = NULL;
     ft_printf(G" OK \n"RST);
     return (cy);

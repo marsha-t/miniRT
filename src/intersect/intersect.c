@@ -1,0 +1,277 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersect.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
+/*   Updated: 2024/08/08 11:32:11 by mateo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../include/miniRT.h"
+
+/*	intersect_closest iterates through all objects 
+	- objects that previously intersected at negative at excluded
+	- intersect_<shape> will update pixel data on value of t for closest intersection
+	- compute closest intersection
+*/
+// WIP: update function to cover cone
+void	intersect_closest(t_meta *meta_data)
+{
+	t_sp	*sphere;
+	t_pl	*plane;
+	t_cy	*cylinder;
+	
+	if (meta_data->sp)
+	{
+		sphere = meta_data->sp;
+		while (sphere)
+		{
+			if (sphere->exclude == 0)
+				intersect_sp(meta_data, sphere);
+			sphere = sphere->next;
+		}
+	}
+	if (meta_data->pl)
+	{
+		plane = meta_data->pl;
+		while (plane)
+		{
+			if (plane->exclude == 0)
+				intersect_pl(meta_data, plane);
+			plane = plane->next;
+		}
+	}
+	if (meta_data->cy)
+	{
+		cylinder = meta_data->cy;
+		while (cylinder)
+		{
+			if (cylinder->exclude == 0)
+				intersect_cy(meta_data, cylinder);
+			cylinder = cylinder->next;
+		}
+	}
+	get_ray_pt(&meta_data->pixel.intersect, meta_data, meta_data->pixel.t);
+}
+
+/*	intersect_sp finds the intersection between ray and a given sphere
+	- if intersection (t) is closer than the last intersection (pixel.t), 
+		data in pixel (i.e., t, obj and surface) is updated
+	- no update if no intersection or intersection is further than last intersection found
+	- if intersection (t) is negative, object excluded from future calculations 
+	 */
+void	intersect_sp(t_meta *meta_data, t_sp *sphere)
+{
+	double	a;
+	double	b;
+	double	c;
+	double	discriminant;
+	double	t;
+	t_vector	temp;
+
+	a = vec_dot_product(&meta_data->pixel.ray, &meta_data->pixel.ray);
+	vec_subtract(&temp, &meta_data->camera->coord, &sphere->coord);
+	b = vec_dot_product(&meta_data->pixel.ray, &temp) * 2;
+	c = vec_dot_product(&temp, &temp) - (sphere->radius) * (sphere->radius);
+	discriminant = b *b - 4 * a * c;
+	if (discriminant < 0)
+		return ;
+	t = (- b - sqrt(discriminant)) / (2 * a);
+	if (t == 0)
+		return ;
+	else if (t < 0)
+	{
+		sphere->exclude = 1;
+		return ;
+	}
+	else if (t > 0 && t < meta_data->pixel.t)
+		meta_data->pixel.t = t;
+	if (discriminant > 0)
+	{
+		t = (- b + sqrt(discriminant)) / (2 * a);
+		if (t <= 0)
+			return ; // exclude object accordingly (for t < 0)
+		else if (t > 0 && t < meta_data->pixel.t)
+			meta_data->pixel.t = t;
+	}
+	meta_data->pixel.obj = (void *)sphere;
+	meta_data->pixel.surface = SF_SPHERE;
+	return ;
+}
+
+/*	intersect_pl finds the intersection between ray and a given plane
+	- if intersection (t) is closer than the last intersection (pixel.t), 
+		data in pixel (i.e., t, obj and surface) is updated
+	- no update if ray is parallel to plane or intersection is further than last intersection found
+	- if intersection (t) is negative, plane is NOT excluded from future calculations 
+	*/
+void	intersect_pl(t_meta *meta_data, t_pl *plane)
+{
+	double		t;
+	double		denom;
+	t_vector	temp;
+	
+	denom = vec_dot_product(&plane->normal, &meta_data->pixel.ray);
+	if (denom == 0)
+		return ;
+	vec_subtract(&temp, &meta_data->camera->coord, &plane->coord);
+	t = -1 * (vec_dot_product(&plane->normal, &temp) / denom);
+	if (t <= 0)
+		return ;
+	if (t < meta_data->pixel.t)
+	{
+		meta_data->pixel.t = t;
+		meta_data->pixel.obj = (void *)plane;
+		meta_data->pixel.surface = SF_PLANE;
+	}
+}
+
+/*	intersect_cy finds intersection between ray and cylinder
+	- calls on intersect_cy_curve to check intersection with curved surface
+	- calls on intersect_cy_base to check intersection with both bases
+*/
+void	intersect_cy(t_meta *meta_data, t_cy *cylinder)
+{
+	intersect_cy_curve(meta_data, cylinder);
+	intersect_cy_base(meta_data, cylinder);
+}
+
+/*	intersect_cy_curve checks intersection with curved surface of cylinder
+	- calls on update_t_cy_curve to check that intersection point is valid 
+		and if so, update pixel data accordingly
+	- no update if no intersection or intersection is further than last intersection found
+	- if intersection (t) is negative, cylinder is excluded from future calculations 
+	*/
+void	intersect_cy_curve(t_meta *meta_data, t_cy *cylinder)
+{
+	double	a;
+	double	b;
+	double	c;
+	t_vector	temp;
+	t_vector	d_perpen;
+	t_vector	w;
+	t_vector	w_perpen;
+	double	discriminant;
+	double	t;
+
+	vec_multiply_scalar(&temp, &cylinder->axis, vec_dot_product(&meta_data->pixel.ray, &cylinder->axis));
+	vec_subtract(&d_perpen, &meta_data->pixel.ray, &temp);
+	vec_subtract(&w, &meta_data->camera->coord, &cylinder->coord);
+	vec_multiply_scalar(&temp, &cylinder->axis, vec_dot_product(&w, &cylinder->axis));
+	vec_subtract(&w_perpen, &w, &temp);
+	a = vec_dot_product(&d_perpen, &d_perpen);
+	b = vec_dot_product(&w_perpen, &d_perpen) * 2;
+	c = vec_dot_product(&w_perpen, &w_perpen) - cylinder->radius * cylinder->radius;
+	discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+		return ;
+	t = (- b - sqrt(discriminant)) / (2 * a);
+	if (t == 0)
+		return ;
+	else if (t < 0)
+	{
+		cylinder->exclude = 1;
+		return ;
+	}
+	else if (t > 0 && t < meta_data->pixel.t)
+		update_t_cy_curve(meta_data, cylinder, t);
+	if (discriminant > 0)
+	{
+		t = (- b + sqrt(discriminant)) / (2 * a);
+		if (t == 0)
+		return ;
+		else if (t < 0)
+		{
+			cylinder->exclude = 1;
+			return ;
+		}
+		else if (t > 0 && t < meta_data->pixel.t)
+			update_t_cy_curve(meta_data, cylinder, t);
+	}
+}
+
+/*	update_t_cy_curve updates data in pixel with t
+	after checking that t is valid on a cylinder's curved surface
+	i.e., that the point lies within cylinder height */
+void	update_t_cy_curve(t_meta *meta_data, t_cy *cylinder, double t)
+{
+	t_vector	ray_pt;
+	t_vector	temp;
+	double		projection;
+
+	get_ray_pt(&ray_pt, meta_data, t);
+	vec_subtract(&temp, &ray_pt, &cylinder->coord);
+	projection = vec_dot_product(&temp, &cylinder->axis);
+	if (projection < - cylinder->height / 2 || projection > cylinder->height / 2)
+		return ;
+	else
+	{
+		meta_data->pixel.t = t;
+		meta_data->pixel.obj = (void *)cylinder;
+		meta_data->pixel.surface = SF_CY_CURVE;
+	}
+}
+
+/*	intersect_cy_curve checks intersection with BOTH bases of cylinder
+	- checks that intersection point (if any) is within radius of cylinder
+		and if so, update pixel data accordingly
+	- no update if no intersection or intersection is further than last intersection found
+	- if intersection (t) is negative, plane is NOT excluded from future calculations 
+*/
+void	intersect_cy_base(t_meta *meta_data, t_cy *cylinder)
+{
+	t_vector	temp;
+	double	denom;
+	double	t;
+	double	len;
+
+	denom = vec_dot_product(&cylinder->axis, &meta_data->pixel.ray);
+	if (denom == 0)
+		return ;
+	vec_subtract(&temp, &cylinder->base_bottom, &meta_data->camera->coord);
+	t = vec_dot_product(&cylinder->axis, &temp) / denom;
+	if (t == 0)
+		return ;
+	else if (t < 0)
+	{
+		cylinder->exclude = 1;
+		return ;
+	}
+	len = vec_len(&temp);
+	if (t > 0 && t < meta_data->pixel.t && len <= cylinder->radius)
+	{
+		meta_data->pixel.t = t;
+		meta_data->pixel.obj = (void *)cylinder;
+		meta_data->pixel.surface = SF_CY_BASE_B;
+	}
+	vec_subtract(&temp, &cylinder->base_top,& meta_data->camera->coord);
+	t = vec_dot_product(&cylinder->axis, &temp) / denom;
+	len = vec_len(&temp);
+	if (t == 0)
+		return ;
+	else if (t < 0)
+	{
+		cylinder->exclude = 1;
+		return ;
+	}
+	if (t > 0 && t < meta_data->pixel.t && len <= cylinder->radius)
+	{
+		meta_data->pixel.t = t;
+		meta_data->pixel.obj = (void *)cylinder;
+		meta_data->pixel.surface = SF_CY_BASE_T;
+	}
+}
+
+/*	get_ray_pt generates coordinates for point on ray
+	- point = camera + t * ray_direction
+*/
+void	get_ray_pt(t_vector *dest, t_meta *meta_data, double t)
+{
+	t_vector	temp;
+
+	vec_multiply_scalar(&temp, &meta_data->pixel.ray, t);
+	vec_add(dest, &meta_data->camera->coord, &temp);
+}

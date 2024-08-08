@@ -21,6 +21,8 @@ int main(int argc, char **argv)
     print_cylinders(&meta_data);
     print_spheres(&meta_data);
     print_planes(&meta_data);
+    prepare_data(&meta_data);
+    gen_img(&meta_data);
     free_exit(&meta_data);
     return (0);
 }

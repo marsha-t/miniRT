@@ -10,7 +10,14 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/parse/create_objects.c \
 				./src/parse/fill_settings.c \
 				./src/parse/free_utils.c \
-				./src/parse/print_utils.c
+				./src/parse/print_utils.c \
+				./src/intersect/prepare.c \
+				./src/intersect/img.c \
+				./src/intersect/intersect.c \
+				./src/utils/misc_math.c \
+				./src/utils/vector_op.c \
+				./src/utils/vector_utils.c 
+				
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
 VPATH = src:lib:lib/libft
 
@@ -44,7 +51,7 @@ LB = ar rcs
 all: $(LIBFT_LIB) $(NAME)
 
 $(NAME): $(MINIRT_OBJS)
-		$(CC) $(CFLAGS) $(MINIRT_OBJS) $(LIBFT_LIB) -o $(NAME)
+		$(CC) $(CFLAGS) $(MINIRT_OBJS) $(LIBFT_LIB) -o $(NAME) -lm
 
 $(LIBFT_LIB):
 	$(MAKE_LIBR) $(LIBFT_DIR)
