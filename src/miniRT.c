@@ -29,6 +29,24 @@ int main(int argc, char **argv)
     return (0);
 }
 
+void    meta_data_init(t_meta *meta_data)
+{
+    meta_data->amlight = NULL;
+    meta_data->camera = NULL;
+    meta_data->light = NULL;
+    meta_data->sp = NULL;
+    meta_data->pl = NULL;
+    meta_data->cy = NULL;
+    meta_data->cn = NULL;
+    meta_data->light_allocated = false;
+    meta_data->camera_allocated = false;
+    meta_data->amlight_allocated = false;
+    meta_data->sp_allocated = false;
+    meta_data->pl_allocated = false;
+    meta_data->cy_allocated = false;
+    meta_data->cn_allocated = false;
+}
+
 void	parse_data(t_meta *meta_data, int argc, char **argv)
 {
     ft_printf(Y"\nPARSING DATA FROM "RST);
@@ -56,11 +74,16 @@ void    read_data(t_meta *meta_data, char *argv)
         }
         while (singleline[index++] != '\n')
             ;
-        while (ft_isspace(singleline[index - 1]) > 0)
+        while (index >= 1 && ft_isspace(singleline[index - 1]) > 0)
         {
             singleline[index - 1] = '\0';
             index--;
         }
-        ft_fill_data(meta_data, singleline);
+        if ((singleline[0] != '\n') && singleline[0] != '#' && (ft_strlen(singleline) > 0))
+            ft_fill_data(meta_data, singleline);
+        else if (singleline[0] == '\n' || singleline[0] == '#')
+            free(singleline);
+        else
+            free(singleline);
     }
 }

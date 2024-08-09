@@ -165,6 +165,7 @@ int     pointer_count(char **argv);
 void    ft_fill_data(t_meta *meta_data, char *singleline);
 void    read_data(t_meta *meta_data, char *argv);
 void	  parse_data(t_meta *data, int argc, char **argv);
+void    meta_data_init(t_meta *meta_data);
 
 void    ft_check_args(int argc, char **argv);
 void    check_fd(char *argv);
