@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/08 21:18:34 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/09 14:53:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	gen_img(t_meta *meta_data)
 				if in shadow, skip
 				if not, final colour += diffuse + specular
 			}
-		
+
 		}
 		put_pixel()
 	}

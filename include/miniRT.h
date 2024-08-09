@@ -148,12 +148,19 @@ typedef struct s_meta
 	t_vector	img_right;
 	t_vector	img_center;
   t_pixel pixel;
+  bool  amlight_allocated;
+  bool  camera_allocated;
+  bool  light_allocated;
+  bool  sp_allocated;
+  bool  pl_allocated;
+  bool  cy_allocated;
+  bool  cn_allocated;
 } t_meta;
 
 void    print_banner();
 void    fill_camera(t_meta *meta_data, char **argv);
 void    fill_ambient(t_meta *meta_data, char **argv);
-void    fill_light(t_meta *meta_data, char **argv);
+t_light    *create_light(t_meta *meta_data, char **argv);
 int     pointer_count(char **argv);
 void    ft_fill_data(t_meta *meta_data, char *singleline);
 void    read_data(t_meta *meta_data, char *argv);
@@ -172,6 +179,7 @@ void    create_objects(t_meta *meta_data, char **argv);
 t_cy    *create_cy(t_meta *meta_data, char **argv);
 t_pl    *create_pl(t_meta *meta_data, char **argv);
 t_sp    *create_sp(t_meta *meta_data, char **argv);
+t_cn    *create_cn(t_meta *meta_data, char **argv);
 
 t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv);
 bool        check_colour_val(t_meta *meta_data, char **src, int arg_count, char **argv);
@@ -184,6 +192,8 @@ int         check_int(t_meta **meta_data, char *str);
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
 void        print_planes(t_meta *meta_data);
+void        print_cones(t_meta *meta_data);
+void        print_light(t_meta *meta_data);
 
 // Prepare derived parameters: prepare.c
 void	prepare_data(t_meta *meta_data);

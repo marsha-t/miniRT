@@ -1,5 +1,10 @@
 #include "../../include/miniRT.h"
 
+/*
+    check_coord iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
 {
     t_vector    vec;
@@ -12,18 +17,27 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
         index = -1;
         while(argv[arg_count][++index])
         {
-            if (ft_isdigit(argv[arg_count][index]) == 0 && \
+            if ((ft_isdigit(argv[arg_count][index]) == 0 && \
                 argv[arg_count][index] != '.' && argv[arg_count][index] != '-' \
-                && argv[arg_count][index] != '+')
+                && argv[arg_count][index] != '+') || arg_count >= 3)
             {
-                free_exit(*meta_data);
                 if (temp != NULL)
                     free(temp);
                 free_pointerlist(2, src, argv);
                 ft_printf(RED"Incorrect XYZ input values\n"RST);
+                free_exit(*meta_data);
                 exit(EXIT_FAILURE);
             }
         }
+    }
+    if (arg_count != 3)
+    {
+        if (temp != NULL)
+            free(temp);
+        free_pointerlist(2, src, argv);
+        ft_printf(RED"Incorrect XYZ input values\n"RST);
+        free_exit(*meta_data);
+        exit(EXIT_FAILURE);
     }
     vec.x = ft_strtod(argv[0]);
     vec.y = ft_strtod(argv[1]);
@@ -31,10 +45,18 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
     return (vec);
 }
 
+/*
+    check_norm iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between -1 and 1, and if all values are not 0.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
 {
     t_vector    vec;
     int         arg_count;
+    double      temp_val;
+    static int  count_zeroes;
 
     arg_count = -1;
     while(argv[++arg_count])
@@ -45,13 +67,39 @@ t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
                 free(temp);
             exit(EXIT_FAILURE);
         }
+        temp_val = ft_strtod(argv[arg_count]);
+        if (temp_val == (double)0)
+            count_zeroes++;
+        if (count_zeroes >= 3)
+        {
+            free_exit(*meta_data);
+            ft_printf(RED"A Incorrect normal vector input values\n"RST);
+            free_pointerlist(2, src, argv);
+            if (temp != NULL)
+                free(temp);
+            exit(EXIT_FAILURE);
+        }
+    }
+    if (arg_count != 3)
+    {
+        if (temp != NULL)
+            free(temp);
+        free_pointerlist(2, src, argv);
+        ft_printf(RED"Incorrect XYZ input values\n"RST);
+        free_exit(*meta_data);
+        exit(EXIT_FAILURE);
     }
     vec.x = ft_strtod(argv[0]);
     vec.y = ft_strtod(argv[1]);
     vec.z = ft_strtod(argv[2]);
+    count_zeroes = 0;
     return (vec);
 }
 
+/*
+    check_double iterates through each input value and check if each character
+    is a digit. if condition fails, it frees the allocated memories and exits the program
+*/
 double    check_double(t_meta **meta_data, void *temp, char **src, char *str)
 {
     int index;
@@ -94,10 +142,16 @@ int    check_int(t_meta **meta_data, char *str)
     return (result);
 }
 
+/*
+    check_norm_val iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between -1 and 1, and if all values are not 0.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv)
 {
     double temp;
-    int index;
+    int index;\
 
     index = -1;
     while(argv[arg_count][++index])
@@ -112,7 +166,7 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
             return (false);
         }
     }
-    temp = ft_strtod(argv[arg_count]);
+    temp = ft_strtod(argv[arg_count]);\
     if (temp < -1 || temp > 1 || arg_count >= 3)
     {
         free_exit(meta_data);
@@ -123,6 +177,12 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
     return (true);
 }
 
+/*
+    check_colour_val iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between 0 and 255.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 bool    check_colour_val(t_meta *meta_data, char **src, int arg_count, char **argv)
 {
     int temp;
@@ -151,6 +211,12 @@ bool    check_colour_val(t_meta *meta_data, char **src, int arg_count, char **ar
     return (true);
 }
 
+/*
+    check_colour iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between 0 and 255.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv)
 {
     t_colour    rgb;
@@ -165,6 +231,15 @@ t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv
                 free(temp);
             exit(EXIT_FAILURE);
         }
+    }
+    if (arg_count != 3)
+    {
+        if (temp != NULL)
+            free(temp);
+        free_pointerlist(2, src, argv);
+        ft_printf(RED"Incorrect XYZ input values\n"RST);
+        free_exit(*meta_data);
+        exit(EXIT_FAILURE);
     }
     rgb.r = ft_atoi(argv[0]);
     rgb.g = ft_atoi(argv[1]);

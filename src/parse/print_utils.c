@@ -39,6 +39,32 @@ void    print_planes(t_meta *meta_data)
     }
 }
 
+void    print_cones(t_meta *meta_data)
+{
+    t_cn *current_cn = meta_data->cn;
+
+    while (current_cn != NULL)
+    {
+        printf("cn: (%f, %f, %f) (%f, %f, %f)\n",\
+            current_cn->coord.x, current_cn->coord.y,current_cn->coord.z, \
+            current_cn->axis.x, current_cn->axis.y, current_cn->axis.z);
+        current_cn = current_cn->next;
+    }
+}
+
+void    print_light(t_meta *meta_data)
+{
+    t_light *current_light = meta_data->light;
+
+    while (current_light != NULL)
+    {
+        printf("light: (%f, %f, %f) (%d, %d, %d)\n",\
+            current_light->coord.x, current_light->coord.y,current_light->coord.z, \
+            current_light->colour.r, current_light->colour.g, current_light->colour.b);
+        current_light = current_light->next;
+    }
+}
+
 void    print_banner()
 {
     ft_printf(Y" _____________________________________\n");

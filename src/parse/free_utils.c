@@ -58,12 +58,21 @@ int	ft_strlen_dp(char **s)
 
 void    free_exit(t_meta *meta_data)
 {
+    t_light *light;
+
+    light = NULL;
+    light = meta_data->light;
     if (meta_data->amlight != NULL)
         free(meta_data->amlight);
     if (meta_data->camera != NULL)
         free(meta_data->camera);
-    if (meta_data->light != NULL)
+    while (meta_data->light_allocated && meta_data->light != NULL)
+    {
+        light = light->next;
         free(meta_data->light);
+        meta_data->light = NULL;
+        meta_data->light = light;
+    }
     free_objects(meta_data);
 }
 
@@ -72,26 +81,42 @@ void    free_objects(t_meta *meta_data)
     t_sp    *sp;
     t_cy    *cy;
     t_pl    *pl;
+    t_cn    *cn;
 
+    sp = NULL;
     sp = meta_data->sp;
+    cy = NULL;
     cy = meta_data->cy;
+    pl = NULL;
     pl = meta_data->pl;
-    while (meta_data->sp != NULL)
-    {
-        sp = sp->next;
-        free(meta_data->sp);
-        meta_data->sp = sp;
-    }
-    while (meta_data->cy != NULL)
-    {
-        cy = cy->next;
-        free(meta_data->cy);
-        meta_data->cy = cy;
-    }
-    while (meta_data->pl != NULL)
+    cn = NULL;
+    cn = meta_data->cn;
+    while (meta_data->pl_allocated && meta_data->pl != NULL)
     {
         pl = pl->next;
         free(meta_data->pl);
+        meta_data->pl = NULL;
         meta_data->pl = pl;
+    }
+    while (meta_data->sp_allocated && meta_data->sp != NULL)
+    {
+        sp = sp->next;
+        free(meta_data->sp);
+        meta_data->sp = NULL;
+        meta_data->sp = sp;
+    }
+    while (meta_data->cy_allocated && meta_data->cy != NULL)
+    {
+        cy = cy->next;
+        free(meta_data->cy);
+        meta_data->cy = NULL;
+        meta_data->cy = cy;
+    }
+    while (meta_data->cn_allocated && meta_data->cn != NULL)
+    {
+        cn = cn->next;
+        free(meta_data->cn);
+        meta_data->cn = NULL;
+        meta_data->cn = cn;
     }
 }
