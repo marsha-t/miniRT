@@ -29,6 +29,7 @@
 # include "../libft/libft.h"
 # include "../libft/ft_printf.h"
 # include "../libft/get_next_line.h"
+# include "../mlx/mlx.h"
 
 typedef struct s_colour
 {
@@ -147,7 +148,9 @@ typedef struct s_meta
 	t_vector	img_up;
 	t_vector	img_right;
 	t_vector	img_center;
-  t_pixel pixel;
+  t_pixel   pixel;
+  void      *mlx_ptr;
+	void			*mlx_win;
   bool  amlight_allocated;
   bool  camera_allocated;
   bool  light_allocated;

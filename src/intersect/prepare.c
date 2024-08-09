@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prepare.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/08 20:37:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/09 16:34:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	prepare_data(t_meta *meta_data)
 void	prepare_img(t_meta *meta_data)
 {
 	double	fov_rad;
-	
+
 	fov_rad = deg_to_rad(meta_data->camera->fov);
 	meta_data->img_width = tan(fov_rad / 2) * 2;
 	meta_data->img_height = meta_data->img_width / meta_data->aspect_ratio;

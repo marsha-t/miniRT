@@ -14,19 +14,41 @@
 
 int main(int argc, char **argv)
 {
-    static t_meta meta_data;
+    t_meta meta_data;
 
+    meta_data.mlx_ptr = mlx_init();
+    if (!meta_data.mlx_ptr)
+        return (0);
+    // if (meta_data.mlx_win)
+    //     mlx_destroy_window(data.mlx_ptr, data.mlx_win);
     print_banner();
+    meta_data_init(&meta_data);
     parse_data(&meta_data, argc, argv);
-    print_cylinders(&meta_data);
-    print_spheres(&meta_data);
-    print_planes(&meta_data);
-    print_light(&meta_data);
-    print_cones(&meta_data);
     prepare_data(&meta_data);
     gen_img(&meta_data);
+    print_light(&meta_data);
+    print_planes(&meta_data);
+    print_spheres(&meta_data);
+    print_cones(&meta_data);
+    print_cylinders(&meta_data);
     free_exit(&meta_data);
-    return (0);
+    return (1);
+}
+
+void	map_draw(t_meta *meta_data)
+{
+	int	x;
+	int	y;
+
+	y = -1;
+	draw_select_style(meta_data);
+	while (++y < data->row)
+	{
+		x = -1;
+		while (++x < data->col)
+			draw_select_color(data, x, y);
+	}
+	mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->img, 0, 0);
 }
 
 void    meta_data_init(t_meta *meta_data)
@@ -72,6 +94,7 @@ void    read_data(t_meta *meta_data, char *argv)
             free(singleline);
             break ;
         }
+        // ft_printf("single line %s\n", singleline);
         while (singleline[index++] != '\n')
             ;
         while (index >= 1 && ft_isspace(singleline[index - 1]) > 0)
@@ -79,10 +102,9 @@ void    read_data(t_meta *meta_data, char *argv)
             singleline[index - 1] = '\0';
             index--;
         }
-        if ((singleline[0] != '\n') && singleline[0] != '#' && (ft_strlen(singleline) > 0))
+        // ft_printf("single line %s\n", singleline);
+        if (*singleline && (singleline[0] != '\n') && singleline[0] != '#' && (ft_strlen(singleline) > 0))
             ft_fill_data(meta_data, singleline);
-        else if (singleline[0] == '\n' || singleline[0] == '#')
-            free(singleline);
         else
             free(singleline);
     }

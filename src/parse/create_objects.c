@@ -80,6 +80,7 @@ void create_objects(t_meta *meta_data, char **argv)
         cn++;
     }
 }
+
 /*
     create_pl creates a plane object and check if each value is valid.
     returns t_pl pointer.
@@ -116,6 +117,7 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
     pl->colour = check_colour(&meta_data, pl, argv, colour);
     free_pointer(colour);
     pl->next = NULL;
+    pl->exclude = false;
     ft_printf(G" OK \n"RST);
     return (pl);
 }
@@ -153,6 +155,7 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
     free_pointer(colour);
     sp->diameter = check_double(&meta_data, sp, argv, argv[2]);
     sp->next = NULL;
+    sp->exclude = false;
     ft_printf(G" OK \n"RST);
     return (sp);
 }
@@ -195,6 +198,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
     cy->diameter = check_double(&meta_data, cy, argv, argv[3]);
     cy->height = check_double(&meta_data, cy, argv, argv[4]);
     cy->next = NULL;
+    cy->exclude = false;
     ft_printf(G" OK \n"RST);
     return (cy);
 }
@@ -237,6 +241,7 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
     cn->height = check_double(&meta_data, cn, argv, argv[4]);
     cn->angle = check_double(&meta_data, cn, argv, argv[3]);
     cn->next = NULL;
+    cn->exclude = false;
     ft_printf(G" OK \n"RST);
     return (cn);
 }

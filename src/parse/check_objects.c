@@ -17,9 +17,9 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
         index = -1;
         while(argv[arg_count][++index])
         {
-            if ((ft_isdigit(argv[arg_count][index]) == 0 && \
+            if (ft_isdigit(argv[arg_count][index]) == 0 && \
                 argv[arg_count][index] != '.' && argv[arg_count][index] != '-' \
-                && argv[arg_count][index] != '+') || arg_count >= 3)
+                && argv[arg_count][index] != '+')
             {
                 if (temp != NULL)
                     free(temp);
@@ -246,5 +246,4 @@ t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv
     rgb.b = ft_atoi(argv[2]);
     return (rgb);
 }
-
 

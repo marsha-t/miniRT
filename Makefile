@@ -17,23 +17,23 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/light/final_colour.c \
 				./src/utils/misc_math.c \
 				./src/utils/vector_op.c \
-				./src/utils/vector_utils.c 
-				
+				./src/utils/vector_utils.c
+
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
 VPATH = src:lib:lib/libft
 
 # includes for mlx mac
 # INCLUDES = -I/opt/X11/include -Imlx
 # includes for mlx linux
-# INCLUDES = -I/usr/include -Imlx -O3
+INCLUDES = -I/usr/include -Imlx -O3
 
 # mlxflags for mac
 # MLX_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 # mlxflags for linux
-# MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
+MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
 
-# MLX_DIR = ./mlx
-# MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
+MLX_DIR = ./mlx
+MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
 # MLX_LIB = $(MLX_DIR)/libmlx.a
 
 ### LIBFT
@@ -49,17 +49,17 @@ RM = rm -rf
 
 LB = ar rcs
 
-all: $(LIBFT_LIB) $(NAME)
+all: $(LIBFT_LIB) $(MLX_LIB) $(NAME)
 
 $(NAME): $(MINIRT_OBJS)
-		$(CC) $(CFLAGS) $(MINIRT_OBJS) $(LIBFT_LIB) -o $(NAME) -lm
+		$(CC) $(CFLAGS) $(MINIRT_OBJS) $(MLX_FLAGS) $(LIBFT_LIB) -o $(NAME) -lm
 
 $(LIBFT_LIB):
 	$(MAKE_LIBR) $(LIBFT_DIR)
 
-# $(MLX_LIB):
-# 	$(MAKE_LIBR) $(MLX_DIR)
-# 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(MLX_LIB):
+	$(MAKE_LIBR) $(MLX_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	$(RM) $(MINIRT_OBJS)

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/09 14:54:35 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/09 15:59:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,15 @@ void	intersect_closest(t_meta *meta_data)
 	t_cy	*cylinder;
 	t_cn	*cone;
 
-	if (meta_data->sp)
+    sphere = NULL;
+    sphere = meta_data->sp;
+    cylinder = NULL;
+    cylinder = meta_data->cy;
+    plane = NULL;
+    plane = meta_data->pl;
+    cone = NULL;
+    cone = meta_data->cn;
+	if (meta_data->sp_allocated && meta_data->sp != NULL)
 	{
 		sphere = meta_data->sp;
 		while (sphere)
@@ -34,7 +42,7 @@ void	intersect_closest(t_meta *meta_data)
 			sphere = sphere->next;
 		}
 	}
-	if (meta_data->pl)
+	if (meta_data->pl_allocated && meta_data->pl != NULL)
 	{
 		plane = meta_data->pl;
 		while (plane)
@@ -44,7 +52,7 @@ void	intersect_closest(t_meta *meta_data)
 			plane = plane->next;
 		}
 	}
-	if (meta_data->cy)
+	if (meta_data->cy_allocated && meta_data->cy != NULL)
 	{
 		cylinder = meta_data->cy;
 		while (cylinder)
@@ -54,7 +62,7 @@ void	intersect_closest(t_meta *meta_data)
 			cylinder = cylinder->next;
 		}
 	}
-	if (meta_data->cn)
+	if (meta_data->cn_allocated && meta_data->cn != NULL)
 	{
 		cone = meta_data->cn;
 		while (cone)
