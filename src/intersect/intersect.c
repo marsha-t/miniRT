@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/09 15:59:37 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/13 04:10:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,8 @@ void	intersect_closest(t_meta *meta_data)
 	t_cy	*cylinder;
 	t_cn	*cone;
 
-    sphere = NULL;
-    sphere = meta_data->sp;
-    cylinder = NULL;
-    cylinder = meta_data->cy;
-    plane = NULL;
-    plane = meta_data->pl;
-    cone = NULL;
-    cone = meta_data->cn;
-	if (meta_data->sp_allocated && meta_data->sp != NULL)
+	// printf("enter here\n");
+	if (meta_data->sp_allocated && meta_data->sp)
 	{
 		sphere = meta_data->sp;
 		while (sphere)
@@ -42,7 +35,7 @@ void	intersect_closest(t_meta *meta_data)
 			sphere = sphere->next;
 		}
 	}
-	if (meta_data->pl_allocated && meta_data->pl != NULL)
+	if (meta_data->pl_allocated && meta_data->pl)
 	{
 		plane = meta_data->pl;
 		while (plane)
@@ -52,7 +45,7 @@ void	intersect_closest(t_meta *meta_data)
 			plane = plane->next;
 		}
 	}
-	if (meta_data->cy_allocated && meta_data->cy != NULL)
+	if (meta_data->cy_allocated && meta_data->cy)
 	{
 		cylinder = meta_data->cy;
 		while (cylinder)
@@ -62,7 +55,7 @@ void	intersect_closest(t_meta *meta_data)
 			cylinder = cylinder->next;
 		}
 	}
-	if (meta_data->cn_allocated && meta_data->cn != NULL)
+	if (meta_data->cn_allocated && meta_data->cn)
 	{
 		cone = meta_data->cn;
 		while (cone)
@@ -99,10 +92,14 @@ void	intersect_sp(t_meta *meta_data, t_sp *sphere)
 		return ;
 	t = (- b - sqrt(discriminant)) / (2 * a);
 	if (t == 0)
+	{
+		meta_data->pixel.t = 0;
 		return ;
+	}
 	else if (t < 0)
 	{
 		sphere->exclude = 1;
+		meta_data->pixel.t = t;
 		return ;
 	}
 	else if (t > 0 && t < meta_data->pixel.t)
@@ -116,6 +113,9 @@ void	intersect_sp(t_meta *meta_data, t_sp *sphere)
 			meta_data->pixel.t = t;
 	}
 	meta_data->pixel.obj = (void *)sphere;
+	meta_data->pixel.final.r = sphere->colour.r;
+	meta_data->pixel.final.g = sphere->colour.g;
+	meta_data->pixel.final.b = sphere->colour.b;
 	meta_data->pixel.surface = SF_SPHERE;
 	return ;
 }
@@ -131,7 +131,7 @@ void	intersect_pl(t_meta *meta_data, t_pl *plane)
 	double		t;
 	double		denom;
 	t_vector	temp;
-	
+
 	denom = vec_dot_product(&plane->normal, &meta_data->pixel.ray);
 	if (denom == 0)
 		return ;
@@ -409,6 +409,7 @@ void	get_ray_pt(t_vector *dest, t_meta *meta_data, double t)
 {
 	t_vector	temp;
 
+	// ft_printf("get_ray_pt\n");
 	vec_multiply_scalar(&temp, &meta_data->pixel.ray, t);
 	vec_add(dest, &meta_data->camera->coord, &temp);
 }

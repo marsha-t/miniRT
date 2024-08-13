@@ -19,8 +19,22 @@ int main(int argc, char **argv)
     meta_data.mlx_ptr = mlx_init();
     if (!meta_data.mlx_ptr)
         return (0);
-    // if (meta_data.mlx_win)
-    //     mlx_destroy_window(data.mlx_ptr, data.mlx_win);
+    if (meta_data.mlx_win)
+    {
+        mlx_destroy_window(meta_data.mlx_ptr, meta_data.mlx_win);
+    }
+	meta_data.img = mlx_new_image(meta_data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (meta_data.img == NULL)
+        return (printf("Failed to create image\n"), 0);
+    meta_data.addr = mlx_get_data_addr(meta_data.img, &meta_data.bits_per_pixel,\
+        &meta_data.line_length, &meta_data.endian);
+    if (meta_data.addr == NULL)
+        return (printf("Failed to create image\n"), 0);
+    meta_data.mlx_win = mlx_new_window(meta_data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, \
+		"MINIRT - MATEO | EMARAVIL");
+    if (meta_data.mlx_win == NULL)
+        return (printf("Failed to create image\n"), 0);
+    mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, meta_data.img, 0, 0);
     print_banner();
     meta_data_init(&meta_data);
     parse_data(&meta_data, argc, argv);
@@ -31,24 +45,33 @@ int main(int argc, char **argv)
     print_spheres(&meta_data);
     print_cones(&meta_data);
     print_cylinders(&meta_data);
+    mlx_hook(meta_data.mlx_win, 17, 0, ft_close, &meta_data);
+    mlx_loop(meta_data.mlx_ptr);
+    ft_close(&meta_data);
     free_exit(&meta_data);
     return (1);
 }
 
-void	map_draw(t_meta *meta_data)
+int	ft_close(t_meta *meta_data)
 {
-	int	x;
-	int	y;
+	mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
+	mlx_destroy_image(meta_data->mlx_ptr, meta_data->img);
+	mlx_destroy_display(meta_data->mlx_ptr);
+	free(meta_data->mlx_ptr);
+	exit(0);
+	return (0);
+}
 
-	y = -1;
-	draw_select_style(meta_data);
-	while (++y < data->row)
+void	img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color)
+{
+	char	*dst;
+
+	if (!(x < 0 || y < 0 || x > WINDOW_WIDTH || y > WINDOW_HEIGHT))
 	{
-		x = -1;
-		while (++x < data->col)
-			draw_select_color(data, x, y);
+		dst = meta_data->addr + (y * meta_data->line_length + x * \
+			(meta_data->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
 	}
-	mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->img, 0, 0);
 }
 
 void    meta_data_init(t_meta *meta_data)
@@ -67,6 +90,8 @@ void    meta_data_init(t_meta *meta_data)
     meta_data->pl_allocated = false;
     meta_data->cy_allocated = false;
     meta_data->cn_allocated = false;
+    meta_data->row = WINDOW_HEIGHT;
+    meta_data->col = WINDOW_WIDTH;
 }
 
 void	parse_data(t_meta *meta_data, int argc, char **argv)

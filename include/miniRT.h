@@ -18,6 +18,9 @@
 # define SF_CONE_CURVE 6
 # define SF_CONE_BASE 7
 
+# define WINDOW_WIDTH 400
+# define WINDOW_HEIGHT 400
+
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
@@ -147,10 +150,18 @@ typedef struct s_meta
 	double		img_height;
 	t_vector	img_up;
 	t_vector	img_right;
+  t_vector  img_forward;
 	t_vector	img_center;
   t_pixel   pixel;
+  int       row;
+  int       col;
   void      *mlx_ptr;
 	void			*mlx_win;
+  void      *img;
+  char      *addr;
+  int       bits_per_pixel;
+  int       line_length;
+  int       endian;
   bool  amlight_allocated;
   bool  camera_allocated;
   bool  light_allocated;
@@ -199,6 +210,12 @@ void        print_planes(t_meta *meta_data);
 void        print_cones(t_meta *meta_data);
 void        print_light(t_meta *meta_data);
 
+int	ft_close(t_meta *meta_data);
+
+void	      map_draw(t_meta *meta_data);
+void	      img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color);
+int	        create_trgb(int t, int r, int g, int b);
+
 // Prepare derived parameters: prepare.c
 void	prepare_data(t_meta *meta_data);
 void	prepare_img(t_meta *meta_data);
@@ -245,6 +262,9 @@ void	vec_cross_product(t_vector *dest, t_vector *a, t_vector *b);
 // Vector utility functions: vector_utils.c
 void	print_vector(char *str, t_vector *vec);
 int	vec_cmp_num(t_vector *vec, double x, double y, double z);
+
+t_vector	calculate_normal(t_vector surface_point, t_vector center);
+t_vector	calculate_light_direction(t_vector surface_point, t_vector light_position);
 
 // Miscellaneous math functions: misc_math.c
 double	deg_to_rad(int degree);
