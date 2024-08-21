@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector_op.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:41:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/08 10:53:44 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/20 22:07:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ void	vec_subtract(t_vector *dest, t_vector *a, t_vector *b)
 	dest->x = a->x - b->x;
 	dest->y = a->y - b->y;
 	dest->z = a->z - b->z;
+}
+
+void	vec_inv(t_vector *dest, t_vector *a)
+{
+	dest->x = -(a->x);
+	dest->y = -(a->y);
+	dest->z = -(a->z);
 }
 
 /*	vec_add returns adds 2 vectors together 

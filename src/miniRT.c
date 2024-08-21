@@ -16,40 +16,54 @@ int main(int argc, char **argv)
 {
     t_meta meta_data;
 
-    meta_data.mlx_ptr = mlx_init();
-    if (!meta_data.mlx_ptr)
-        return (0);
-    if (meta_data.mlx_win)
-    {
-        mlx_destroy_window(meta_data.mlx_ptr, meta_data.mlx_win);
-    }
-	meta_data.img = mlx_new_image(meta_data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-    if (meta_data.img == NULL)
-        return (printf("Failed to create image\n"), 0);
-    meta_data.addr = mlx_get_data_addr(meta_data.img, &meta_data.bits_per_pixel,\
-        &meta_data.line_length, &meta_data.endian);
-    if (meta_data.addr == NULL)
-        return (printf("Failed to create image\n"), 0);
-    meta_data.mlx_win = mlx_new_window(meta_data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, \
-		"MINIRT - MATEO | EMARAVIL");
-    if (meta_data.mlx_win == NULL)
-        return (printf("Failed to create image\n"), 0);
-    mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, meta_data.img, 0, 0);
     print_banner();
     meta_data_init(&meta_data);
     parse_data(&meta_data, argc, argv);
+    rt_mlxinit(&meta_data);
     prepare_data(&meta_data);
     gen_img(&meta_data);
-    print_light(&meta_data);
-    print_planes(&meta_data);
-    print_spheres(&meta_data);
-    print_cones(&meta_data);
-    print_cylinders(&meta_data);
+    // print_light(&meta_data);
+    // print_planes(&meta_data);
+    // print_spheres(&meta_data);
+    // print_cones(&meta_data);
+    // print_cylinders(&meta_data);
+    mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, meta_data.img, 0, 0);
     mlx_hook(meta_data.mlx_win, 17, 0, ft_close, &meta_data);
     mlx_loop(meta_data.mlx_ptr);
     ft_close(&meta_data);
     free_exit(&meta_data);
     return (1);
+}
+
+void    rt_mlxinit(t_meta *meta_data)
+{
+    meta_data->mlx_ptr = mlx_init();
+    if (!meta_data->mlx_ptr)
+        return ;
+    if (meta_data->mlx_win)
+    {
+        mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
+    }
+	meta_data->img = mlx_new_image(meta_data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (meta_data->img == NULL)
+    {
+        printf("Failed to create image\n");
+        return ;
+    }
+    meta_data->addr = mlx_get_data_addr(meta_data->img, &meta_data->bits_per_pixel,\
+        &meta_data->line_length, &meta_data->endian);
+    if (meta_data->addr == NULL)
+    {
+        printf("Failed to create image\n");
+        return ;
+    }
+    meta_data->mlx_win = mlx_new_window(meta_data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, \
+		"MINIRT - MATEO | EMARAVIL");
+    if (meta_data->mlx_win == NULL)
+    {
+        printf("Failed to create image\n");
+        return ;
+    }
 }
 
 int	ft_close(t_meta *meta_data)

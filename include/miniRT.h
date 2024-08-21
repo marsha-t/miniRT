@@ -18,8 +18,9 @@
 # define SF_CONE_CURVE 6
 # define SF_CONE_BASE 7
 
-# define WINDOW_WIDTH 400
-# define WINDOW_HEIGHT 400
+# define WINDOW_WIDTH 1000
+# define WINDOW_HEIGHT 600
+# define FOCAL_LENGTH 0.5
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -36,9 +37,9 @@
 
 typedef struct s_colour
 {
-    int  r;
-    int  g;
-    int  b;
+    double  r;
+    double  g;
+    double  b;
     double r_n;
     double g_n;
     double b_n;
@@ -127,7 +128,9 @@ typedef struct s_pixel
 	int			surface;
 	t_vector	intersect;
   t_vector  shadow;
+  t_vector  coord;
   t_colour  final;
+  t_vector  normal;
 	/*	
     or
 		int			surface; e.g.,
@@ -150,7 +153,6 @@ typedef struct s_meta
 	double		img_height;
 	t_vector	img_up;
 	t_vector	img_right;
-  t_vector  img_forward;
 	t_vector	img_center;
   t_pixel   pixel;
   int       row;
@@ -171,6 +173,7 @@ typedef struct s_meta
   bool  cn_allocated;
 } t_meta;
 
+void    rt_mlxinit(t_meta *meta_data);
 void    print_banner();
 void    fill_camera(t_meta *meta_data, char **argv);
 void    fill_ambient(t_meta *meta_data, char **argv);
@@ -214,7 +217,7 @@ int	ft_close(t_meta *meta_data);
 
 void	      map_draw(t_meta *meta_data);
 void	      img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color);
-int	        create_trgb(int t, int r, int g, int b);
+int	        create_trgb(int r, int g, int b);
 
 // Prepare derived parameters: prepare.c
 void	prepare_data(t_meta *meta_data);
@@ -252,6 +255,7 @@ void	get_ambient(t_meta *meta_data);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);
+void	vec_inv(t_vector *dest, t_vector *a);
 double	vec_len(t_vector *vec);
 void	vec_subtract(t_vector *dest, t_vector *a, t_vector *b);
 void	vec_add(t_vector *dest, t_vector *a, t_vector *b);

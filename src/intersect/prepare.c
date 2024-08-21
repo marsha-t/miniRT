@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/13 03:08:32 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/21 04:07:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 */
 void	prepare_data(t_meta *meta_data)
 {
-	meta_data->aspect_ratio = 1;  //WINDOW_HEIGHT - 1 / WINDOW_WIDTH - 1; // windwos width - 1 / windows height - 1
+	meta_data->aspect_ratio = (double)(WINDOW_WIDTH) / (double)(WINDOW_HEIGHT);
+	printf("ASPECT RATIO %f\n", meta_data->aspect_ratio);
 	prepare_img(meta_data);
 	prepare_light(meta_data);
 	prepare_obj(meta_data);
@@ -31,9 +32,6 @@ void	prepare_img(t_meta *meta_data)
 	fov_rad = deg_to_rad(meta_data->camera->fov);
 	meta_data->img_width = tan(fov_rad / 2) * 2;
 	meta_data->img_height = meta_data->img_width / meta_data->aspect_ratio;
-	meta_data->img_forward.x = 0;
-	meta_data->img_forward.y = 0;
-	meta_data->img_forward.z = 1;
 	img_basis_vec(meta_data);
 	// vec_subtract(&meta_data->img_center, &meta_data->camera->coord,
 	// 		&meta_data->camera->orient);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/13 04:10:13 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/21 04:37:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,43 +80,102 @@ void	intersect_sp(t_meta *meta_data, t_sp *sphere)
 	double	b;
 	double	c;
 	double	discriminant;
-	double	t;
+	double	t1;
+	double	t2;
 	t_vector	temp;
 
 	a = vec_dot_product(&meta_data->pixel.ray, &meta_data->pixel.ray);
 	vec_subtract(&temp, &meta_data->camera->coord, &sphere->coord);
 	b = vec_dot_product(&meta_data->pixel.ray, &temp) * 2;
-	c = vec_dot_product(&temp, &temp) - (sphere->radius) * (sphere->radius);
-	discriminant = b *b - 4 * a * c;
+	c = vec_dot_product(&temp, &temp) - ((sphere->radius) * (sphere->radius));
+	// meta_data->pixel.coord = meta_data->light->coord;
+	discriminant = (b*b) - (4*a*c);
 	if (discriminant < 0)
 		return ;
-	t = (- b - sqrt(discriminant)) / (2 * a);
-	if (t == 0)
-	{
-		meta_data->pixel.t = 0;
-		return ;
-	}
-	else if (t < 0)
+	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
+	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+	// printf("t: %f t1: %f t2: %f\n", meta_data->pixel.t, t1, t2);
+	if (t1 < 0 && t2 < 0 && meta_data->pixel.t < 0)
 	{
 		sphere->exclude = 1;
-		meta_data->pixel.t = t;
+		meta_data->pixel.t = -1;
 		return ;
 	}
-	else if (t > 0 && t < meta_data->pixel.t)
-		meta_data->pixel.t = t;
-	if (discriminant > 0)
+	else if (t1 < 0 && t2 > 0 && t2 < meta_data->pixel.t && meta_data->pixel.t > 0)
 	{
-		t = (- b + sqrt(discriminant)) / (2 * a);
-		if (t <= 0)
-			return ; // exclude object accordingly (for t < 0)
-		else if (t > 0 && t < meta_data->pixel.t)
-			meta_data->pixel.t = t;
+		meta_data->pixel.t = t2;
 	}
+	else if (t1 > 0 && t2 < 0 && t1 < meta_data->pixel.t && meta_data->pixel.t > 0)
+	{
+		meta_data->pixel.t = t1;
+	}
+	else if (t1 > 0 && t2 > 0 && t1 < t2 && t1 < meta_data->pixel.t && meta_data->pixel.t > 0)
+	{
+		meta_data->pixel.t = t1;
+	}
+	else if (t1 > 0 && t2 > 0 && t1 > t2 && t2 < meta_data->pixel.t && meta_data->pixel.t > 0)
+	{
+		meta_data->pixel.t = t2;
+	}
+	else if (t1 < 0 && t2 > 0 && meta_data->pixel.t < 0)
+	{
+		meta_data->pixel.t = t2;
+	}
+	else if (t1 > 0 && t2 < 0 && meta_data->pixel.t < 0)
+	{
+		meta_data->pixel.t = t1;
+	}
+	else if (t1 > 0 && t2 > 0 && t1 < t2 && meta_data->pixel.t < 0)
+	{
+		meta_data->pixel.t = t1;
+	}
+	else if (t1 > 0 && t2 > 0 && t1 > t2 && meta_data->pixel.t < 0)
+	{
+		meta_data->pixel.t = t2;
+	}
+	else if (t1 == t2 && meta_data->pixel.t < 0)
+	{
+		meta_data->pixel.t = t2;
+	}
+	else if (t1 == t2 && meta_data->pixel.t > t2 && meta_data->pixel.t > 0)
+	{
+		meta_data->pixel.t = t2;
+	}
+	else
+	{
+		// sphere->exclude = 1;
+		// meta_data->pixel.t = -1;
+		return ;
+	}
+	// printf("t: %f t1: %f t2: %f\n", meta_data->pixel.t, t1, t2);
+	// printf("pixel.t: %f\n", meta_data->pixel.t);
+	// if (t == 0)
+	// {
+	// 	meta_data->pixel.t = 0;
+	// 	return ;
+	// }
+	// else if (t1 < 0 && t2 < 0)
+	// {
+	// 	sphere->exclude = 1;
+	// 	meta_data->pixel.t = t;
+	// 	return ;
+	// }
+	// else if (t > 0 && t < meta_data->pixel.t)
+	// 	meta_data->pixel.t = t;
+	// if (discriminant > 0)
+	// {
+	// 	t = (-b + sqrt(discriminant)) / (2.0 * a);
+	// 	meta_data->pixel.t = t;
+	// 	if (t <= 0)
+	// 		return ; // exclude object accordingly (for t < 0)
+	// 	// else if (t > 0 && t < meta_data->pixel.t)
+	// }
 	meta_data->pixel.obj = (void *)sphere;
-	meta_data->pixel.final.r = sphere->colour.r;
-	meta_data->pixel.final.g = sphere->colour.g;
-	meta_data->pixel.final.b = sphere->colour.b;
+	meta_data->pixel.final.r_n = sphere->colour.r_n;
+	meta_data->pixel.final.g_n = sphere->colour.g_n;
+	meta_data->pixel.final.b_n = sphere->colour.b_n;
 	meta_data->pixel.surface = SF_SPHERE;
+	meta_data->pixel.coord = sphere->coord;
 	return ;
 }
 
@@ -132,20 +191,38 @@ void	intersect_pl(t_meta *meta_data, t_pl *plane)
 	double		denom;
 	t_vector	temp;
 
+	// printf("intersect pl\n");
 	denom = vec_dot_product(&plane->normal, &meta_data->pixel.ray);
 	if (denom == 0)
 		return ;
 	vec_subtract(&temp, &meta_data->camera->coord, &plane->coord);
-	t = -1 * (vec_dot_product(&plane->normal, &temp) / denom);
+	t = -1 * ((vec_dot_product(&plane->normal, &temp)) / denom);
 	if (t <= 0)
 		return ;
-	if (t < meta_data->pixel.t)
+	if (t > 0 && meta_data->pixel.t < 0)
+		meta_data->pixel.t = t;
+	else if (t < meta_data->pixel.t && meta_data->pixel.t > 0)
 	{
 		meta_data->pixel.t = t;
-		meta_data->pixel.obj = (void *)plane;
-		meta_data->pixel.surface = SF_PLANE;
 	}
+	else
+		return ;
+	meta_data->pixel.obj = (void *)plane;
+	meta_data->pixel.final.r_n = plane->colour.r_n;
+	meta_data->pixel.final.g_n = plane->colour.g_n;
+	meta_data->pixel.final.b_n = plane->colour.b_n;
+	meta_data->pixel.surface = SF_PLANE;
+	meta_data->pixel.coord = plane->coord;
+	meta_data->pixel.normal = plane->normal;
+	if (vec_dot_product(&plane->normal, &meta_data->pixel.ray) > 0)
+	{
+		vec_inv(&meta_data->pixel.normal, &plane->normal);
+	}
+	// printf("denom %f t: %f\n", denom, t);
+	// printf("meta_data t: %f\n", meta_data->pixel.t);
 }
+
+
 
 /*	intersect_cy finds intersection between ray and cylinder
 	- calls on intersect_cy_curve to check intersection with curved surface
@@ -185,12 +262,19 @@ void	intersect_cy_curve(t_meta *meta_data, t_cy *cylinder)
 	c = vec_dot_product(&w_perpen, &w_perpen) - cylinder->radius * cylinder->radius;
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
+	{
+		printf("discriminant %f\n", discriminant);
 		return ;
+	}
 	t = (- b - sqrt(discriminant)) / (2 * a);
 	if (t == 0)
+	{
+		printf("curve t = 0\n");
 		return ;
+	}
 	else if (t < 0)
 	{
+		printf("curve exclude\n");
 		cylinder->exclude = 1;
 		return ;
 	}
@@ -200,15 +284,20 @@ void	intersect_cy_curve(t_meta *meta_data, t_cy *cylinder)
 	{
 		t = (- b + sqrt(discriminant)) / (2 * a);
 		if (t == 0)
-		return ;
+		{
+			printf("discriminant t = 0\n");
+			return ;
+		}
 		else if (t < 0)
 		{
+			printf("discriminant exclude = 1\n");
 			cylinder->exclude = 1;
 			return ;
 		}
 		else if (t > 0 && t < meta_data->pixel.t)
 			update_t_cy_curve(meta_data, cylinder, t);
 	}
+	printf("t: %f\n", meta_data->pixel.t);
 }
 
 /*	update_t_cy_curve updates data in pixel with t
@@ -247,14 +336,19 @@ void	intersect_cy_base(t_meta *meta_data, t_cy *cylinder)
 	double	len;
 
 	denom = vec_dot_product(&cylinder->axis, &meta_data->pixel.ray);
+	printf("denom %f\n", denom);
 	if (denom == 0)
 		return ;
 	vec_subtract(&temp, &cylinder->base_bottom, &meta_data->camera->coord);
 	t = vec_dot_product(&cylinder->axis, &temp) / denom;
 	if (t == 0)
+	{
+		printf("t = 0\n");
 		return ;
+	}
 	else if (t < 0)
 	{
+		printf("t < 0\n");
 		cylinder->exclude = 1;
 		return ;
 	}
@@ -269,10 +363,14 @@ void	intersect_cy_base(t_meta *meta_data, t_cy *cylinder)
 	t = vec_dot_product(&cylinder->axis, &temp) / denom;
 	len = vec_len(&temp);
 	if (t == 0)
+	{
+		printf("t = 0\n");
 		return ;
+	}
 	else if (t < 0)
 	{
 		cylinder->exclude = 1;
+		printf("exclude\n");
 		return ;
 	}
 	if (t > 0 && t < meta_data->pixel.t && len <= cylinder->radius)
@@ -281,6 +379,7 @@ void	intersect_cy_base(t_meta *meta_data, t_cy *cylinder)
 		meta_data->pixel.obj = (void *)cylinder;
 		meta_data->pixel.surface = SF_CY_BASE_T;
 	}
+	printf("t: %f\n", meta_data->pixel.t);
 }
 
 /*	intersect_cn finds intersection between ray and cone
