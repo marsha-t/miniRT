@@ -23,6 +23,26 @@
 # define FOCAL_LENGTH 0.5
 
 # define KEY_ESC 53
+# define NUMPAD_0 65438
+# define NUMPAD_1 65436
+# define NUMPAD_2 65433
+# define NUMPAD_3 65435
+# define NUMPAD_4 65430
+# define NUMPAD_5 65437
+# define NUMPAD_6 65432
+# define NUMPAD_7 65429
+# define NUMPAD_8 65431
+# define NUMPAD_9 65434
+# define ARROW_LEFT 65361
+# define ARROW_UP 65362
+# define ARROW_DOWN 65364
+# define ARROW_RIGHT 65363
+# define KEY_Q 113
+# define KEY_A 97
+# define KEY_W 119
+# define KEY_S 115
+# define KEY_E 101
+# define KEY_D 100
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -170,6 +190,7 @@ typedef struct s_meta
 } t_meta;
 
 void    rt_mlxinit(t_meta *meta_data);
+void    draw(t_meta *meta_data);
 void    print_banner();
 void    fill_camera(t_meta *meta_data, char **argv);
 void    fill_ambient(t_meta *meta_data, char **argv);
@@ -179,6 +200,9 @@ void    ft_fill_data(t_meta *meta_data, char *singleline);
 void    read_data(t_meta *meta_data, char *argv);
 void	  parse_data(t_meta *data, int argc, char **argv);
 void    meta_data_init(t_meta *meta_data);
+
+void    translate_camera(t_vector *vector, int key);
+void    translate_light(t_vector *vector, int key);
 
 void    ft_check_args(int argc, char **argv);
 void    check_fd(char *argv);

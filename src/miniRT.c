@@ -20,8 +20,9 @@ int main(int argc, char **argv)
     meta_data_init(&meta_data);
     parse_data(&meta_data, argc, argv);
     rt_mlxinit(&meta_data);
-    prepare_data(&meta_data);
-    gen_img(&meta_data);
+    draw(&meta_data);
+    // prepare_data(&meta_data);
+    // gen_img(&meta_data);
     // print_light(&meta_data);
     // print_planes(&meta_data);
     // print_spheres(&meta_data);
@@ -34,6 +35,22 @@ int main(int argc, char **argv)
     ft_close(&meta_data);
     free_exit(&meta_data);
     return (1);
+}
+
+// void    copy_img(t_meta *meta_data)
+// {
+    
+// }
+
+// void    restore_img(t_meta *meta_data)
+// {
+
+// }
+
+void    draw(t_meta *meta_data)
+{
+    prepare_data(meta_data);
+    gen_img(meta_data);
 }
 
 void    rt_mlxinit(t_meta *meta_data)
@@ -77,7 +94,114 @@ int	ft_key(int key, void *param)
 	meta_data = (t_meta *)param;
 	if (key == KEY_ESC)
 		ft_close(meta_data);
+    else if (key == NUMPAD_0)
+        printf("NUMPAD 0\n");
+    else if (key == NUMPAD_1)
+    {
+        printf("NUMPAD 1\n");
+        translate_camera(&meta_data->camera->coord, key);
+    }
+    else if (key == NUMPAD_2)
+    {
+        printf("NUMPAD 2\n");
+        translate_camera(&meta_data->camera->coord, key);
+    }
+    else if (key == NUMPAD_3)
+    {
+        printf("NUMPAD 3\n");
+        translate_camera(&meta_data->camera->coord, key);
+    }
+    else if (key == NUMPAD_4)
+    {
+        printf("NUMPAD 4\n");
+        translate_camera(&meta_data->camera->coord, key);
+    }
+    else if (key == NUMPAD_5)
+    {
+        printf("NUMPAD 5\n");
+        translate_camera(&meta_data->camera->coord, key);
+    }
+    else if (key == NUMPAD_6)
+    {
+        printf("NUMPAD 6\n");
+        translate_camera(&meta_data->camera->coord, key);
+    }
+    else if (key == NUMPAD_7)
+        printf("NUMPAD 7\n");
+    else if (key == NUMPAD_8)
+        printf("NUMPAD 8\n");
+    else if (key == NUMPAD_9)
+        printf("NUMPAD 9\n");
+    else if (key == KEY_Q)
+    {
+        printf("Q\n");
+        translate_light(&meta_data->light->coord, key);
+    }
+    else if (key == KEY_A)
+    {
+        printf("A\n");
+        translate_light(&meta_data->light->coord, key);
+    }
+    else if (key == KEY_W)
+    {
+        printf("W\n");
+        translate_light(&meta_data->light->coord, key);
+    }
+    else if (key == KEY_S)
+    {
+        printf("S\n");
+        translate_light(&meta_data->light->coord, key);
+    }
+    else if (key == KEY_E)
+    {
+        printf("E\n");
+        translate_light(&meta_data->light->coord, key);
+    }
+    else if (key == KEY_D)
+    {
+        printf("D\n");
+        translate_light(&meta_data->light->coord, key);
+    }
+    else
+    {
+        printf("none %d\n", key);
+    }
+    mlx_clear_window(meta_data->mlx_ptr, meta_data->mlx_win);
+    draw(meta_data);
+    mlx_put_image_to_window(meta_data->mlx_ptr, meta_data->mlx_win, meta_data->img, 0, 0);
 	return (0);
+}
+
+void    translate_camera(t_vector *vector, int key)
+{
+    if (key == NUMPAD_4)
+        vector->x += 10;
+    if (key == NUMPAD_1)
+        vector->x -= 10;
+    if (key == NUMPAD_5)
+        vector->y += 10;
+    if (key == NUMPAD_2)
+        vector->y -= 10;
+    if (key == NUMPAD_6)
+        vector->z += 10;
+    if (key == NUMPAD_3)
+        vector->z -= 10;
+}
+
+void    translate_light(t_vector *vector, int key)
+{
+    if (key == KEY_Q)
+        vector->x += 10;
+    if (key == KEY_A)
+        vector->x -= 10;
+    if (key == KEY_W)
+        vector->y += 10;
+    if (key == KEY_S)
+        vector->y -= 10;
+    if (key == KEY_E)
+        vector->z += 10;
+    if (key == KEY_D)
+        vector->z -= 10;
 }
 
 int	ft_close(t_meta *meta_data)
