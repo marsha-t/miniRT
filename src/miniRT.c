@@ -28,6 +28,7 @@ int main(int argc, char **argv)
     // print_cones(&meta_data);
     // print_cylinders(&meta_data);
     mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, meta_data.img, 0, 0);
+	mlx_hook(meta_data.mlx_win, 2, 1L << 0, ft_key, &meta_data);
     mlx_hook(meta_data.mlx_win, 17, 0, ft_close, &meta_data);
     mlx_loop(meta_data.mlx_ptr);
     ft_close(&meta_data);
@@ -40,10 +41,10 @@ void    rt_mlxinit(t_meta *meta_data)
     meta_data->mlx_ptr = mlx_init();
     if (!meta_data->mlx_ptr)
         return ;
-    if (meta_data->mlx_win)
-    {
-        mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
-    }
+    // if (meta_data->mlx_win)
+    // {
+    //     mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
+    // }
 	meta_data->img = mlx_new_image(meta_data->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
     if (meta_data->img == NULL)
     {
@@ -66,11 +67,24 @@ void    rt_mlxinit(t_meta *meta_data)
     }
 }
 
+/*	ft_key directs specific keypresses to various actions
+	- close
+*/
+int	ft_key(int key, void *param)
+{
+	t_meta *meta_data;
+
+	meta_data = (t_meta *)param;
+	if (key == KEY_ESC)
+		ft_close(meta_data);
+	return (0);
+}
+
 int	ft_close(t_meta *meta_data)
 {
 	mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
 	mlx_destroy_image(meta_data->mlx_ptr, meta_data->img);
-	mlx_destroy_display(meta_data->mlx_ptr);
+	// mlx_destroy_display(meta_data->mlx_ptr);
 	free(meta_data->mlx_ptr);
 	exit(0);
 	return (0);

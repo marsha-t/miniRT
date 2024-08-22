@@ -1,0 +1,50 @@
+#include "../../include/miniRT.h"
+
+/*	quadratic formula solves for a quadratic equation (given a, b, c)
+	- returns smallest positivmakee t or -1 otherwise */
+double	quadratic_formula(double a, double b, double c)
+{
+	double	t;
+	double	t2;
+	double	discriminant;
+
+	discriminant = b * b - 4 * a * c;
+	if (discriminant < 0)
+		return (-1);
+	t = (-b - sqrt(discriminant)) / (2 * a);
+	if (discriminant == 0)
+	{
+		if (t <= 0)
+			return (-1);
+		else
+			return (t);
+	}
+	t2 = (-b + sqrt(discriminant)) / (2 * a);
+	if (t <= 0)
+	{
+		if (t2 <= 0)
+			return (-1);
+		else
+			return (t);
+	}
+	else
+	{
+		if (t < t2)
+			return (t);
+		else
+			return (t2);
+	}
+}
+
+/*	get_ray_pt generates coordinates for point on ray
+	- point = camera + t * ray_direction
+*/
+void	get_ray_pt(t_vector *dest, t_vector *ray, t_vector *origin, double t)
+{
+	t_vector	temp;
+
+	vec_multiply_scalar(&temp, ray, t);
+	vec_add(dest, origin, &temp);
+	// vec_multiply_scalar(&temp, &meta_data->pixel.ray, t);
+	// vec_add(dest, &meta_data->camera->coord, &temp);
+}
