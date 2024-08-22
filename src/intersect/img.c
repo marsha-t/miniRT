@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 10:10:22 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/22 18:24:07 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	gen_img(t_meta *meta_data)
 			init_pixel(&meta_data->pixel);
 			ray_dir(x, y, meta_data);
 			intersect_closest(meta_data);
+			prepare_intersect(&meta_data->pixel);
 			if (meta_data->pixel.t >= 0 && meta_data->pixel.t != DBL_MAX)
 			{
 				gen_final_colour(meta_data);
@@ -56,7 +57,6 @@ int	create_trgb(int r, int g, int b)
 	at the start of every calculation for each pixel (i, j) */
 void	init_pixel(t_pixel *pixel)
 {
-	// pixel->t = -1;
 	pixel->t = DBL_MAX;
 	pixel->obj = 0;
 	pixel->surface = -1;

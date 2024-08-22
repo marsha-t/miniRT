@@ -133,12 +133,6 @@ typedef struct s_pixel
   t_vector  coord;
   t_colour  final;
   t_vector  normal;
-	/*	
-    or
-		int			surface; e.g.,
-						sphere/plane/cy curve/cy bottom base/cy top base/cone curve/cone base
-		int			nth_obj; e.g., 0 = 1st in linked list
-	*/
 }				t_pixel;
 
 typedef struct s_meta
@@ -253,6 +247,15 @@ double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray, t_vector 
 double	intersect_cn_curve_math(t_cn *cone, t_vector *ray, t_vector *origin);
 double	intersect_cn_base_math(t_cn *cone, t_vector *ray, t_vector *origin);
 
+// Calculate derived data of intersection: intersect_prepare.c
+void	prepare_intersect(t_pixel *pixel);
+void  prepare_intersect_sp(t_pixel *pixel);
+t_vector	get_sp_normal(t_vector surface_point, t_vector center);
+void	prepare_intersect_pl(t_pixel *pixel);
+void	prepare_intersect_cy(t_pixel *pixel);
+void	prepare_intersect_cn(t_pixel *pixel);
+t_vector	get_cy_curve_normal(t_pixel *pixel, t_cy *cylinder);
+
 // Utility functions needed for intersection calculation: intersect_utils.c
 double	quadratic_formula(double a, double b, double c);
 void	get_ray_pt(t_vector *dest, t_vector *ray, t_vector *origin, double t);
@@ -277,7 +280,6 @@ void	vec_cross_product(t_vector *dest, t_vector *a, t_vector *b);
 void	print_vector(char *str, t_vector *vec);
 int	vec_cmp_num(t_vector *vec, double x, double y, double z);
 
-t_vector	calculate_normal(t_vector surface_point, t_vector center);
 t_vector	calculate_light_direction(t_vector surface_point, t_vector light_position);
 
 // Miscellaneous math functions: misc_math.c

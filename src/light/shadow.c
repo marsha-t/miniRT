@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 17:32:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 12:16:54 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/22 17:48:25 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,22 @@ bool	in_shadow(t_meta *meta_data, t_light *light)
 	t_cn *cone;
 	double t;
 	double len;
-
+	t_vector new_origin;
+	
 	vec_subtract(&meta_data->pixel.shadow, &light->coord,
 		&meta_data->pixel.intersect);
 	vec_normalise(&meta_data->pixel.shadow);
 	vec_subtract(&temp, &light->coord, &meta_data->pixel.intersect);
 	len = vec_len(&temp);
+	vec_multiply_scalar(&temp, &meta_data->pixel.normal, 0.001);
+	vec_add(&new_origin, &meta_data->pixel.intersect, &temp);
 	if (meta_data->sp_allocated && meta_data->sp != NULL)
 	{
 		sphere = meta_data->sp;
 		while (sphere)
 		{
 			t = intersect_sp_math(sphere, &meta_data->pixel.shadow,
-					&meta_data->pixel.intersect);
+					&new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			sphere = sphere->next;
@@ -47,8 +50,7 @@ bool	in_shadow(t_meta *meta_data, t_light *light)
 		plane = meta_data->pl;
 		while (plane)
 		{
-			t = intersect_pl_math(plane, &meta_data->pixel.shadow,
-					&meta_data->pixel.intersect);
+			t = intersect_pl_math(plane, &meta_data->pixel.shadow, &new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			plane = plane->next;
@@ -60,15 +62,15 @@ bool	in_shadow(t_meta *meta_data, t_light *light)
 		while (cylinder)
 		{
 			t = intersect_cy_curve_math(cylinder, &meta_data->pixel.shadow,
-					&meta_data->pixel.intersect);
+					&new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			t = intersect_cy_base_math(cylinder, SF_CY_BASE_B,
-					&meta_data->pixel.shadow, &meta_data->pixel.intersect);
+					&meta_data->pixel.shadow, &new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			t = intersect_cy_base_math(cylinder, SF_CY_BASE_T,
-					&meta_data->pixel.shadow, &meta_data->pixel.intersect);
+					&meta_data->pixel.shadow, &new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			cylinder = cylinder->next;
@@ -80,11 +82,11 @@ bool	in_shadow(t_meta *meta_data, t_light *light)
 		while (cone)
 		{
 			t = intersect_cn_curve_math(cone, &meta_data->pixel.shadow,
-					&meta_data->pixel.intersect);
+					&new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			t = intersect_cn_base_math(cone, &meta_data->pixel.shadow,
-					&meta_data->pixel.intersect);
+					&new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			cone = cone->next;

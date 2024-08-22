@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersect_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/22 18:03:25 by mateo             #+#    #+#             */
+/*   Updated: 2024/08/22 18:08:07 by mateo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRT.h"
 
 /*	quadratic formula solves for a quadratic equation (given a, b, c)
@@ -45,6 +57,4 @@ void	get_ray_pt(t_vector *dest, t_vector *ray, t_vector *origin, double t)
 
 	vec_multiply_scalar(&temp, ray, t);
 	vec_add(dest, origin, &temp);
-	// vec_multiply_scalar(&temp, &meta_data->pixel.ray, t);
-	// vec_add(dest, &meta_data->camera->coord, &temp);
 }

@@ -15,6 +15,7 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/intersect/img.c \
 				./src/intersect/intersect.c \
 				./src/intersect/intersect_math.c \
+				./src/intersect/intersect_prepare.c \
 				./src/intersect/intersect_utils.c \
 				./src/light/final_colour.c \
 				./src/light/shadow.c \

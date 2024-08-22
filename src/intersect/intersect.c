@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 12:14:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/22 18:24:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	intersect_closest(t_meta *meta_data)
 	t_cy	*cylinder;
 	t_cn	*cone;
 
-	// printf("enter here\n");
 	if (meta_data->sp_allocated && meta_data->sp)
 	{
 		sphere = meta_data->sp;
@@ -80,10 +79,6 @@ void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray)
 	{
 		meta_data->pixel.t = t;
 		meta_data->pixel.obj = (void *)sphere;
-		meta_data->pixel.final.r_n = sphere->colour.r_n;
-		meta_data->pixel.final.g_n = sphere->colour.g_n;
-		meta_data->pixel.final.b_n = sphere->colour.b_n;
-		meta_data->pixel.coord = sphere->coord;
 		meta_data->pixel.surface = SF_SPHERE;
 	}
 }
@@ -103,16 +98,7 @@ void	intersect_pl(t_meta *meta_data, t_pl *plane, t_vector *ray)
 	{
 		meta_data->pixel.t = t;
 		meta_data->pixel.obj = (void *)plane;
-		meta_data->pixel.final.r_n = plane->colour.r_n;
-		meta_data->pixel.final.g_n = plane->colour.g_n;
-		meta_data->pixel.final.b_n = plane->colour.b_n;
 		meta_data->pixel.surface = SF_PLANE;
-		meta_data->pixel.coord = plane->coord;
-		meta_data->pixel.normal = plane->normal;
-		if (vec_dot_product(&plane->normal, &meta_data->pixel.ray) > 0)
-		{
-			vec_inv(&meta_data->pixel.normal, &plane->normal);
-		}
 	}
 }
 
@@ -129,9 +115,6 @@ void	intersect_cy(t_meta *meta_data, t_cy *cylinder, t_vector *ray)
 	{
 		meta_data->pixel.t = t;
 		meta_data->pixel.obj = (void *)cylinder;
-		meta_data->pixel.final.r_n = cylinder->colour.r_n;
-		meta_data->pixel.final.g_n = cylinder->colour.g_n;
-		meta_data->pixel.final.b_n = cylinder->colour.b_n;
 		meta_data->pixel.surface = SF_CY_CURVE;
 	}
 	t = intersect_cy_base_math(cylinder, SF_CY_BASE_B, ray,
@@ -140,9 +123,6 @@ void	intersect_cy(t_meta *meta_data, t_cy *cylinder, t_vector *ray)
 	{
 		meta_data->pixel.t = t;
 		meta_data->pixel.obj = (void *)cylinder;
-		meta_data->pixel.final.r_n = cylinder->colour.r_n;
-		meta_data->pixel.final.g_n = cylinder->colour.g_n;
-		meta_data->pixel.final.b_n = cylinder->colour.b_n;
 		meta_data->pixel.surface = SF_CY_BASE_B;
 	}
 	t = intersect_cy_base_math(cylinder, SF_CY_BASE_T, ray,
@@ -151,17 +131,13 @@ void	intersect_cy(t_meta *meta_data, t_cy *cylinder, t_vector *ray)
 	{
 		meta_data->pixel.t = t;
 		meta_data->pixel.obj = (void *)cylinder;
-		meta_data->pixel.final.r_n = cylinder->colour.r_n;
-		meta_data->pixel.final.g_n = cylinder->colour.g_n;
-		meta_data->pixel.final.b_n = cylinder->colour.b_n;
 		meta_data->pixel.surface = SF_CY_BASE_T;
 	}
 }
 
 /*	intersect_cn finds intersection between ray and cone
 	- calls on intersect_cn_curve_math to check intersection with curved surface
-	- calls on intersect_cn_base_math to check intersection with base
-*/
+	- calls on intersect_cn_base_math to check intersection with base */
 void	intersect_cn(t_meta *meta_data, t_cn *cone, t_vector *ray)
 {
 	double	t;
@@ -171,9 +147,6 @@ void	intersect_cn(t_meta *meta_data, t_cn *cone, t_vector *ray)
 	{
 		meta_data->pixel.t = t;
 		meta_data->pixel.obj = (void *)cone;
-		meta_data->pixel.final.r_n = cone->colour.r_n;
-		meta_data->pixel.final.g_n = cone->colour.g_n;
-		meta_data->pixel.final.b_n = cone->colour.b_n;
 		meta_data->pixel.surface = SF_CONE_CURVE;
 	}
 	t = intersect_cn_base_math(cone, ray, &meta_data->camera->coord);
@@ -181,9 +154,6 @@ void	intersect_cn(t_meta *meta_data, t_cn *cone, t_vector *ray)
 	{
 		meta_data->pixel.t = t;
 		meta_data->pixel.obj = (void *)cone;
-		meta_data->pixel.final.r_n = cone->colour.r_n;
-		meta_data->pixel.final.g_n = cone->colour.g_n;
-		meta_data->pixel.final.b_n = cone->colour.b_n;
 		meta_data->pixel.surface = SF_CONE_BASE;
 	}
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersect_math.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/22 18:24:23 by mateo             #+#    #+#             */
+/*   Updated: 2024/08/22 18:24:37 by mateo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRT.h"
 
 /*	intersect_sp_math finds the intersection between ray and a given sphere
@@ -36,7 +48,6 @@ double	intersect_pl_math(t_pl *plane, t_vector *ray, t_vector *origin)
 	return (t);
 }
 
-
 /*	intersect_cy_curve_math checks intersection with curved surface of cylinder
 	- returns -1 if there are no intersections or t <= 0
 	- returns -1 if pt doesnt lie within cylinder height
@@ -54,8 +65,8 @@ double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin)
 	t_vector	ray_pt;
 	double		projection;
 
-	vec_multiply_scalar(&temp, &cylinder->axis,
-		vec_dot_product(ray, &cylinder->axis));
+	vec_multiply_scalar(&temp, &cylinder->axis, vec_dot_product(ray,
+			&cylinder->axis));
 	vec_subtract(&d_perpen, ray, &temp);
 	vec_subtract(&w, origin, &cylinder->coord);
 	vec_multiply_scalar(&temp, &cylinder->axis, vec_dot_product(&w,
@@ -78,12 +89,12 @@ double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin)
 	return (t);
 }
 
-
 /*	intersect_cy_base_math checks intersection with EITHER bases of cylinder
 	- returns -1 if there are no intersections or t <= 0
 	- returns -1 if intersection is outside radius of cylinder
 	- returns t otherwise  */
-double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray, t_vector *origin)
+double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray,
+		t_vector *origin)
 {
 	t_vector	temp;
 	double		denom;
@@ -106,7 +117,6 @@ double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray, t_vector 
 	return (t);
 }
 
-
 /*	intersect_cn_curve_math checks intersection with curved surface of cylinder
 	- returns -1 if there are no intersections or t <= 0
 	- returns -1 if pt doesnt lie within cone height
@@ -127,8 +137,8 @@ double	intersect_cn_curve_math(t_cn *cone, t_vector *ray, t_vector *origin)
 	a -= temp * vec_dot_product(ray, &cone->axis);
 	vec_subtract(&w, origin, &cone->coord);
 	b = vec_dot_product(&w, ray);
-	b -= temp * vec_dot_product(&w, &cone->axis)
-		* vec_dot_product(ray, &cone->axis);
+	b -= temp * vec_dot_product(&w, &cone->axis) * vec_dot_product(ray,
+			&cone->axis);
 	b *= 2;
 	c = vec_dot_product(&w, &w) - temp * vec_dot_product(&w, &cone->axis);
 	t = quadratic_formula(a, b, c);
