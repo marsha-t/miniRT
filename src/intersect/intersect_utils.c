@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:03:25 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 18:08:07 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/22 21:33:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ double	quadratic_formula(double a, double b, double c)
 	if (discriminant < 0)
 		return (-1);
 	t = (-b - sqrt(discriminant)) / (2 * a);
+	t2 = (-b + sqrt(discriminant)) / (2 * a);
 	if (discriminant == 0)
 	{
 		if (t <= 0)
@@ -31,20 +32,24 @@ double	quadratic_formula(double a, double b, double c)
 		else
 			return (t);
 	}
-	t2 = (-b + sqrt(discriminant)) / (2 * a);
 	if (t <= 0)
 	{
 		if (t2 <= 0)
 			return (-1);
 		else
-			return (t);
+			return (t2);
 	}
 	else
 	{
-		if (t < t2)
-			return (t);
+		if (t2 > 0)
+		{
+			if (t < t2)
+				return (t);
+			else
+				return (t2);
+		}
 		else
-			return (t2);
+			return (t);
 	}
 }
 

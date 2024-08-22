@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prepare.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 18:25:28 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/22 23:15:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 void	prepare_data(t_meta *meta_data)
 {
 	meta_data->aspect_ratio = (double)(WINDOW_WIDTH) / (double)(WINDOW_HEIGHT);
-	printf("ASPECT RATIO %f\n", meta_data->aspect_ratio);
 	prepare_img(meta_data);
 	prepare_light(meta_data);
 	prepare_obj(meta_data);

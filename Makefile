@@ -26,19 +26,30 @@ MINIRT_SRCS = 	./src/miniRT.c \
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
 VPATH = src:lib:lib/libft
 
-# includes for mlx mac
-INCLUDES = -I/opt/X11/include -Imlx
-# includes for mlx linux
-# INCLUDES = -I/usr/include -Imlx -O3
-
-# mlxflags for mac
-MLX_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
-# mlxflags for linux
-# MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
-
 MLX_DIR = ./mlx
-# MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
-MLX_LIB = $(MLX_DIR)/libmlx.a
+
+ifeq ($(shell uname), Linux)
+	INCLUDES = -I/usr/include -Imlx -O3
+	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
+	MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
+else
+	INCLUDES = -I/opt/X11/include -Imlx
+	MLX_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
+	MLX_LIB = $(MLX_DIR)/libmlx.a
+endif
+
+# includes for mlx mac
+# INCLUDES = -I/opt/X11/include -Imlx
+# # includes for mlx linux
+# # INCLUDES = -I/usr/include -Imlx -O3
+
+# # mlxflags for mac
+# MLX_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
+# # mlxflags for linux
+# # MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
+
+# # MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
+# MLX_LIB = $(MLX_DIR)/libmlx.a
 
 ### LIBFT
 LIBFT = libft.a

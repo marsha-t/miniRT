@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect_math.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:24:23 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 18:24:37 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/22 23:12:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin)
 	vec_subtract(&w_perpen, &w, &temp);
 	a = vec_dot_product(&d_perpen, &d_perpen);
 	b = vec_dot_product(&w_perpen, &d_perpen) * 2;
-	c = vec_dot_product(&w_perpen, &w_perpen) - cylinder->radius
-		* cylinder->radius;
+	c = vec_dot_product(&w_perpen, &w_perpen) - (cylinder->radius
+		* cylinder->radius);
 	t = quadratic_formula(a, b, c);
 	if (t > 0)
 	{
@@ -100,6 +100,7 @@ double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray,
 	double		denom;
 	double		t;
 	double		len;
+	t_vector	ray_pt;
 
 	denom = vec_dot_product(&cylinder->axis, ray);
 	if (denom == 0)
@@ -111,6 +112,11 @@ double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray,
 	t = vec_dot_product(&cylinder->axis, &temp) / denom;
 	if (t <= 0)
 		return (-1);
+	get_ray_pt(&ray_pt, ray, origin, t);
+	if (base == SF_CY_BASE_B)
+		vec_subtract(&temp, &cylinder->base_bottom, &ray_pt);
+	else if (base == SF_CY_BASE_T)
+		vec_subtract(&temp, &cylinder->base_top, &ray_pt);
 	len = vec_len(&temp);
 	if (len > cylinder->radius)
 		return (-1);

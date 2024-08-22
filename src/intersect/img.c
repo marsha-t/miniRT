@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 18:24:07 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/22 23:46:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ void	gen_img(t_meta *meta_data)
 {
 	int x;
 	int y;
+	int	pixel_processed;
+	double	progress;
+	// char	progress_str[50];
 
 	y = -1;
+	pixel_processed = 0;
 	while (++y < WINDOW_HEIGHT)
 	{
 		x = -1;
@@ -43,9 +47,15 @@ void	gen_img(t_meta *meta_data)
 			{
 				img_mlx_pixel_put(meta_data, x, y, create_trgb(0, 0, 0));
 			}
+			pixel_processed++;
+			progress = ((double)pixel_processed / (WINDOW_WIDTH * WINDOW_HEIGHT)) * 100;
+			printf(Y"\rRendering progress: %.2f%%"RST, progress);
+			fflush(stdout);
+			// snprintf(progress_str, sizeof(progress_str), "Rendering progress: %.2f%%", progress);
+            // mlx_string_put(meta_data->mlx_ptr, meta_data->mlx_win, 10, 10, 0xFFFFFF, progress_str);
 		}
 	}
-	printf("loop out\n");
+	printf(Y"\rRendering progress: 100.00%%\n"RST);
 }
 
 int	create_trgb(int r, int g, int b)
