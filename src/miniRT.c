@@ -242,26 +242,6 @@ void    meta_data_init(t_meta *meta_data)
     meta_data->pl_allocated = false;
     meta_data->cy_allocated = false;
     meta_data->cn_allocated = false;
-    meta_data->row = WINDOW_HEIGHT;
-    meta_data->col = WINDOW_WIDTH;
-}
-
-void    meta_data_init(t_meta *meta_data)
-{
-    meta_data->amlight = NULL;
-    meta_data->camera = NULL;
-    meta_data->light = NULL;
-    meta_data->sp = NULL;
-    meta_data->pl = NULL;
-    meta_data->cy = NULL;
-    meta_data->cn = NULL;
-    meta_data->light_allocated = false;
-    meta_data->camera_allocated = false;
-    meta_data->amlight_allocated = false;
-    meta_data->sp_allocated = false;
-    meta_data->pl_allocated = false;
-    meta_data->cy_allocated = false;
-    meta_data->cn_allocated = false;
 }
 
 void	parse_data(t_meta *meta_data, int argc, char **argv)
