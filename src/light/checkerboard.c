@@ -6,24 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:39:17 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 10:37:40 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/26 12:23:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
-
-# define SQSIZE_FLAT  1
-# define SQSIZE_CURVE M_PI / 4
-
-void	get_checkerboard(t_meta *meta_data);
-void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane);
-void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere);
-void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder);
-void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base);
-void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone);
-void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone);
-void	least_parallel_avector(t_vector *a, t_vector *normal)
-void	assign_checker_colour(int row, int column, int surface, t_colour *colour);
 
 /*	get_checkerboard determines checkerboard colour for given intersection
 	- calls on object-specific functions to calculate checkerboard colour 
@@ -74,12 +61,17 @@ void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere)
 	double	theta;
 	double	phi;
 	
-	theta = acos(meta_data->pixel.intersect.z / sphere->radius);
-	phi = atan2(meta_data->pixel.intersect.y, meta_data->pixel.intersect.x);
-	theta /= M_PI;
-	phi /= (2 * M_PI);
-	theta = floor (theta / SQSIZE_CURVE);
-	phi = floor (phi / SQSIZE_CURVE);
+	// theta = acos(meta_data->pixel.intersect.z / sphere->radius);
+	// phi = atan2(meta_data->pixel.intersect.y, meta_data->pixel.intersect.x);
+	
+	phi = atan2(meta_data->pixel.intersect.z, meta_data->pixel.intersect.x);
+	theta = acos(meta_data->pixel.intersect.y / sphere->radius);
+	theta /= (2 * M_PI);
+	phi /= (M_PI);
+	theta = theta * 50;
+	phi = phi * 50;
+	// theta = floor (theta / SQSIZE_CURVE);
+	// phi = floor (phi / SQSIZE_CURVE);
 	assign_checker_colour(theta, phi, &sphere->colour);
 }
 
@@ -131,8 +123,10 @@ void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base)
 		vec_subtract(&a, &meta_data->pixel.intersect, &cylinder->base_top);
 	x = vec_dot_product(&a, &u);
 	z = vec_dot_product(&a, &v);
-	x = floor(x / SQSIZE_FLAT);
-	z = floor(z / SQSIZE_FLAT);
+	// x = floor(x / SQSIZE_FLAT);
+	// z = floor(z / SQSIZE_FLAT);
+	x = floor(x / 1);
+	z = floor(z / 1);
 	assign_checker_colour(x, z, &cylinder->colour);
 }
 
@@ -158,7 +152,7 @@ void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone)
 	vec_multiply_scalar(&m_para, &cone->axis, vec_dot_product(&m, &cone->axis));
 	vec_subtract(&m_perp, &m, &m_para);
 	dist = vec_len(&m_para) * tan(cone->angle) * atan2(vec_dot_product(&m_perp, &u), vec_dot_product(&m_perp, &v));
-	dist /= (vec_len(&m_para) * tan(cone->angle) * 2 * M_PI * SQSIZE_FLAT)
+	dist /= (vec_len(&m_para) * tan(cone->angle) * 2 * M_PI * SQSIZE_FLAT);
 	col = vec_len(&m_para) / (SQSIZE_FLAT * cone->height);
 	assign_checker_colour(dist, col, &cone->colour);
 }
@@ -221,7 +215,7 @@ void	least_parallel_avector(t_vector *a, t_vector *normal)
 
 /*	assign_checker_colour determines checkerboard colour based on rol and col given
 	- updates t_colour struct directly */
-void	assign_checker_colour(int row, int column, int surface, t_colour *colour)
+void	assign_checker_colour(int row, int column, t_colour *colour)
 {
 	if ((row + column) % 2 == 0)
 	{

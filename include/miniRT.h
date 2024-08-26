@@ -17,32 +17,55 @@
 # define SF_CY_BASE_T 5
 # define SF_CONE_CURVE 6
 # define SF_CONE_BASE 7
+# define SQSIZE_FLAT  5
+# define SQSIZE_CURVE M_PI / 4
 
 # define WINDOW_WIDTH 1000
 # define WINDOW_HEIGHT 600
 # define FOCAL_LENGTH 0.5
 
 # define KEY_ESC 53
-# define NUMPAD_0 65438
-# define NUMPAD_1 65436
-# define NUMPAD_2 65433
-# define NUMPAD_3 65435
-# define NUMPAD_4 65430
-# define NUMPAD_5 65437
-# define NUMPAD_6 65432
-# define NUMPAD_7 65429
-# define NUMPAD_8 65431
-# define NUMPAD_9 65434
-# define ARROW_LEFT 65361
-# define ARROW_UP 65362
-# define ARROW_DOWN 65364
-# define ARROW_RIGHT 65363
-# define KEY_Q 113
-# define KEY_A 97
-# define KEY_W 119
-# define KEY_S 115
-# define KEY_E 101
-# define KEY_D 100
+# define NUMPAD_0 82
+# define NUMPAD_1 83
+# define NUMPAD_2 84
+# define NUMPAD_3 85
+# define NUMPAD_4 86
+# define NUMPAD_5 87
+# define NUMPAD_6 88
+# define NUMPAD_7 89
+# define NUMPAD_8 91
+# define NUMPAD_9 92
+# define ARROW_LEFT 126
+# define ARROW_UP 123
+# define ARROW_DOWN 125
+# define ARROW_RIGHT 124
+# define KEY_Q 12
+# define KEY_A 0
+# define KEY_W 13
+# define KEY_S 1
+# define KEY_E 14
+# define KEY_D 2
+
+// # define NUMPAD_0 65438
+// # define NUMPAD_1 65436
+// # define NUMPAD_2 65433
+// # define NUMPAD_3 65435
+// # define NUMPAD_4 65430
+// # define NUMPAD_5 65437
+// # define NUMPAD_6 65432
+// # define NUMPAD_7 65429
+// # define NUMPAD_8 65431
+// # define NUMPAD_9 65434
+// # define ARROW_LEFT 65361
+// # define ARROW_UP 65362
+// # define ARROW_DOWN 65364
+// # define ARROW_RIGHT 65363
+// # define KEY_Q 113
+// # define KEY_A 97
+// # define KEY_W 119
+// # define KEY_S 115
+// # define KEY_E 101
+// # define KEY_D 100
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -289,6 +312,17 @@ void	gen_final_colour(t_meta *meta_data);
 
 // Calculate shadow: shadow.c
 bool	in_shadow(t_meta *meta_data, t_light *light);
+
+// Apply checkerboard pattern: checkerboard.c
+void	get_checkerboard(t_meta *meta_data);
+void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane);
+void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere);
+void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder);
+void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base);
+void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone);
+void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone);
+void	least_parallel_avector(t_vector *a, t_vector *normal);
+void	assign_checker_colour(int row, int column, t_colour *colour);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);
