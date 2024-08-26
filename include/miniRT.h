@@ -92,7 +92,7 @@ typedef struct s_light
     t_vector coord;
     double brightness;
     t_colour colour;
-    struct s_light *next;
+    struct s_light  *next;
 }  t_light;
 
 typedef struct s_sp
@@ -127,7 +127,6 @@ typedef struct s_cy
   bool  exclude;
   struct s_cy  *next;
 } t_cy;
-
 
 typedef struct s_cn
 {
@@ -214,6 +213,7 @@ void    free_pointerlist(int num, ...);
 int	    ft_strlen_dp(char **s);
 
 void    create_objects(t_meta *meta_data, char **argv);
+t_light    *create_light(t_meta *meta_data, char **argv);
 t_cy    *create_cy(t_meta *meta_data, char **argv);
 t_pl    *create_pl(t_meta *meta_data, char **argv);
 t_sp    *create_sp(t_meta *meta_data, char **argv);

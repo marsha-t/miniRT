@@ -204,7 +204,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 }
 
 /*
-    create_cn creates a sphere object and check if each value is valid.
+    create_cn creates a cone object and check if each value is valid.
     returns t_cn pointer.
 */
 t_cn    *create_cn(t_meta *meta_data, char **argv)
