@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 20:49:00 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/27 03:48:29 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/27 03:53:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	gen_final_colour(t_meta *meta_data)
 	// t_vector temp;
 	// t_vector center;
 	double	dot_product;
-	double  coeff_ref = 0.5;
-	double	shine_fac = 20;
 	double  p2;
 
 	// printf("amlight: r: %d g: %d b: %d\n", meta_data->amlight->colour.r, meta_data->amlight->colour.g, meta_data->amlight->colour.b);
@@ -68,7 +66,7 @@ void	gen_final_colour(t_meta *meta_data)
 			vec_subtract(&reflection, &light_direction, &reflection);
 			dot_product = fmax(0.0, vec_dot_product(&reflection, &meta_data->pixel.ray));
 			if (dot_product > 0.0001)
-				dot_product = pow(fmax(0.0, dot_product), shine_fac) * coeff_ref;
+				dot_product = pow(fmax(0.0, dot_product), meta_data->pixel.shine_fac) * meta_data->pixel.coeff_ref;
 			p2 = dot_product * curr->brightness;
 			specular.r += fmin(curr->colour.r * p2, 255);
 			specular.g += fmin(curr->colour.g * p2, 255);

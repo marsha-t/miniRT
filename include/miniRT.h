@@ -145,6 +145,8 @@ typedef struct s_pixel
 {
 	t_vector	ray;
 	double		t;
+  double    coeff_ref;
+  double    shine_fac;
 	void *obj;
 	int			surface;
 	t_vector	intersect;

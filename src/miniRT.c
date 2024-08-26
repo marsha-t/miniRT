@@ -244,6 +244,8 @@ void    meta_data_init(t_meta *meta_data)
     meta_data->cn_allocated = false;
     meta_data->row = WINDOW_HEIGHT;
     meta_data->col = WINDOW_WIDTH;
+    meta_data->pixel.coeff_ref = 0.5;
+    meta_data->pixel.shine_fac = 20;
 }
 
 // void    meta_data_init(t_meta *meta_data)
