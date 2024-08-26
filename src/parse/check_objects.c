@@ -1,5 +1,10 @@
 #include "../../include/miniRT.h"
 
+/*
+    check_coord iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
 {
     t_vector    vec;
@@ -25,12 +30,27 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
             }
         }
     }
+    if (arg_count != 3)
+    {
+        if (temp != NULL)
+            free(temp);
+        free_pointerlist(2, src, argv);
+        ft_printf(RED"Incorrect XYZ input values\n"RST);
+        free_exit(*meta_data);
+        exit(EXIT_FAILURE);
+    }
     vec.x = ft_strtod(argv[0]);
     vec.y = ft_strtod(argv[1]);
     vec.z = ft_strtod(argv[2]);
     return (vec);
 }
 
+/*
+    check_norm iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between -1 and 1, and if all values are not 0.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
 {
     t_vector    vec;
@@ -60,6 +80,15 @@ t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
             exit(EXIT_FAILURE);
         }
     }
+    if (arg_count != 3)
+    {
+        if (temp != NULL)
+            free(temp);
+        free_pointerlist(2, src, argv);
+        ft_printf(RED"Incorrect XYZ input values\n"RST);
+        free_exit(*meta_data);
+        exit(EXIT_FAILURE);
+    }
     vec.x = ft_strtod(argv[0]);
     vec.y = ft_strtod(argv[1]);
     vec.z = ft_strtod(argv[2]);
@@ -67,6 +96,10 @@ t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
     return (vec);
 }
 
+/*
+    check_double iterates through each input value and check if each character
+    is a digit. if condition fails, it frees the allocated memories and exits the program
+*/
 double    check_double(t_meta **meta_data, void *temp, char **src, char *str)
 {
     int index;
@@ -109,6 +142,12 @@ int    check_int(t_meta **meta_data, char *str)
     return (result);
 }
 
+/*
+    check_norm_val iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between -1 and 1, and if all values are not 0.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv)
 {
     double temp;
@@ -138,6 +177,12 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
     return (true);
 }
 
+/*
+    check_colour_val iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between 0 and 255.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 bool    check_colour_val(t_meta *meta_data, char **src, int arg_count, char **argv)
 {
     int temp;
@@ -166,6 +211,12 @@ bool    check_colour_val(t_meta *meta_data, char **src, int arg_count, char **ar
     return (true);
 }
 
+/*
+    check_colour iterates through each input value and check if each character
+    is a digit. Also checks if the number of inputs is equal to three and if
+    the value is between 0 and 255.
+    if condition fails, it frees the allocated memories and exits the program
+*/
 t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv)
 {
     t_colour    rgb;
@@ -181,10 +232,18 @@ t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv
             exit(EXIT_FAILURE);
         }
     }
+    if (arg_count != 3)
+    {
+        if (temp != NULL)
+            free(temp);
+        free_pointerlist(2, src, argv);
+        ft_printf(RED"Incorrect XYZ input values\n"RST);
+        free_exit(*meta_data);
+        exit(EXIT_FAILURE);
+    }
     rgb.r = ft_atoi(argv[0]);
     rgb.g = ft_atoi(argv[1]);
     rgb.b = ft_atoi(argv[2]);
     return (rgb);
 }
-
 

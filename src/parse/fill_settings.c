@@ -1,5 +1,11 @@
 #include "../../include/miniRT.h"
 
+/*
+    ft_fill_data checks the singleline for each id from the .rt file.
+    Subsequently it assigns to the associated function of each id.
+    if an unknown id is declared in the .rt file, the function exits
+    the program
+*/
 void    ft_fill_data(t_meta *meta_data, char *singleline)
 {
     char **argv;
@@ -50,7 +56,11 @@ void    ft_fill_data(t_meta *meta_data, char *singleline)
     free_pointer(argv);
 }
 
-
+/*
+    fill_ambient associats with the ambient setting of the ray tracing.
+    this function fills out the amlight pointer of t_meta struct.
+    allocates t_amlight and fills out the input values from the .rt file.
+*/
 void    fill_ambient(t_meta *meta_data, char **argv)
 {
     char    **rgb;
@@ -82,6 +92,11 @@ void    fill_ambient(t_meta *meta_data, char **argv)
     free_pointer(rgb);
 }
 
+/*
+    fill_camera associats with the camera setting of the ray tracing.
+    this function fills out the camera pointer of t_meta struct.
+    allocates t_camera and fills out the input values from the .rt file.
+*/
 void    fill_camera(t_meta *meta_data, char **argv)
 {
     char    **coord_p;
@@ -120,6 +135,10 @@ void    fill_camera(t_meta *meta_data, char **argv)
     meta_data->camera->fov = check_double(&meta_data, NULL, argv, argv[3]);
 }
 
+/*
+    create_light creates a light source object and check if each value is valid.
+    returns t_light pointer.
+*/
 t_light    *create_light(t_meta *meta_data, char **argv)
 {
     char    **coordlight_p;

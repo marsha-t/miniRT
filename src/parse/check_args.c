@@ -1,5 +1,8 @@
 #include "../../include/miniRT.h"
 
+/* ft_check_args checks if the input argument (filename) has the
+    correct file extension (.rt)
+*/
 void    ft_check_args(int argc, char **argv)
 {
     char    *extnsn;
@@ -23,6 +26,9 @@ void    ft_check_args(int argc, char **argv)
     check_fd(argv[1]);
 }
 
+/*
+    check_fd checks if the file directory exists
+*/
 void    check_fd(char *argv)
 {
     int fd;
@@ -37,6 +43,9 @@ void    check_fd(char *argv)
     close(fd);
 }
 
+/*
+    get the fd of the of the file specified in open function
+*/
 int	get_fd(char *argv)
 {
 	char	*filedirectory;

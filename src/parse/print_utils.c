@@ -19,7 +19,7 @@ void    print_spheres(t_meta *meta_data)
 
     while (current_sp != NULL)
     {
-        printf("sp: (%f, %f, %f) (%d, %d, %d)\n",\
+        printf("sp: (%f, %f, %f) (%f, %f, %f)\n",\
             current_sp->coord.x, current_sp->coord.y,current_sp->coord.z, \
             current_sp->colour.r, current_sp->colour.g, current_sp->colour.b);
         current_sp = current_sp->next;
@@ -58,7 +58,7 @@ void    print_light(t_meta *meta_data)
 
     while (current_light != NULL)
     {
-        printf("light: (%f, %f, %f) (%d, %d, %d)\n",\
+        printf("light: (%f, %f, %f) (%f, %f, %f)\n",\
             current_light->coord.x, current_light->coord.y,current_light->coord.z, \
             current_light->colour.r, current_light->colour.g, current_light->colour.b);
         current_light = current_light->next;
