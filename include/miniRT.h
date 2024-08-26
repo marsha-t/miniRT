@@ -19,7 +19,7 @@
 # define SF_CONE_BASE 7
 
 # define WINDOW_WIDTH 1000
-# define WINDOW_HEIGHT 600
+# define WINDOW_HEIGHT 800
 # define FOCAL_LENGTH 0.5
 
 # define KEY_ESC 53

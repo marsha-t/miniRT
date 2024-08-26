@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 17:32:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 23:48:02 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/27 00:20:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	in_shadow(t_meta *meta_data, t_light *light)
 	double t;
 	double len;
 	t_vector new_origin;
-	
+
 	vec_subtract(&meta_data->pixel.shadow, &light->coord,
 		&meta_data->pixel.intersect);
 	vec_normalise(&meta_data->pixel.shadow);
