@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:39:17 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/26 12:23:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/27 14:59:46 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane)
 	vec_subtract(&a, &meta_data->pixel.intersect, &plane->coord);
 	x = vec_dot_product(&a, &u);
 	z = vec_dot_product(&a, &v);
-	x = floor(x / SQSIZE_FLAT);
-	z = floor(z / SQSIZE_FLAT);
+	x = floor(x / 5);
+	z = floor(z / 1);
 	assign_checker_colour(x, z, &plane->colour);
 }
 
@@ -60,18 +60,17 @@ void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere)
 {
 	double	theta;
 	double	phi;
-	
-	// theta = acos(meta_data->pixel.intersect.z / sphere->radius);
-	// phi = atan2(meta_data->pixel.intersect.y, meta_data->pixel.intersect.x);
-	
-	phi = atan2(meta_data->pixel.intersect.z, meta_data->pixel.intersect.x);
-	theta = acos(meta_data->pixel.intersect.y / sphere->radius);
+	t_vector	temp;
+
+	vec_subtract(&temp, &meta_data->pixel.intersect, &sphere->coord);
+	phi = atan2(temp.z, temp.x);
+	if (phi < 0)
+		phi += (2 * M_PI);
+	theta = acos(temp.y / sphere->radius);
 	theta /= (2 * M_PI);
 	phi /= (M_PI);
-	theta = theta * 50;
-	phi = phi * 50;
-	// theta = floor (theta / SQSIZE_CURVE);
-	// phi = floor (phi / SQSIZE_CURVE);
+	theta = theta * 10;
+	phi = phi * 10;
 	assign_checker_colour(theta, phi, &sphere->colour);
 }
 
@@ -79,26 +78,24 @@ void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere)
 	for intersection with cylinder curved surface */
 void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder)
 {
+	t_vector	temp1;
+	t_vector	temp2;
+	double	height;
 	double	theta;
-	t_vector	temp;
-	double	z;
-	double	s_z;
-	t_vector	a;
-	t_vector	u;
-	t_vector	v;
 
-	s_z = SQSIZE_CURVE * cylinder->radius;
-	least_parallel_avector(&a, &cylinder->axis);
-	vec_cross_product(&u, &cylinder->axis, &a);
-	vec_normalise(&u);
-	vec_cross_product(&v, &cylinder->axis, &u);
-	vec_normalise(&v);
-	vec_subtract(&temp, &meta_data->pixel.intersect, &cylinder->coord);
-	theta = atan2(vec_dot_product(&temp, &u), vec_dot_product(&temp, &v)) / (2 * M_PI);
-	z = vec_dot_product(&temp, &cylinder->axis) / cylinder->height;
-	theta = floor(theta / SQSIZE_CURVE);
-	z = floor(z / s_z);
-	assign_checker_colour(z, theta, &cylinder->colour);
+	vec_subtract(&temp1, &meta_data->pixel.intersect, &cylinder->coord);
+	height = vec_dot_product(&temp1, &cylinder->axis);
+	vec_multiply_scalar(&temp2, &cylinder->axis, -height);
+	vec_add(&temp2, &temp1, &temp2);
+	vec_normalise(&temp2);
+	theta = atan2(temp2.y, temp2.x);
+	if (theta < 0)
+		theta += (2 * M_PI);
+	theta /= (2*M_PI);
+	height = (height + (cylinder->height / 2)) / cylinder->height;
+	theta *= 20;
+	height *= 10;
+	assign_checker_colour(theta, height, &cylinder->colour);
 }
 
 /*	get_checkerboard_cy_base determines checkerboard colour 
@@ -125,7 +122,7 @@ void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base)
 	z = vec_dot_product(&a, &v);
 	// x = floor(x / SQSIZE_FLAT);
 	// z = floor(z / SQSIZE_FLAT);
-	x = floor(x / 1);
+	x = floor(x / 2);
 	z = floor(z / 1);
 	assign_checker_colour(x, z, &cylinder->colour);
 }

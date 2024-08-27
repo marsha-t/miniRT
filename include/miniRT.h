@@ -302,6 +302,7 @@ void	prepare_intersect_pl(t_pixel *pixel);
 void	prepare_intersect_cy(t_pixel *pixel);
 void	prepare_intersect_cn(t_pixel *pixel);
 t_vector	get_cy_curve_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cn_curve_normal(t_pixel *pixel, t_cn *cone);
 
 // Utility functions needed for intersection calculation: intersect_utils.c
 double	quadratic_formula(double a, double b, double c);
