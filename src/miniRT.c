@@ -128,9 +128,9 @@ int	ft_key(int key, void *param)
         translate_camera(&meta_data->camera->coord, key);
     }
     else if (key == NUMPAD_7)
-        printf("NUMPAD 7\n");
+        translate_spotlight(&meta_data->spotlight->coord, key);
     else if (key == NUMPAD_8)
-        printf("NUMPAD 8\n");
+        translate_spotlight(&meta_data->spotlight->coord, key);
     else if (key == NUMPAD_9)
         printf("NUMPAD 9\n");
     else if (key == KEY_Q)
@@ -205,6 +205,14 @@ void    translate_light(t_vector *vector, int key)
         vector->z -= 10;
 }
 
+void    translate_spotlight(t_vector *vector, int key)
+{
+    if (key == NUMPAD_7)
+        vector->x += 10;
+    if (key == NUMPAD_8)
+        vector->x -= 10;
+}
+
 int	ft_close(t_meta *meta_data)
 {
 	mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
@@ -232,6 +240,7 @@ void    meta_data_init(t_meta *meta_data)
     meta_data->amlight = NULL;
     meta_data->camera = NULL;
     meta_data->light = NULL;
+    meta_data->spotlight = NULL;
     meta_data->sp = NULL;
     meta_data->pl = NULL;
     meta_data->cy = NULL;
@@ -240,6 +249,7 @@ void    meta_data_init(t_meta *meta_data)
     meta_data->camera_allocated = false;
     meta_data->amlight_allocated = false;
     meta_data->sp_allocated = false;
+    meta_data->sl_allocated = false;
     meta_data->pl_allocated = false;
     meta_data->cy_allocated = false;
     meta_data->cn_allocated = false;
@@ -247,6 +257,11 @@ void    meta_data_init(t_meta *meta_data)
     meta_data->col = WINDOW_WIDTH;
     meta_data->pixel.coeff_ref = 0.5;
     meta_data->pixel.shine_fac = 20;
+    meta_data->pixel.spot_theta = 10;
+    meta_data->pixel.spot_p = 100;
+    meta_data->pixel.spot_k0 = 0.001;
+    meta_data->pixel.spot_k1 = 0.0001;
+    meta_data->pixel.spot_k2 = 0.00001;
 }
 
 // void    meta_data_init(t_meta *meta_data)

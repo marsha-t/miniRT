@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 20:49:00 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/27 03:53:18 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/29 03:24:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	gen_final_colour(t_meta *meta_data)
 {
 	t_light	*curr;
+	t_spotlight *curr_sl;
 	t_colour ambient_colour;
 	t_vector light_direction;
 	// int count;
@@ -38,6 +39,7 @@ void	gen_final_colour(t_meta *meta_data)
 	// vec_subtract(&normal, &surface, &meta_data->sp->coord);
 
 	curr = meta_data->light;
+	curr_sl = meta_data->spotlight;
 	diffuse.r = 0;
 	diffuse.g = 0;
 	diffuse.b = 0;
@@ -49,16 +51,8 @@ void	gen_final_colour(t_meta *meta_data)
 	{
 		if (in_shadow(meta_data, curr) == false)
 		{
-			// printf("###########################################\n");
-			// printf(RED"ambient_colour: r: %f g: %f b: %f\n"RST, ambient_colour.r/255, ambient_colour.g/255, ambient_colour.b/255);
-			// printf(RED"diffuse: r: %f g: %f b: %f\n"RST, diffuse.r, diffuse.g, diffuse.b);
-			// printf(RED"t: %f\n"RST, meta_data->pixel.t);
-			// printf(RED"obj color_n: r_n: %f g_n: %f b_n: %f\n"RST, meta_data->pixel.final.r_n, meta_data->pixel.final.g_n, meta_data->pixel.final.b_n);
-			// printf(RED"light_colour: r: %f g: %f b: %f\n"RST, curr->colour.r/255, curr->colour.g/255, curr->colour.b/255);
 			light_direction = calculate_light_direction(meta_data->pixel.intersect, curr->coord);
-			// vec_multiply_scalar(&meta_data->pixel.normal, &meta_data->pixel.normal, -1);
 			dot_product = fmax(0.0, vec_dot_product(&meta_data->pixel.normal, &light_direction));
-			// printf(Y"pixel final r: %f g: %f b %f\n"RST, meta_data->pixel.final.r, meta_data->pixel.final.g, meta_data->pixel.final.b);
 			diffuse.r += curr->colour.r * curr->brightness * dot_product * (meta_data->pixel.final.r_n);
 			diffuse.g += curr->colour.g * curr->brightness * dot_product * (meta_data->pixel.final.g_n);
 			diffuse.b += curr->colour.b * curr->brightness * dot_product * (meta_data->pixel.final.b_n);
@@ -71,19 +65,30 @@ void	gen_final_colour(t_meta *meta_data)
 			specular.r += fmin(curr->colour.r * p2, 255);
 			specular.g += fmin(curr->colour.g * p2, 255);
 			specular.b += fmin(curr->colour.b * p2, 255);
-			// print_vector(RED"light dir: "RST, &light_direction);
-			// print_vector(RED"normal dir: "RST, &normal);
-			// print_vector(RED"intersect dir: "RST, &meta_data->pixel.intersect);
-			// print_vector(RED"ray dir: "RST, &meta_data->pixel.ray);
-			// printf(RED"dot_product: %f\n"RST, dot_product);
-			// printf(RED"diffuse: r: %f g: %f b: %f\n"RST, diffuse.r, diffuse.g, diffuse.b);
-			// print_vector(RED"ray dir_n: "RST, &meta_data->pixel.ray_n);
-			// if (meta_data->pixel.surface == SF_SPHERE || meta_data->pixel.surface == SF_PLANE)
-			// 	printf(Y"%d f r: %f f g: %f f b %f\n"RST, count, meta_data->pixel.final.r, meta_data->pixel.final.g, meta_data->pixel.final.b);
-			// printf("###########################################\n");
-			// count++;
 		}
 		curr = curr->next;
+	}
+	while (curr_sl)
+	{
+		if (in_shadow_spotlight(meta_data, curr_sl) == false)
+		{
+			// printf("false\n");
+			light_direction = calculate_light_direction(meta_data->pixel.intersect, curr_sl->coord);
+			dot_product = fmax(0.0, vec_dot_product(&meta_data->pixel.normal, &light_direction));
+			diffuse.r += curr_sl->colour.r * meta_data->pixel.spot_intensity * dot_product * (meta_data->pixel.final.r_n);
+			diffuse.g += curr_sl->colour.g * meta_data->pixel.spot_intensity * dot_product * (meta_data->pixel.final.g_n);
+			diffuse.b += curr_sl->colour.b * meta_data->pixel.spot_intensity * dot_product * (meta_data->pixel.final.b_n);
+			vec_multiply_scalar(&reflection, &meta_data->pixel.normal, 2 * dot_product);
+			vec_subtract(&reflection, &light_direction, &reflection);
+			dot_product = fmax(0.0, vec_dot_product(&reflection, &meta_data->pixel.ray));
+			if (dot_product > 0.0001)
+				dot_product = pow(fmax(0.0, dot_product), meta_data->pixel.shine_fac) * meta_data->pixel.coeff_ref;
+			p2 = dot_product * meta_data->pixel.spot_intensity;
+			specular.r += fmin(curr_sl->colour.r * p2, 255);
+			specular.g += fmin(curr_sl->colour.g * p2, 255);
+			specular.b += fmin(curr_sl->colour.b * p2, 255);
+		}
+		curr_sl = curr_sl->next;
 	}
 	meta_data->pixel.final.r = fmin((ambient_colour.r + diffuse.r + specular.r), 255);
 	meta_data->pixel.final.g = fmin((ambient_colour.g + diffuse.g + specular.g), 255);

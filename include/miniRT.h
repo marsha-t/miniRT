@@ -156,10 +156,18 @@ typedef struct s_pixel
 	double		t;
   double    coeff_ref;
   double    shine_fac;
+  double    spot_attenuate;
+  double    spot_intensity;
+  double    spot_theta;
+  double    spot_p;
+  double    spot_k0;
+  double    spot_k1;
+  double    spot_k2;
 	void *obj;
 	int			surface;
 	t_vector	intersect;
   t_vector  shadow;
+  t_vector  shadow_spot;
   t_vector  coord;
   t_colour  final;
   t_vector  normal;
@@ -215,6 +223,7 @@ void    meta_data_init(t_meta *meta_data);
 
 void    translate_camera(t_vector *vector, int key);
 void    translate_light(t_vector *vector, int key);
+void    translate_spotlight(t_vector *vector, int key);
 
 void    ft_check_args(int argc, char **argv);
 void    check_fd(char *argv);
@@ -304,6 +313,7 @@ void	gen_final_colour(t_meta *meta_data);
 
 // Calculate shadow: shadow.c
 bool	in_shadow(t_meta *meta_data, t_light *light);
+bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);
