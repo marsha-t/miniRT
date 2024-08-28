@@ -254,6 +254,7 @@ bool        check_norm_val(t_meta *meta_data, char **src, int arg_count, char **
 t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv);
 double      check_double(t_meta **meta_data, void *temp, char **src, char *str);
 int         check_int(t_meta **meta_data, char *str);
+t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv);
 
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);

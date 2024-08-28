@@ -247,26 +247,36 @@ t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv
 	return (rgb);
 }
 
-void    check_bonus(t_meta** meta_data, void *temp, char *bonus, char **src)
+t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv)
 {
-	char	**sizes;
-	if (bonus[0] == 'c')
+	int		arg_count;
+	t_sqsize	sqsize;
+	double	temp_val;
+
+	arg_count = 0;	
+	while (argv[++arg_count])
 	{
-		bonus += 2;
-		sizes = ft_split(bonus, ',');
-		check_checker(meta_data, temp, sizes, src);
-		free_pointer(sizes);
+		temp_val = ft_strtod(argv[arg_count]);
+		if (temp_val <= 0)
+		{
+			if (temp != NULL)
+				free(temp);
+			free_pointerlist(2, src, argv);
+			ft_printf(RED"Incorrect checkerboard square size values\n"RST);
+			free_exit(*meta_data);
+			exit(EXIT_FAILURE);
+		}
 	}
-	// else if (bonus[0] == 't')
-	// {
-	//     bonus += 2;
-	//     check_texture(meta_data, temp, bonus, src);
-	// }
-	else
+	if (arg_count != 3)
 	{
-		free_pointer(src);
-		ft_printf(RED"Incorrect bonus\n"RST);
+		if (temp != NULL)
+			free(temp);
+		free_pointerlist(2, src, argv);
+		ft_printf(RED"Incorrect no. of checkerboard arguments\n"RST);
 		free_exit(*meta_data);
 		exit(EXIT_FAILURE);
 	}
+	sqsize.row = ft_strtod(argv[1]);
+	sqsize.col = ft_strtod(argv[2]);
+	return (sqsize);
 }

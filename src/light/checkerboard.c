@@ -41,6 +41,8 @@ void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane)
 	double	x;
 	double	z;
 
+	if (plane->checker == 0)
+		return ;
 	least_parallel_avector(&a, &plane->normal);
 	vec_cross_product(&u, &plane->normal, &a);
 	vec_normalise(&u);
@@ -49,8 +51,8 @@ void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane)
 	vec_subtract(&a, &meta_data->pixel.intersect, &plane->coord);
 	x = vec_dot_product(&a, &u);
 	z = vec_dot_product(&a, &v);
-	x = floor(x / 5);
-	z = floor(z / 1);
+	x = floor(x / plane->sqsize.row);
+	z = floor(z / plane->sqsize.col);
 	assign_checker_colour(x, z, &plane->colour);
 }
 
@@ -62,6 +64,8 @@ void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere)
 	double	phi;
 	t_vector	temp;
 
+	if (sphere->checker == 0)
+		return ;
 	vec_subtract(&temp, &meta_data->pixel.intersect, &sphere->coord);
 	phi = atan2(temp.z, temp.x);
 	if (phi < 0)
@@ -69,8 +73,8 @@ void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere)
 	theta = acos(temp.y / sphere->radius);
 	theta /= (2 * M_PI);
 	phi /= (M_PI);
-	theta = theta * 10;
-	phi = phi * 10;
+	theta = theta * plane->sqsize.row;
+	phi = phi * plane->sqsize.col;
 	assign_checker_colour(theta, phi, &sphere->colour);
 }
 
@@ -83,6 +87,8 @@ void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder)
 	double	height;
 	double	theta;
 
+	if (cylinder->checker == 0)
+		return ;
 	vec_subtract(&temp1, &meta_data->pixel.intersect, &cylinder->coord);
 	height = vec_dot_product(&temp1, &cylinder->axis);
 	vec_multiply_scalar(&temp2, &cylinder->axis, -height);
@@ -94,13 +100,12 @@ void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder)
 		theta = atan2(temp2.z, temp2.x);
 	else
 		theta = atan2(temp2.y, temp2.x);
-	// theta = atan2(temp2.y, temp2.x);
 	if (theta < 0)
 		theta += (2 * M_PI);
 	theta /= (2*M_PI);
 	height = (height + (cylinder->height / 2)) / cylinder->height;
-	theta *= 20;
-	height *= 10;
+	theta *= plane->sqsize.row;
+	height *= plane->sqsize.col;
 	assign_checker_colour(theta, height, &cylinder->colour);
 }
 
@@ -115,6 +120,8 @@ void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base)
 	double	x;
 	double	z;
 
+	if (cylinder->checker == 0)
+		return ;
 	least_parallel_avector(&a, &cylinder->axis);
 	vec_cross_product(&u, &cylinder->axis, &a);
 	vec_normalise(&u);
@@ -126,10 +133,8 @@ void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base)
 		vec_subtract(&a, &meta_data->pixel.intersect, &cylinder->base_top);
 	x = vec_dot_product(&a, &u);
 	z = vec_dot_product(&a, &v);
-	// x = floor(x / SQSIZE_FLAT);
-	// z = floor(z / SQSIZE_FLAT);
-	x = floor(x / 2);
-	z = floor(z / 1);
+	x = floor(x / plane->sqsize.row);
+	z = floor(z / plane->sqsize.col);
 	assign_checker_colour(x, z, &cylinder->colour);
 }
 
@@ -141,6 +146,8 @@ void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone)
 	double	row;
 	double	col;
 	
+	if (cone->checker == 0)
+		return ;
 	vec_subtract(&temp, &meta_data->pixel.intersect, &cone->coord);
 	if (temp.x >= temp.z && temp.x >= temp.y)
 		col = atan2(temp.z, temp.y);
@@ -153,8 +160,8 @@ void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone)
 	col /= (2 * M_PI);
 	row = vec_dot_product(&temp, &cone->axis);
 	row /= cone->height;
-	row *= 5;
-	col *= 11;
+	row *= plane->sqsize.row;
+	col *= plane->sqsize.col;
 	assign_checker_colour(row, col, &cone->colour);
 }
 
@@ -169,6 +176,8 @@ void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone)
 	double	x;
 	double	z;
 
+	if (cone->checker == 0)
+		return ;
 	least_parallel_avector(&a, &cone->axis);
 	vec_cross_product(&u, &cone->axis, &a);
 	vec_normalise(&u);
@@ -177,8 +186,8 @@ void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone)
 	vec_subtract(&a, &meta_data->pixel.intersect, &cone->base);
 	x = vec_dot_product(&a, &u);
 	z = vec_dot_product(&a, &v);
-	x = floor(x / SQSIZE_FLAT);
-	z = floor(z / SQSIZE_FLAT);
+	x = floor(x / plane->sqsize.row);
+	z = floor(z / plane->sqsize.col);
 	assign_checker_colour(x, z, &cone->colour);
 }
 
