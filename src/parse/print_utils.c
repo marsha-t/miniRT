@@ -65,6 +65,20 @@ void    print_light(t_meta *meta_data)
     }
 }
 
+
+void    print_spotlight(t_meta *meta_data)
+{
+    t_spotlight *current_spotlight = meta_data->spotlight;
+
+    while (current_spotlight != NULL)
+    {
+        printf("spotlight: (%f, %f, %f) (%f, %f, %f)\n",\
+            current_spotlight->coord.x, current_spotlight->coord.y,current_spotlight->coord.z, \
+            current_spotlight->colour.r, current_spotlight->colour.g, current_spotlight->colour.b);
+        current_spotlight = current_spotlight->next;
+    }
+}
+
 void    print_banner()
 {
     ft_printf(Y" _____________________________________\n");

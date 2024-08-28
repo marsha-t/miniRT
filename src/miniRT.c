@@ -21,6 +21,7 @@ int main(int argc, char **argv)
     parse_data(&meta_data, argc, argv);
     rt_mlxinit(&meta_data);
     draw(&meta_data);
+    print_spotlight(&meta_data);
     // prepare_data(&meta_data);
     // gen_img(&meta_data);
     // print_light(&meta_data);

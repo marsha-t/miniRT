@@ -167,7 +167,7 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
         }
     }
     temp = ft_strtod(argv[arg_count]);\
-    if (temp < -1 || temp > 1 || arg_count >= 3)
+    if ((temp != 1 && temp != 0 && temp != -1) || arg_count >= 3)
     {
         free_exit(meta_data);
         ft_printf(RED"A Incorrect normal vector input values\n"RST);

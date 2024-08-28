@@ -10,7 +10,9 @@ void    ft_fill_data(t_meta *meta_data, char *singleline)
 {
     char **argv;
     static int light_count;
+    static int spot_light_count;
     t_light *temp_light;
+    t_spotlight *temp_spotlight;
 
     argv = ft_split(singleline, ' ');
     free(singleline);
@@ -41,6 +43,22 @@ void    ft_fill_data(t_meta *meta_data, char *singleline)
             temp_light->next = create_light(meta_data, argv);
         }
         light_count++;
+    }
+    else if (ft_strncmp(argv[0], "SL", 1) == 0 && ft_strlen(argv[0]) == 2)
+    {
+        if (spot_light_count == 0)
+        {
+            meta_data->spotlight = create_spotlight(meta_data, argv);
+            meta_data->sl_allocated = true;
+        }
+        else
+        {
+            temp_spotlight = meta_data->spotlight;
+            while (temp_spotlight->next != NULL)
+                temp_spotlight = temp_spotlight->next;
+            temp_spotlight->next = create_spotlight(meta_data, argv);
+        }
+        spot_light_count++;
     }
     else if ((ft_strncmp(argv[0], "pl", 2) == 0 || \
         ft_strncmp(argv[0], "sp", 2) == 0 || ft_strncmp(argv[0], "cy", 2) == 0 || \
@@ -148,7 +166,7 @@ t_light    *create_light(t_meta *meta_data, char **argv)
     ft_printf(G"\tLIGHT SETTINGS ...\t"RST);
     if (pointer_count(argv) != 4)
     {
-        ft_printf(RED"Incorrect camera data <C X,Y,Z brightness RGB>\n"RST);
+        ft_printf(RED"Incorrect LIGHT data <C X,Y,Z brightness RGB>\n"RST);
         free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
@@ -170,4 +188,41 @@ t_light    *create_light(t_meta *meta_data, char **argv)
     temp_light->next = NULL;
     ft_printf(G" OK \n"RST);
     return (temp_light);
+}
+
+t_spotlight    *create_spotlight(t_meta *meta_data, char **argv)
+{
+    char    **coordspotlight_p;
+    char    **rgb;
+    char    **spot_dir;
+    t_spotlight *temp_spotlight;
+
+    ft_printf(G"\tSPOTLIGHT SETTINGS ...\t"RST);
+    if (pointer_count(argv) != 5)
+    {
+        ft_printf(RED"Incorrect SPOTLIGHT data <C X,Y,Z brightness RGB>\n"RST);
+        free_pointer(argv);
+        free_exit(meta_data);
+        exit(EXIT_FAILURE);
+    }
+    temp_spotlight = malloc(sizeof(t_spotlight));
+    if (!temp_spotlight)
+    {
+        free_pointer(argv);
+        free_exit(meta_data);
+        exit(EXIT_FAILURE);
+    }
+    coordspotlight_p = ft_split(argv[1], ',');
+    temp_spotlight->coord = check_coord(&meta_data, temp_spotlight, argv, coordspotlight_p);
+    free_pointer(coordspotlight_p);
+    spot_dir = ft_split(argv[2], ',');
+    temp_spotlight->spot_dir = check_norm(&meta_data, temp_spotlight, argv, spot_dir);
+    free_pointer(spot_dir);
+    temp_spotlight->brightness = check_double(&meta_data, temp_spotlight, argv, argv[3]);
+    rgb = ft_split(argv[4], ',');
+    temp_spotlight->colour = check_colour(&meta_data, temp_spotlight, argv, rgb);
+    free_pointer(rgb);
+    temp_spotlight->next = NULL;
+    ft_printf(G" OK \n"RST);
+    return (temp_spotlight);
 }
