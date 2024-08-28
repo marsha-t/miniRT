@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:54:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/27 16:48:53 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/28 14:20:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	prepare_intersect_cn(t_pixel *pixel)
 	pixel->final.g_n = cone->colour.g_n;
 	pixel->final.b_n = cone->colour.b_n;
 	if (pixel->surface == SF_CONE_CURVE)
-		get_cn_curve_normal(pixel, (t_cn *)pixel->obj);
+		pixel->normal = get_cn_curve_normal(pixel, (t_cn *)pixel->obj);
 	if (pixel->surface == SF_CONE_BASE)
 		vec_inv(&pixel->normal, &cone->axis);
 }
@@ -131,23 +131,12 @@ t_vector	get_cn_curve_normal(t_pixel *pixel, t_cn *cone)
 	t_vector	parallel;
 	t_vector	normal;
 
-	// pixel->intersect.x = 8;
-	// pixel->intersect.y = -4;
-	// pixel->intersect.z = 90;
-	
 	vec_subtract(&temp, &pixel->intersect, &cone->coord);
 	vec_multiply_scalar(&parallel, &cone->axis, vec_dot_product(&temp, &cone->axis));
-	vec_subtract(&normal, &temp, &parallel);
-	vec_multiply_scalar(&normal, &normal, cos(cone->angle));
+	t_vector	perpen;
+	vec_subtract(&perpen, &temp, &parallel);
+	vec_multiply_scalar(&temp, &cone->axis, tan(cone->angle) * vec_len(&perpen));
+	vec_subtract(&normal, &perpen, &temp);
 	vec_normalise(&normal);
-	
-	// vec_subtract(&temp, &pixel->intersect, &cone->coord);
-	// vec_multiply_scalar(&parallel, &cone->axis, vec_dot_product(&temp, &cone->axis));
-	// t_vector perpen;
-	// vec_subtract(&perpen, &temp, &parallel);
-	// t_vector temp2;
-	// vec_multiply_scalar(&temp2, &parallel, tan(cone->angle));
-	// vec_subtract(&normal, &perpen, &temp2);
-	// vec_normalise(&normal);
 	return (normal);
 }

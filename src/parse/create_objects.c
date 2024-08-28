@@ -93,9 +93,9 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
     char    **colour;
 
     ft_printf(G"\tPLANE OBJECT ...\t"RST);
-    if (pointer_count(argv) != 4)
+    if (pointer_count(argv) < 4 || pointer_count(argv) > 6)
     {
-        ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB>\n"RST);
+        ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB [checker] [texture]>\n"RST);
         free_pointer(argv);
         free_exit(meta_data);
         exit(EXIT_FAILURE);
@@ -116,8 +116,17 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
     colour = ft_split(argv[3], ',');
     pl->colour = check_colour(&meta_data, pl, argv, colour);
     free_pointer(colour);
+    pl->checker = 0;
+    pl->texture = 0;
+    if (argv[4])
+    {
+        if (argv[4][0] == 'c')
+        {
+            pl->checker = 1;
+            pl->sqsize = check_bonus(&meta_data, pl, argv[4]);
+        }
+    }
     pl->next = NULL;
-    pl->exclude = false;
     ft_printf(G" OK \n"RST);
     return (pl);
 }
@@ -155,7 +164,6 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
     free_pointer(colour);
     sp->diameter = check_double(&meta_data, sp, argv, argv[2]);
     sp->next = NULL;
-    sp->exclude = false;
     ft_printf(G" OK \n"RST);
     return (sp);
 }
@@ -198,7 +206,6 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
     cy->diameter = check_double(&meta_data, cy, argv, argv[3]);
     cy->height = check_double(&meta_data, cy, argv, argv[4]);
     cy->next = NULL;
-    cy->exclude = false;
     ft_printf(G" OK \n"RST);
     return (cy);
 }
@@ -241,7 +248,6 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
     cn->height = check_double(&meta_data, cn, argv, argv[4]);
     cn->angle = check_double(&meta_data, cn, argv, argv[3]);
     cn->next = NULL;
-    cn->exclude = false;
     ft_printf(G" OK \n"RST);
     return (cn);
 }

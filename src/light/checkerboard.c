@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:39:17 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/27 14:59:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/28 15:30:21 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,13 @@ void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder)
 	vec_multiply_scalar(&temp2, &cylinder->axis, -height);
 	vec_add(&temp2, &temp1, &temp2);
 	vec_normalise(&temp2);
-	theta = atan2(temp2.y, temp2.x);
+	if (temp2.x >= temp2.z && temp2.x >= temp2.y)
+		theta = atan2(temp2.z, temp2.y);
+	else if (temp2.y >= temp2.z && temp2.y >= temp2.x)
+		theta = atan2(temp2.z, temp2.x);
+	else
+		theta = atan2(temp2.y, temp2.x);
+	// theta = atan2(temp2.y, temp2.x);
 	if (theta < 0)
 		theta += (2 * M_PI);
 	theta /= (2*M_PI);
@@ -131,27 +137,25 @@ void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base)
 	for intersection with cone curved surface */
 void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone)
 {
-	t_vector	a;
-	t_vector	u;
-	t_vector	v;
-	t_vector	m;
-	t_vector	m_para;
-	t_vector	m_perp;
-	double	dist;
+	t_vector	temp;
+	double	row;
 	double	col;
 	
-	least_parallel_avector(&a, &cone->axis);
-	vec_cross_product(&u, &cone->axis, &a);
-	vec_normalise(&u);
-	vec_cross_product(&v, &cone->axis, &u);
-	vec_normalise(&v);
-	vec_subtract(&m, &meta_data->pixel.intersect, &cone->coord);
-	vec_multiply_scalar(&m_para, &cone->axis, vec_dot_product(&m, &cone->axis));
-	vec_subtract(&m_perp, &m, &m_para);
-	dist = vec_len(&m_para) * tan(cone->angle) * atan2(vec_dot_product(&m_perp, &u), vec_dot_product(&m_perp, &v));
-	dist /= (vec_len(&m_para) * tan(cone->angle) * 2 * M_PI * SQSIZE_FLAT);
-	col = vec_len(&m_para) / (SQSIZE_FLAT * cone->height);
-	assign_checker_colour(dist, col, &cone->colour);
+	vec_subtract(&temp, &meta_data->pixel.intersect, &cone->coord);
+	if (temp.x >= temp.z && temp.x >= temp.y)
+		col = atan2(temp.z, temp.y);
+	else if (temp.y >= temp.z && temp.y >= temp.x)
+		col = atan2(temp.z, temp.x);
+	else
+		col = atan2(temp.y, temp.x);
+	if (col < 0)
+		col += 2 * M_PI;
+	col /= (2 * M_PI);
+	row = vec_dot_product(&temp, &cone->axis);
+	row /= cone->height;
+	row *= 5;
+	col *= 11;
+	assign_checker_colour(row, col, &cone->colour);
 }
 
 /*	get_checkerboard_cn_base determines checkerboard colour 

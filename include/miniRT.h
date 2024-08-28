@@ -80,6 +80,12 @@
 # include "../libft/get_next_line.h"
 # include "../mlx/mlx.h"
 
+typedef struct s_sqsize
+{
+	double  row;
+	double  col;
+}	t_sqsize;
+
 typedef struct s_colour
 {
     double  r;
@@ -124,7 +130,6 @@ typedef struct s_sp
   double diameter;
   t_colour  colour;
 	double radius;
-  bool  exclude;
   struct s_sp  *next;
 } t_sp;
 
@@ -133,7 +138,9 @@ typedef struct s_pl
   t_vector  coord;
   t_vector  normal;
   t_colour colour;
-  bool  exclude;
+  bool	checker;
+  t_sqsize sqsize;
+  bool	texture;
   struct s_pl  *next;
 } t_pl;
 
@@ -147,7 +154,6 @@ typedef struct s_cy
   t_colour colour;
   t_vector base_bottom;
 	t_vector base_top;
-  bool  exclude;
   struct s_cy  *next;
 } t_cy;
 
@@ -160,7 +166,6 @@ typedef struct s_cn
   double  height;
   t_vector  base;
   t_colour colour;
-  bool  exclude;
   struct s_cn  *next;
 } t_cn;
 

@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 23:13:42 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/28 15:32:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 
 /*	intersect_closest iterates through all objects
-	- objects that previously intersected at negative at excluded
 	- intersect_<shape> will update pixel data on value of t for closest intersection
 	- compute closest intersection
 */
