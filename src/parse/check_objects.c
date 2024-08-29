@@ -247,6 +247,13 @@ t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv
 	return (rgb);
 }
 
+/*
+	check_checker parses parameters for checkerboard patterns
+	- checks that the values are non-zero and positive
+	- checks that only 2 values are given
+	- if checks fail, it frees the allocated memories and exits the program
+	- otherwise, row and col are assigned the parsed values
+*/
 t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv)
 {
 	int		arg_count;
@@ -280,3 +287,5 @@ t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **arg
 	sqsize.col = ft_strtod(argv[2]);
 	return (sqsize);
 }
+
+			// sp->bump_map = check_bump(&meta_data, sp, argv, bonus);

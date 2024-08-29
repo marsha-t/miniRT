@@ -97,7 +97,7 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
 	ft_printf(G"\tPLANE OBJECT ...\t"RST);
 	if (pointer_count(argv) < 4 || pointer_count(argv) > 6)
 	{
-		ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB [checkerboard] [texture]>\n"RST);
+		ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB [checkerboard] [bumpmap]>\n"RST);
 		free_pointer(argv);
 		free_exit(meta_data);
 		exit(EXIT_FAILURE);
@@ -119,7 +119,7 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
 	pl->colour = check_colour(&meta_data, pl, argv, colour);
 	free_pointer(colour);
 	pl->checker = 0;
-	pl->texture = 0;
+	pl->bump = 0;
 	i = 3;
 	while (argv[++i])
 	{
@@ -132,7 +132,7 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
 		}
 		else if (bonus[0][0] == 't')
 		{
-			pl->texture = 1;
+			pl->bump = 1;
 		}
 		else
 		{
@@ -162,7 +162,7 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 	ft_printf(G"\tSPHERE OBJECT ...\t"RST);
 	if (pointer_count(argv) < 4 || pointer_count(argv) > 6)
 	{
-		ft_printf(RED"Incorrect SP data <sp X,Y,Z diameter RGB [checkerboard] [texture]>\n"RST);
+		ft_printf(RED"Incorrect SP data <sp X,Y,Z diameter RGB [checkerboard] [bumpmap]>\n"RST);
 		free_pointer(argv);
 		free_exit(meta_data);
 		exit(EXIT_FAILURE);
@@ -182,7 +182,7 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 	free_pointer(colour);
 	sp->diameter = check_double(&meta_data, sp, argv, argv[2]);
 	sp->checker = 0;
-	sp->texture = 0;
+	sp->bump = 0;
 	i = 3;
 	while (argv[++i])
 	{
@@ -199,9 +199,10 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 				exit(EXIT_FAILURE);
 			}
 		}
-		else if (bonus[0][0] == 't')
+		else if (bonus[0][0] == 'b')
 		{
-			sp->texture = 1;
+			sp->bump = 1;
+			// sp->bump_map = check_bump(&meta_data, sp, argv, bonus);
 		}
 		else
 		{
@@ -232,7 +233,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 	ft_printf(G"\tCYLINDER OBJECT ...\t"RST);
 	if (pointer_count(argv) < 6 || pointer_count(argv) > 8)
 	{
-		ft_printf(RED"Incorrect CY data <cy X,Y,Z NVector diameter height RGB [checkerboard] [texture]>\n"RST);
+		ft_printf(RED"Incorrect CY data <cy X,Y,Z NVector diameter height RGB [checkerboard] [bumpmap]>\n"RST);
 		free_pointer(argv);
 		free_exit(meta_data);
 		exit(EXIT_FAILURE);
@@ -256,7 +257,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 	cy->diameter = check_double(&meta_data, cy, argv, argv[3]);
 	cy->height = check_double(&meta_data, cy, argv, argv[4]);
 	cy->checker = 0;
-	cy->texture = 0;
+	cy->bump = 0;
 	i = 5;
 	while (argv[++i])
 	{
@@ -275,7 +276,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 		}
 		else if (bonus[0][0] == 't')
 		{
-			cy->texture = 1;
+			cy->bump = 1;
 		}
 		else
 		{
@@ -306,7 +307,7 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 	ft_printf(G"\tCONE OBJECT ...\t\t"RST);
 	if (pointer_count(argv) < 6 || pointer_count(argv) > 8)
 	{
-		ft_printf(RED"Incorrect CN data <cn X,Y,Z Axis Angle Height RGB [checkerboard] [texture]>\n"RST);
+		ft_printf(RED"Incorrect CN data <cn X,Y,Z Axis Angle Height RGB [checkerboard] [bumpmap]>\n"RST);
 		free_pointer(argv);
 		free_exit(meta_data);
 		exit(EXIT_FAILURE);
@@ -337,7 +338,7 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	cn->checker = 0;
-	cn->texture = 0;
+	cn->bump = 0;
 	i = 5;
 	while (argv[++i])
 	{
@@ -356,7 +357,7 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 		}
 		else if (bonus[0][0] == 't')
 		{
-			cn->texture = 1;
+			cn->bump = 1;
 		}
 		else
 		{
