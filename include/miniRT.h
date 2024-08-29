@@ -130,6 +130,9 @@ typedef struct s_sp
   double diameter;
   t_colour  colour;
 	double radius;
+  bool	checker;
+  t_sqsize sqsize;
+  bool	texture;
   struct s_sp  *next;
 } t_sp;
 
@@ -154,6 +157,9 @@ typedef struct s_cy
   t_colour colour;
   t_vector base_bottom;
 	t_vector base_top;
+  bool	checker;
+  t_sqsize sqsize;
+  bool	texture;
   struct s_cy  *next;
 } t_cy;
 
@@ -166,6 +172,9 @@ typedef struct s_cn
   double  height;
   t_vector  base;
   t_colour colour;
+  bool	checker;
+  t_sqsize sqsize;
+  bool	texture;
   struct s_cn  *next;
 } t_cn;
 

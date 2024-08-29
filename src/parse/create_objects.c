@@ -123,7 +123,7 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
 	i = 3;
 	while (argv[++i])
 	{
-		bonus = ft_split(argv[i]);
+		bonus = ft_split(argv[i], ',');
 		if (bonus[0][0] == 'c')
 		{
 			pl->checker = 1;
@@ -138,7 +138,7 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
 		{
 			free_pointer(bonus);
 			ft_printf(RED"Incorrect bonus\n"RST);
-			free_exit(*meta_data);
+			free_exit(meta_data);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -186,12 +186,18 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 	i = 3;
 	while (argv[++i])
 	{
-		bonus = ft_split(argv[i]);
+		bonus = ft_split(argv[i], ',');
 		if (bonus[0][0] == 'c')
 		{
 			sp->checker = 1;
 			sp->sqsize = check_checker(&meta_data, sp, argv, bonus);
 			free_pointer(bonus);
+			if (sp->sqsize.row < 1 || sp->sqsize.col < 1)
+			{
+				ft_printf(RED"Incorrect checkerboard square size values\n"RST);
+				free_exit(meta_data);
+				exit(EXIT_FAILURE);
+			}
 		}
 		else if (bonus[0][0] == 't')
 		{
@@ -201,7 +207,7 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 		{
 			free_pointer(bonus);
 			ft_printf(RED"Incorrect bonus\n"RST);
-			free_exit(*meta_data);
+			free_exit(meta_data);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -224,7 +230,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 	char	**bonus;
 
 	ft_printf(G"\tCYLINDER OBJECT ...\t"RST);
-	if (pointer_count(argv) < 6 || pointer_count(argv) < 8)
+	if (pointer_count(argv) < 6 || pointer_count(argv) > 8)
 	{
 		ft_printf(RED"Incorrect CY data <cy X,Y,Z NVector diameter height RGB [checkerboard] [texture]>\n"RST);
 		free_pointer(argv);
@@ -251,15 +257,21 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 	cy->height = check_double(&meta_data, cy, argv, argv[4]);
 	cy->checker = 0;
 	cy->texture = 0;
-	i = 3;
+	i = 5;
 	while (argv[++i])
 	{
-		bonus = ft_split(argv[i]);
+		bonus = ft_split(argv[i], ',');
 		if (bonus[0][0] == 'c')
 		{
 			cy->checker = 1;
 			cy->sqsize = check_checker(&meta_data, cy, argv, bonus);
 			free_pointer(bonus);
+			if (cy->sqsize.row < 1 || cy->sqsize.col < 1)
+			{
+				ft_printf(RED"Incorrect checkerboard square size values\n"RST);
+				free_exit(meta_data);
+				exit(EXIT_FAILURE);
+			}
 		}
 		else if (bonus[0][0] == 't')
 		{
@@ -269,7 +281,7 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 		{
 			free_pointer(bonus);
 			ft_printf(RED"Incorrect bonus\n"RST);
-			free_exit(*meta_data);
+			free_exit(meta_data);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -326,15 +338,21 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 	}
 	cn->checker = 0;
 	cn->texture = 0;
-	i = 3;
+	i = 5;
 	while (argv[++i])
 	{
-		bonus = ft_split(argv[i]);
+		bonus = ft_split(argv[i], ',');
 		if (bonus[0][0] == 'c')
 		{
 			cn->checker = 1;
 			cn->sqsize = check_checker(&meta_data, cn, argv, bonus);
 			free_pointer(bonus);
+			if (cn->sqsize.row < 1 || cn->sqsize.col < 1)
+			{
+				ft_printf(RED"Incorrect checkerboard square size values\n"RST);
+				free_exit(meta_data);
+				exit(EXIT_FAILURE);
+			}
 		}
 		else if (bonus[0][0] == 't')
 		{
@@ -344,7 +362,7 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 		{
 			free_pointer(bonus);
 			ft_printf(RED"Incorrect bonus\n"RST);
-			free_exit(*meta_data);
+			free_exit(meta_data);
 			exit(EXIT_FAILURE);
 		}
 	}
