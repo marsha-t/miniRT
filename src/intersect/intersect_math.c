@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect_math.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:24:23 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 23:12:25 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/28 14:00:27 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,27 +132,24 @@ double	intersect_cn_curve_math(t_cn *cone, t_vector *ray, t_vector *origin)
 	double		a;
 	double		b;
 	double		c;
-	t_vector	w;
-	double		temp;
-	double		t;
+	double	cos_sq;
+	t_vector	temp;
 	t_vector	ray_pt;
 	double		projection;
+	double t;
 
-	temp = (cone->radius * cone->radius) / (cone->height * cone->height);
-	a = vec_dot_product(ray, ray);
-	a -= temp * vec_dot_product(ray, &cone->axis);
-	vec_subtract(&w, origin, &cone->coord);
-	b = vec_dot_product(&w, ray);
-	b -= temp * vec_dot_product(&w, &cone->axis) * vec_dot_product(ray,
-			&cone->axis);
+	cos_sq = cos(cone->angle) * cos(cone->angle);
+	a = vec_dot_product(ray, &cone->axis) * vec_dot_product(ray, &cone->axis) - cos_sq;
+	vec_subtract(&temp, origin, &cone->coord);
+	b = vec_dot_product(&temp, &cone->axis) * vec_dot_product(ray, &cone->axis) - (cos_sq * vec_dot_product(&temp, ray));
 	b *= 2;
-	c = vec_dot_product(&w, &w) - temp * vec_dot_product(&w, &cone->axis);
+	c = vec_dot_product(&temp, &cone->axis) * vec_dot_product(&temp, &cone->axis) - (cos_sq * vec_dot_product(&temp, &temp));
 	t = quadratic_formula(a, b, c);
 	if (t > 0)
 	{
 		get_ray_pt(&ray_pt, ray, origin, t);
-		vec_subtract(&w, &ray_pt, &cone->coord);
-		projection = vec_dot_product(&w, &cone->axis);
+		vec_subtract(&temp, &ray_pt, &cone->coord);
+		projection = vec_dot_product(&temp, &cone->axis);
 		if (projection < 0 || projection > cone->height)
 			return (-1);
 	}

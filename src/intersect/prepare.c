@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prepare.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 23:15:25 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/27 16:23:25 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ void	prepare_cn(t_cn *start)
 	curr = start;
 	while (curr)
 	{
+		curr->angle = curr->angle * (M_PI / 180);
 		curr->radius = curr->height * tan(curr->angle);
 		vec_multiply_scalar(&temp, &curr->axis, curr->height);
 		vec_add(&curr->base, &curr->coord, &temp);

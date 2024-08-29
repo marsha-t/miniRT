@@ -151,6 +151,12 @@ void    fill_camera(t_meta *meta_data, char **argv)
     meta_data->camera->orient = check_norm(&meta_data, NULL, argv, orient_p);
     free_pointer(orient_p);
     meta_data->camera->fov = check_double(&meta_data, NULL, argv, argv[3]);
+    if (meta_data->camera->fov > 180)
+    {
+        free_pointer(argv);
+        free_exit(meta_data);
+        exit(EXIT_FAILURE);
+    }
 }
 
 /*

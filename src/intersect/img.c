@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/23 01:08:13 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/28 14:27:13 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	gen_img(t_meta *meta_data)
 			prepare_intersect(&meta_data->pixel);
 			if (meta_data->pixel.t >= 0 && meta_data->pixel.t != DBL_MAX)
 			{
+				get_checkerboard(meta_data);
 				gen_final_colour(meta_data);
 				// printf("after gen final color\n");
 				// printf("x: %d y: %d\n", x, y);

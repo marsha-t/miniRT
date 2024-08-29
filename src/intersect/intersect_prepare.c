@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:54:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/22 18:25:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/28 14:20:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ void	prepare_intersect_cy(t_pixel *pixel)
 		pixel->normal = cylinder->axis;
 }
 
-/*	prepare_intersect_cn adds derived parameters about intersection point with a cone */
+/*	
+	prepare_intersect_cn adds derived parameters about intersection point 
+	with a cone 
+*/
 void	prepare_intersect_cn(t_pixel *pixel)
 {
 	t_cn	*cone;
@@ -95,12 +98,16 @@ void	prepare_intersect_cn(t_pixel *pixel)
 	pixel->final.r_n = cone->colour.r_n;
 	pixel->final.g_n = cone->colour.g_n;
 	pixel->final.b_n = cone->colour.b_n;
+	if (pixel->surface == SF_CONE_CURVE)
+		pixel->normal = get_cn_curve_normal(pixel, (t_cn *)pixel->obj);
 	if (pixel->surface == SF_CONE_BASE)
 		vec_inv(&pixel->normal, &cone->axis);
 }
 
-/*	get_cy_curve_normal calculates normal vector for intersection
-	on cylinder's curved surface */
+/*	
+	get_cy_curve_normal calculates normal vector for intersection
+	on cylinder's curved surface 
+*/
 t_vector	get_cy_curve_normal(t_pixel *pixel, t_cy *cylinder)
 {
 	t_vector	temp1;
@@ -112,4 +119,24 @@ t_vector	get_cy_curve_normal(t_pixel *pixel, t_cy *cylinder)
 	vec_subtract(&temp1, &temp1, &temp2);
 	vec_normalise(&temp1);
 	return (temp1);
+}
+
+/*	
+	get_cn_curve_normal calculates normal vector for intersection
+	on cone's curved surface 
+*/
+t_vector	get_cn_curve_normal(t_pixel *pixel, t_cn *cone)
+{
+	t_vector	temp;
+	t_vector	parallel;
+	t_vector	normal;
+
+	vec_subtract(&temp, &pixel->intersect, &cone->coord);
+	vec_multiply_scalar(&parallel, &cone->axis, vec_dot_product(&temp, &cone->axis));
+	t_vector	perpen;
+	vec_subtract(&perpen, &temp, &parallel);
+	vec_multiply_scalar(&temp, &cone->axis, tan(cone->angle) * vec_len(&perpen));
+	vec_subtract(&normal, &perpen, &temp);
+	vec_normalise(&normal);
+	return (normal);
 }
