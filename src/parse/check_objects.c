@@ -288,4 +288,36 @@ t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **arg
 	return (sqsize);
 }
 
-			// sp->bump_map = check_bump(&meta_data, sp, argv, bonus);
+/*
+	check_bump parses the bump map path
+	- checks that only one element (separated by comma) waas given
+	- loads xpm img
+	- if checks fail, it frees the allocated memories and exits the program
+	- otherwise, it returns the path
+*/
+t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv)
+{
+	t_img	bump_img;
+
+	if (argv[2])
+	{
+		if (temp != NULL)
+			free(temp);
+		free_pointerlist(2, src, argv);
+		ft_printf(RED"Incorrect no. of bump map arguments\n"RST);
+		free_exit(*meta_data);
+		exit(EXIT_FAILURE);
+	}
+	bump_img.img = mlx_xpm_file_to_image((*meta_data)->mlx_ptr, argv[1], &bump_img.width, &bump_img.height);
+	if (!bump_img.img)
+	{
+		if (temp != NULL)
+			free(temp);
+		free_pointerlist(2, src, argv);
+		ft_printf(RED"Error from mlx_xpm_file_to_image\n"RST);
+		free_exit(*meta_data);
+		exit(EXIT_FAILURE);
+	}
+	bump_img.addr = mlx_get_data_addr(bump_img.img, &bump_img.bits_per_pixel, &bump_img.line_length, &bump_img.endian);
+	return (bump_img);
+}

@@ -202,7 +202,9 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 		else if (bonus[0][0] == 'b')
 		{
 			sp->bump = 1;
-			// sp->bump_map = check_bump(&meta_data, sp, argv, bonus);
+			sp->bump_img = check_bump(&meta_data, sp, argv, bonus);
+			sp->surface_area = sp->radius * sp->radius * 4 * M_PI;
+			sp->bump_img.scale = sp->surface_area / (sp->bump_img.width * sp->bump_img.height);
 		}
 		else
 		{

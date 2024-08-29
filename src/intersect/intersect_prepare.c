@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:54:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/28 14:20:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/08/29 20:44:48 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,13 @@ void	prepare_intersect_sp(t_pixel *pixel)
 	pixel->final.g_n = sphere->colour.g_n;
 	pixel->final.b_n = sphere->colour.b_n;
 	pixel->coord = sphere->coord;
-	pixel->normal = get_sp_normal(pixel->intersect, pixel->coord);
+	// if (sphere->bump == 0)
+		pixel->normal = get_sp_normal(pixel->intersect, pixel->coord);
+	// else
+		// pixel->normal = get_sp_bm_normal(pixel, sphere);
+	if (sphere->bump == 1)
+		get_sp_bm_normal(pixel, sphere);
+	
 }
 
 t_vector	get_sp_normal(t_vector surface_point, t_vector center)

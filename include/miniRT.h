@@ -80,6 +80,18 @@
 # include "../libft/get_next_line.h"
 # include "../mlx/mlx.h"
 
+typedef struct s_img
+{
+	void	*img;
+	int		width;
+	int		height;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+  double  scale;
+}	t_img;
+
 typedef struct s_sqsize
 {
 	double  row;
@@ -142,7 +154,8 @@ typedef struct s_sp
   bool	checker;
   t_sqsize sqsize;
   bool	bump;
-  char  *bump_map;
+  t_img bump_img;
+  double  surface_area;
   struct s_sp  *next;
 } t_sp;
 
@@ -288,6 +301,7 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
 double      check_double(t_meta **meta_data, void *temp, char **src, char *str);
 int         check_int(t_meta **meta_data, char *str);
 t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv);
+t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv);
 
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
@@ -365,6 +379,10 @@ void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone);
 void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone);
 void	least_parallel_avector(t_vector *a, t_vector *normal);
 void	assign_checker_colour(int row, int column, t_colour *colour);
+
+// Apply bump map textures: bumpmap.c
+t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere);
+t_vector get_bm_normal(int x, int y, t_img *img);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);
