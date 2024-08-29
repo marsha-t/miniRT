@@ -59,9 +59,11 @@ int	ft_strlen_dp(char **s)
 void    free_exit(t_meta *meta_data)
 {
     t_light *light;
+    t_spotlight *spotlight;
 
     light = NULL;
     light = meta_data->light;
+    spotlight = meta_data->spotlight;
     if (meta_data->amlight != NULL)
         free(meta_data->amlight);
     if (meta_data->camera != NULL)
@@ -72,6 +74,13 @@ void    free_exit(t_meta *meta_data)
         free(meta_data->light);
         meta_data->light = NULL;
         meta_data->light = light;
+    }
+    while (meta_data->sp_allocated && meta_data->spotlight  != NULL)
+    {
+        spotlight = spotlight->next;
+        free(meta_data->spotlight);
+        meta_data->spotlight = NULL;
+        meta_data->spotlight = spotlight;
     }
     free_objects(meta_data);
 }

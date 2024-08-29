@@ -21,7 +21,7 @@
 # define SQSIZE_CURVE M_PI / 4
 
 # define WINDOW_WIDTH 1000
-# define WINDOW_HEIGHT 600
+# define WINDOW_HEIGHT 800
 # define FOCAL_LENGTH 0.5
 
 # define KEY_ESC 53
@@ -116,6 +116,15 @@ typedef struct s_camera
   double    fov;
 } t_camera;
 
+typedef struct s_spotlight
+{
+    t_vector coord;
+    double brightness;
+    t_colour colour;
+    t_vector spot_dir;
+    struct s_spotlight  *next;
+}  t_spotlight;
+
 typedef struct s_light
 {
     t_vector coord;
@@ -183,10 +192,20 @@ typedef struct s_pixel
 {
 	t_vector	ray;
 	double		t;
+  double    coeff_ref;
+  double    shine_fac;
+  double    spot_attenuate;
+  double    spot_intensity;
+  double    spot_theta;
+  double    spot_p;
+  double    spot_k0;
+  double    spot_k1;
+  double    spot_k2;
 	void *obj;
 	int			surface;
 	t_vector	intersect;
   t_vector  shadow;
+  t_vector  shadow_spot;
   t_vector  coord;
   t_colour  final;
   t_vector  normal;
@@ -197,6 +216,7 @@ typedef struct s_meta
   t_amlight  *amlight;
   t_camera  *camera;
   t_light  *light;
+  t_spotlight  *spotlight;
   t_sp  *sp;
   t_pl  *pl;
   t_cy  *cy;
@@ -220,6 +240,7 @@ typedef struct s_meta
   bool  amlight_allocated;
   bool  camera_allocated;
   bool  light_allocated;
+  bool  sl_allocated;
   bool  sp_allocated;
   bool  pl_allocated;
   bool  cy_allocated;
@@ -240,6 +261,7 @@ void    meta_data_init(t_meta *meta_data);
 
 void    translate_camera(t_vector *vector, int key);
 void    translate_light(t_vector *vector, int key);
+void    translate_spotlight(t_vector *vector, int key);
 
 void    ft_check_args(int argc, char **argv);
 void    check_fd(char *argv);
@@ -252,6 +274,7 @@ int	    ft_strlen_dp(char **s);
 
 void    create_objects(t_meta *meta_data, char **argv);
 t_light    *create_light(t_meta *meta_data, char **argv);
+t_spotlight    *create_spotlight(t_meta *meta_data, char **argv);
 t_cy    *create_cy(t_meta *meta_data, char **argv);
 t_pl    *create_pl(t_meta *meta_data, char **argv);
 t_sp    *create_sp(t_meta *meta_data, char **argv);
@@ -271,6 +294,7 @@ void        print_spheres(t_meta *meta_data);
 void        print_planes(t_meta *meta_data);
 void        print_cones(t_meta *meta_data);
 void        print_light(t_meta *meta_data);
+void        print_spotlight(t_meta *meta_data);
 
 int	ft_key(int key, void *param);
 int	ft_close(t_meta *meta_data);
@@ -329,6 +353,7 @@ void	gen_final_colour(t_meta *meta_data);
 
 // Calculate shadow: shadow.c
 bool	in_shadow(t_meta *meta_data, t_light *light);
+bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
 
 // Apply checkerboard pattern: checkerboard.c
 void	get_checkerboard(t_meta *meta_data);

@@ -154,27 +154,27 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
 	int index;\
 
 	index = -1;
-	while(argv[arg_count][++index])
-	{
-		if (ft_isdigit(argv[arg_count][index]) == 0 && \
-			argv[arg_count][index] != '.'\
-			&& argv[arg_count][index] != '-' && argv[arg_count][index] != '+')
-		{
-			free_exit(meta_data);
-			ft_printf(RED"Incorrect normal vector input values\n"RST);
-			free_pointerlist(2, src, argv);
-			return (false);
-		}
-	}
-	temp = ft_strtod(argv[arg_count]);\
-	if (temp < -1 || temp > 1 || arg_count >= 3)
-	{
-		free_exit(meta_data);
-		ft_printf(RED"A Incorrect normal vector input values\n"RST);
-		free_pointerlist(2, src, argv);
-		return (false);
-	}
-	return (true);
+    while(argv[arg_count][++index])
+    {
+        if (ft_isdigit(argv[arg_count][index]) == 0 && \
+            argv[arg_count][index] != '.'\
+            && argv[arg_count][index] != '-' && argv[arg_count][index] != '+')
+        {
+            free_exit(meta_data);
+            ft_printf(RED"Incorrect normal vector input values\n"RST);
+            free_pointerlist(2, src, argv);
+            return (false);
+        }
+    }
+    temp = ft_strtod(argv[arg_count]);\
+    if ((temp != 1 && temp != 0 && temp != -1) || arg_count >= 3)
+    {
+        free_exit(meta_data);
+        ft_printf(RED"A Incorrect normal vector input values\n"RST);
+        free_pointerlist(2, src, argv);
+        return (false);
+    }
+    return (true);
 }
 
 /*
