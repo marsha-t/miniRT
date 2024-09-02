@@ -85,6 +85,7 @@ typedef struct s_img
 	void	*img;
 	int		width;
 	int		height;
+  double   area;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
@@ -381,8 +382,6 @@ void	least_parallel_avector(t_vector *a, t_vector *normal);
 void	assign_checker_colour(int row, int column, t_colour *colour);
 
 // Apply bump map textures: bumpmap.c
-t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere);
-t_vector get_bm_normal(int x, int y, t_img *img);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);
