@@ -156,7 +156,6 @@ typedef struct s_sp
   t_sqsize sqsize;
   bool	bump;
   t_img bump_img;
-  double  surface_area;
   struct s_sp  *next;
 } t_sp;
 
@@ -168,6 +167,7 @@ typedef struct s_pl
   bool	checker;
   t_sqsize sqsize;
   bool	bump;
+  t_img bump_img;
   struct s_pl  *next;
 } t_pl;
 
@@ -184,6 +184,7 @@ typedef struct s_cy
   bool	checker;
   t_sqsize sqsize;
   bool	bump;
+  t_img bump_img;
   struct s_cy  *next;
 } t_cy;
 
@@ -370,6 +371,14 @@ void	gen_final_colour(t_meta *meta_data);
 bool	in_shadow(t_meta *meta_data, t_light *light);
 bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
 
+// Get UV coordinates: uv_map.c
+void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v);
+void	uv_map_sp(t_pixel *pixel, t_sp *sphere, double *u, double *v);
+void	uv_map_cy_curve(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
+void	uv_map_cy_base(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
+void	uv_map_cn_curve(t_pixel *pixel, t_cn *cone, double *u, double *v);
+void	uv_map_cn_base(t_pixel *pixel, t_cn *cone, double *u, double *v);
+
 // Apply checkerboard pattern: checkerboard.c
 void	get_checkerboard(t_meta *meta_data);
 void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane);
@@ -382,6 +391,11 @@ void	least_parallel_avector(t_vector *a, t_vector *normal);
 void	assign_checker_colour(int row, int column, t_colour *colour);
 
 // Apply bump map textures: bumpmap.c
+t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere);
+t_vector	get_world_normal(t_vector *bm_normal, t_vector *ori_normal);
+t_vector extract_bm(int x, int y, t_img *img);
+t_vector	get_cy_curve_bm_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cy_base_bm_normal(t_pixel *pixel, t_cy *cylinder);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);

@@ -6,18 +6,11 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 20:17:13 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/30 20:50:19 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/02 10:29:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
-
-void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v);
-void	uv_map_sp(t_pixel *pixel, t_sp *sphere, double *u, double *v);
-void	uv_map_cy_curve(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
-void	uv_map_cy_base(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
-void	uv_map_cn_curve(t_pixel *pixel, t_cn *cone, double *u, double *v);
-void	uv_map_cn_base(t_pixel *pixel, t_cn *cone, double *u, double *v);
 
 /*
 	uv_map_pl does uv mapping (maps 3D to 2D coordinates in UV space)
@@ -34,7 +27,7 @@ void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v)
 	vec_normalise(&t);
 	vec_cross_product(&b, &plane->normal, &t);
 	vec_normalise(&b);
-	vec_subtract(&a, &pixel.intersect, &plane->coord);
+	vec_subtract(&a, &pixel->intersect, &plane->coord);
 	*u = vec_dot_product(&a, &t);
 	*v = vec_dot_product(&a, &b);
 }
@@ -47,7 +40,7 @@ void	uv_map_sp(t_pixel *pixel, t_sp *sphere, double *u, double *v)
 {
 	t_vector	temp;
 
-	vec_subtract(&temp, &pixel.intersect, &sphere->coord);
+	vec_subtract(&temp, &pixel->intersect, &sphere->coord);
 	*v = atan2(temp.z, temp.x);
 	if (*v < 0)
 		*v += (2 * M_PI);
@@ -65,7 +58,7 @@ void	uv_map_cy_curve(t_pixel *pixel, t_cy *cylinder, double *u, double *v)
 	t_vector	temp1;
 	t_vector	temp2;
 
-	vec_subtract(&temp1, &pixel.intersect, &cylinder->coord);
+	vec_subtract(&temp1, &pixel->intersect, &cylinder->coord);
 	*v = vec_dot_product(&temp1, &cylinder->axis);
 	vec_multiply_scalar(&temp2, &cylinder->axis, -(*v));
 	vec_add(&temp2, &temp1, &temp2);
@@ -95,14 +88,14 @@ void	uv_map_cy_base(t_pixel *pixel, t_cy *cylinder, double *u, double *v)
 	least_parallel_avector(&a, &cylinder->axis);
 	vec_cross_product(&t, &cylinder->axis, &a);
 	vec_normalise(&t);
-	vec_cross_product(&v, &cylinder->axis, &t);
+	vec_cross_product(&b, &cylinder->axis, &t);
 	vec_normalise(&b);
-	if (pixel.surface == SF_CY_BASE_B)
-		vec_subtract(&a, &pixel.intersect, &cylinder->base_bottom);
-	else if (pixel.surface == SF_CY_BASE_T)
-		vec_subtract(&a, &pixel.intersect, &cylinder->base_top);
+	if (pixel->surface == SF_CY_BASE_B)
+		vec_subtract(&a, &pixel->intersect, &cylinder->base_bottom);
+	else if (pixel->surface == SF_CY_BASE_T)
+		vec_subtract(&a, &pixel->intersect, &cylinder->base_top);
 	*u = vec_dot_product(&a, &t);
-	*z = vec_dot_product(&a, &b);
+	*v = vec_dot_product(&a, &b);
 }
 
 /*
@@ -111,7 +104,9 @@ void	uv_map_cy_base(t_pixel *pixel, t_cy *cylinder, double *u, double *v)
 */
 void	uv_map_cn_curve(t_pixel *pixel, t_cn *cone, double *u, double *v)
 {
-	vec_subtract(&temp, &pixel.intersect, &cone->coord);
+	t_vector	temp;
+
+	vec_subtract(&temp, &pixel->intersect, &cone->coord);
 	if (temp.x >= temp.z && temp.x >= temp.y)
 		*v = atan2(temp.z, temp.y);
 	else if (temp.y >= temp.z && temp.y >= temp.x)
@@ -140,7 +135,7 @@ void	uv_map_cn_base(t_pixel *pixel, t_cn *cone, double *u, double *v)
 	vec_normalise(&t);
 	vec_cross_product(&b, &cone->axis, &t);
 	vec_normalise(&b);
-	vec_subtract(&a, &pixel.intersect, &cone->base);
+	vec_subtract(&a, &pixel->intersect, &cone->base);
 	*u = vec_dot_product(&a, &t);
 	*v = vec_dot_product(&a, &b);
 }

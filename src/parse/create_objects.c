@@ -133,8 +133,8 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
 		else if (bonus[0][0] == 't')
 		{
 			pl->bump = 1;
-			pl->bump_img = check_bump(&meta_data, pl, argv, bonus);
-			pl->bump_img.scale = 5; // repeat every 5 units
+			// pl->bump_img = check_bump(&meta_data, pl, argv, bonus);
+			// pl->bump_img.scale = 5; // repeat every 5 units
 		}
 		else
 		{
@@ -205,8 +205,7 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 		{
 			sp->bump = 1;
 			sp->bump_img = check_bump(&meta_data, sp, argv, bonus);
-			sp->surface_area = sp->radius * sp->radius * 4 * M_PI;
-			sp->bump_img.scale = sp->surface_area / sp->bump_img.area;
+			sp->bump_img.scale = (sp->radius * sp->radius * 4 * M_PI) / sp->bump_img.area;
 		}
 		else
 		{
@@ -278,9 +277,11 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 				exit(EXIT_FAILURE);
 			}
 		}
-		else if (bonus[0][0] == 't')
+		else if (bonus[0][0] == 'b')
 		{
 			cy->bump = 1;
+			cy->bump_img = check_bump(&meta_data, cy, argv, bonus);
+			cy->bump_img.scale = (cy->height * cy->radius * 2 * M_PI) / cy->bump_img.area;
 		}
 		else
 		{

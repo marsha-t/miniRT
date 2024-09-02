@@ -2,4 +2,13 @@ A 0.3 255,120,255
 C 50,50,0 0,0,1 40
 L 65,70,20 0.7 255,255,255
 
-sp 50,0,100 10 255,0,0 b,bumpmaps/sample.xpm
+# sp 50,0,100 10 255,0,0 b,bumpmaps/5_5_sample.xpm
+# sp 70,0,100 10 255,0,0 
+
+# sp 70,15,100 10 255,0,0 b,bumpmaps/10_10_sample.xpm 
+
+sp 70,15,100 10 255,0,0 b,bumpmaps/4_4_sample.xpm 
+# sp 70,0,100 10 255,0,0 b,bumpmaps/5_5_sample.xpm
+
+# sp 20,0,100 10 255,0,0 
+

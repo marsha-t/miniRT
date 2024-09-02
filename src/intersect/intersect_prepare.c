@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:54:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/30 21:46:25 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/02 11:33:21 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,12 @@ void	prepare_intersect_sp(t_pixel *pixel)
 	pixel->final.b_n = sphere->colour.b_n;
 	pixel->coord = sphere->coord;
 	pixel->normal = get_sp_normal(pixel->intersect, pixel->coord);
+	// print_vector("ori_normal:", &pixel->normal);
 	if (sphere->bump == 1)
+	{
 		pixel->normal = get_sp_bm_normal(pixel, sphere);
-	
+	}
+	// print_vector("new_normal:", &pixel->normal);
 }
 
 t_vector	get_sp_normal(t_vector surface_point, t_vector center)
@@ -82,11 +85,26 @@ void	prepare_intersect_cy(t_pixel *pixel)
 	pixel->final.g_n = cylinder->colour.g_n;
 	pixel->final.b_n = cylinder->colour.b_n;
 	if (pixel->surface == SF_CY_CURVE)
+	{
 		pixel->normal = get_cy_curve_normal(pixel, (t_cy *)pixel->obj);
+		if (cylinder->bump == 1)
+			pixel->normal = get_cy_curve_bm_normal(pixel, cylinder);
+	}
 	else if (pixel->surface == SF_CY_BASE_B)
+	{
 		vec_inv(&pixel->normal, &cylinder->axis);
+		// print_vector("ori_normal:", &pixel->normal);
+		if (cylinder->bump == 1)
+			pixel->normal = get_cy_base_bm_normal(pixel, cylinder);
+		// print_vector("new_normal:", &pixel->normal);
+
+	}
 	else if (pixel->surface == SF_CY_BASE_T)
+	{
 		pixel->normal = cylinder->axis;
+		if (cylinder->bump == 1)
+			pixel->normal = get_cy_base_bm_normal(pixel, cylinder);
+	}
 }
 
 /*	
