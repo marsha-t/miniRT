@@ -46,6 +46,7 @@
 # define KEY_E 14
 # define KEY_D 2
 
+# define INTENSITY_SCALE 5
 // # define NUMPAD_0 65438
 // # define NUMPAD_1 65436
 // # define NUMPAD_2 65433
@@ -336,14 +337,20 @@ void	init_pixel(t_pixel *pixel);
 void  ray_dir(int i, int j, t_meta *meta_data);
 
 // Calculate closest intersection for ray direction: intersect.c
-void	intersect_closest(t_meta *meta_data);
-void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray);
+// void	intersect_closest(t_meta *meta_data);
+void	intersect_closest(t_meta *meta_data, int x, int y);
+
+// void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray);
+void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray, int x, int y);
+
 void	intersect_pl(t_meta *meta_data, t_pl *plane, t_vector *ray);
 void	intersect_cy(t_meta *meta_data, t_cy *cylinder, t_vector *ray);
 void	intersect_cn(t_meta *meta_data, t_cn *cone, t_vector *ray);
 
 // Calculate intersection between any given ray and object: intersect_math.c
-double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin);
+// double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin);
+double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin, int x, int y);
+
 double	intersect_pl_math(t_pl *plane, t_vector *ray, t_vector *origin);
 double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin);
 double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray, t_vector *origin);
@@ -392,10 +399,10 @@ void	assign_checker_colour(int row, int column, t_colour *colour);
 
 // Apply bump map textures: bumpmap.c
 t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere);
-t_vector	get_world_normal(t_vector *bm_normal, t_vector *ori_normal);
-t_vector extract_bm(int x, int y, t_img *img);
 t_vector	get_cy_curve_bm_normal(t_pixel *pixel, t_cy *cylinder);
 t_vector	get_cy_base_bm_normal(t_pixel *pixel, t_cy *cylinder);
+void	get_bm_gradient(t_img *img, double *u, double *v);
+t_vector	get_world_normal(t_vector *ori_normal, double u, double v);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);

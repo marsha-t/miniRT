@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/28 14:27:13 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/02 17:36:37 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ void	gen_img(t_meta *meta_data)
 		{
 			init_pixel(&meta_data->pixel);
 			ray_dir(x, y, meta_data);
-			intersect_closest(meta_data);
+			intersect_closest(meta_data,x, y);
 			prepare_intersect(&meta_data->pixel);
 			if (meta_data->pixel.t >= 0 && meta_data->pixel.t != DBL_MAX)
 			{
+				printf("intersect\n");
 				get_checkerboard(meta_data);
 				gen_final_colour(meta_data);
 				// printf("after gen final color\n");

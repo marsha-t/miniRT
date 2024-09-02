@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:24:23 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/28 14:00:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/02 17:40:58 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /*	intersect_sp_math finds the intersection between ray and a given sphere
 	- returns -1 if there are no intersections or t <= 0
 	- returns t otherwise  */
-double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin)
+// double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin)
+double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin, int x, int y)
 {
 	double		a;
 	double		b;
@@ -26,6 +27,14 @@ double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin)
 	vec_subtract(&temp, origin, &sphere->coord);
 	b = vec_dot_product(ray, &temp) * 2;
 	c = vec_dot_product(&temp, &temp) - (sphere->radius) * (sphere->radius);
+	if (x == 640 && y == 360)
+	{
+		printf("%d, %d: \n", x, y);
+		print_vector("ray: ", ray);
+		printf("a: %f\n", a);
+		printf("b: %f\n", b);
+		printf("c: %f\n", c);
+	}
 	return (quadratic_formula(a, b, c));
 }
 
