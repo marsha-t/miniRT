@@ -302,6 +302,7 @@ double      check_double(t_meta **meta_data, void *temp, char **src, char *str);
 int         check_int(t_meta **meta_data, char *str);
 t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv);
 t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv);
+bool	is_xpm_file(char *path);
 
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
