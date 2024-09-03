@@ -307,7 +307,7 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 	char	**bonus;
 
 	ft_printf(G"\tCONE OBJECT ...\t\t"RST);
-	if (pointer_count(argv) < 6 || pointer_count(argv) > 8)
+	if (pointer_count(argv) < 6 || pointer_count(argv) > 7)
 	{
 		ft_printf(RED"Incorrect CN data <cn X,Y,Z Axis Angle Height RGB [checkerboard]>\n"RST);
 		free_pointer(argv);

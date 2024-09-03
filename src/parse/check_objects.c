@@ -300,7 +300,7 @@ t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv)
 {
 	t_img	bump_img;
 
-	if (argv[2])
+	if (argv[2] || is_xpm_file(argv[1]) == 1)
 	{
 		if (temp != NULL)
 			free(temp);
@@ -321,4 +321,20 @@ t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv)
 	}
 	bump_img.addr = mlx_get_data_addr(bump_img.img, &bump_img.bits_per_pixel, &bump_img.line_length, &bump_img.endian);
 	return (bump_img);
+}
+
+/*
+	is_xpm_file checks that path ends with .xpm
+*/
+bool	is_xpm_file(char *path)
+{
+	char	*dot;
+
+	dot = ft_strrchr(path, '.');
+	if (dot == NULL)
+		return (false);
+	dot++;
+	if (ft_strncmp(path, "xpm", 4) != 0)
+		return (false);
+	return (true);
 }
