@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 10:07:21 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/02 17:32:11 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/03 12:51:38 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 	- intersect_<shape> will update pixel data on value of t for closest intersection
 	- compute closest intersection
 */
-// void	intersect_closest(t_meta *meta_data)
-void	intersect_closest(t_meta *meta_data, int x, int y)
+void	intersect_closest(t_meta *meta_data)
 {
 	t_sp	*sphere;
 	t_pl	*plane;
@@ -29,7 +28,7 @@ void	intersect_closest(t_meta *meta_data, int x, int y)
 		sphere = meta_data->sp;
 		while (sphere)
 		{
-			intersect_sp(meta_data, sphere, &meta_data->pixel.ray, x, y);
+			intersect_sp(meta_data, sphere, &meta_data->pixel.ray);
 			sphere = sphere->next;
 		}
 	}
@@ -70,12 +69,11 @@ void	intersect_closest(t_meta *meta_data, int x, int y)
 		obj and surface) is updated
 	- no update otherwise
 	*/
-// void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray)
-void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray, int x, int y)
+void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray)
 {
 	double	t;
 
-	t = intersect_sp_math(sphere, ray, &meta_data->camera->coord, x, y);
+	t = intersect_sp_math(sphere, ray, &meta_data->camera->coord);
 	if (t > 0 && t < meta_data->pixel.t)
 	{
 		meta_data->pixel.t = t;

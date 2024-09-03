@@ -320,6 +320,5 @@ t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	bump_img.addr = mlx_get_data_addr(bump_img.img, &bump_img.bits_per_pixel, &bump_img.line_length, &bump_img.endian);
-	bump_img.area = (double)bump_img.width * (double)bump_img.height;
 	return (bump_img);
 }

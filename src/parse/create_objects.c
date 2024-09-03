@@ -130,11 +130,10 @@ t_pl    *create_pl(t_meta *meta_data, char **argv)
 			pl->sqsize = check_checker(&meta_data, pl, argv, bonus);
 			free_pointer(bonus);
 		}
-		else if (bonus[0][0] == 't')
+		else if (bonus[0][0] == 'b')
 		{
 			pl->bump = 1;
-			// pl->bump_img = check_bump(&meta_data, pl, argv, bonus);
-			// pl->bump_img.scale = 5; // repeat every 5 units
+			pl->bump_img = check_bump(&meta_data, pl, argv, bonus);
 		}
 		else
 		{
@@ -205,7 +204,6 @@ t_sp    *create_sp(t_meta *meta_data, char **argv)
 		{
 			sp->bump = 1;
 			sp->bump_img = check_bump(&meta_data, sp, argv, bonus);
-			sp->bump_img.scale = (sp->radius * sp->radius * 4 * M_PI) / sp->bump_img.area;
 		}
 		else
 		{
@@ -281,7 +279,6 @@ t_cy    *create_cy(t_meta *meta_data, char **argv)
 		{
 			cy->bump = 1;
 			cy->bump_img = check_bump(&meta_data, cy, argv, bonus);
-			cy->bump_img.scale = (cy->height * cy->radius * 2 * M_PI) / cy->bump_img.area;
 		}
 		else
 		{
@@ -312,7 +309,7 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 	ft_printf(G"\tCONE OBJECT ...\t\t"RST);
 	if (pointer_count(argv) < 6 || pointer_count(argv) > 8)
 	{
-		ft_printf(RED"Incorrect CN data <cn X,Y,Z Axis Angle Height RGB [checkerboard] [bumpmap]>\n"RST);
+		ft_printf(RED"Incorrect CN data <cn X,Y,Z Axis Angle Height RGB [checkerboard]>\n"RST);
 		free_pointer(argv);
 		free_exit(meta_data);
 		exit(EXIT_FAILURE);
@@ -343,7 +340,6 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	cn->checker = 0;
-	cn->bump = 0;
 	i = 5;
 	while (argv[++i])
 	{
@@ -359,10 +355,6 @@ t_cn    *create_cn(t_meta *meta_data, char **argv)
 				free_exit(meta_data);
 				exit(EXIT_FAILURE);
 			}
-		}
-		else if (bonus[0][0] == 't')
-		{
-			cn->bump = 1;
 		}
 		else
 		{

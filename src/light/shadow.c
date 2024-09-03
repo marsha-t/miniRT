@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 17:32:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/02 17:36:54 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/03 12:52:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	in_shadow(t_meta *meta_data, t_light *light)
 		while (sphere)
 		{
 			t = intersect_sp_math(sphere, &meta_data->pixel.shadow,
-					&new_origin, 0, 0);
+					&new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			sphere = sphere->next;
@@ -137,7 +137,7 @@ bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight)
 		while (sphere)
 		{
 			t = intersect_sp_math(sphere, &meta_data->pixel.shadow_spot,
-					&new_origin, 0, 0);
+					&new_origin);
 			if (t > 0 && t < len)
 				return (true);
 			sphere = sphere->next;

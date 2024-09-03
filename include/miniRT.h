@@ -86,12 +86,10 @@ typedef struct s_img
 	void	*img;
 	int		width;
 	int		height;
-  double   area;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-  double  scale;
 }	t_img;
 
 typedef struct s_sqsize
@@ -200,7 +198,6 @@ typedef struct s_cn
   t_colour colour;
   bool	checker;
   t_sqsize sqsize;
-  bool	bump;
   struct s_cn  *next;
 } t_cn;
 
@@ -337,20 +334,14 @@ void	init_pixel(t_pixel *pixel);
 void  ray_dir(int i, int j, t_meta *meta_data);
 
 // Calculate closest intersection for ray direction: intersect.c
-// void	intersect_closest(t_meta *meta_data);
-void	intersect_closest(t_meta *meta_data, int x, int y);
-
-// void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray);
-void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray, int x, int y);
-
+void	intersect_closest(t_meta *meta_data);
+void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray);
 void	intersect_pl(t_meta *meta_data, t_pl *plane, t_vector *ray);
 void	intersect_cy(t_meta *meta_data, t_cy *cylinder, t_vector *ray);
 void	intersect_cn(t_meta *meta_data, t_cn *cone, t_vector *ray);
 
 // Calculate intersection between any given ray and object: intersect_math.c
-// double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin);
-double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin, int x, int y);
-
+double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin);
 double	intersect_pl_math(t_pl *plane, t_vector *ray, t_vector *origin);
 double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin);
 double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray, t_vector *origin);
@@ -391,7 +382,7 @@ void	get_checkerboard(t_meta *meta_data);
 void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane);
 void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere);
 void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder);
-void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base);
+void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder);
 void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone);
 void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone);
 void	least_parallel_avector(t_vector *a, t_vector *normal);
@@ -399,10 +390,14 @@ void	assign_checker_colour(int row, int column, t_colour *colour);
 
 // Apply bump map textures: bumpmap.c
 t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere);
+t_vector	get_pl_bm_normal(t_pixel *pixel, t_pl *plane);
 t_vector	get_cy_curve_bm_normal(t_pixel *pixel, t_cy *cylinder);
 t_vector	get_cy_base_bm_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cn_curve_bm_normal(t_pixel *pixel, t_cn *cone);
+t_vector	get_cn_base_bm_normal(t_pixel *pixel, t_cn *cone);
+
 void	get_bm_gradient(t_img *img, double *u, double *v);
-t_vector	get_world_normal(t_vector *ori_normal, double u, double v);
+t_vector	perturb_normal(t_vector *ori_normal, double u, double v);
 
 // Vector operations: vector_op.c
 double	vec_dot_product(t_vector *a, t_vector *b);

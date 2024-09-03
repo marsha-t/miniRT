@@ -6,14 +6,17 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:25:52 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/02 18:05:15 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/03 13:14:02 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 
-/*	
-	get_sp_bm_normal 
+/*
+	get_*_bm_normal:
+	- uv maps to convert 3d coordinates to 2d coordinates
+	- calculate horizontal and vertical gradients
+	- perturb normal using gradients 
 */
 t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere)
 {
@@ -22,12 +25,19 @@ t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere)
 	
 	uv_map_sp(pixel, sphere, &u, &v);
 	get_bm_gradient(&sphere->bump_img, &u, &v);
-	return (get_world_normal(&pixel->normal, u, v));
+	return (perturb_normal(&pixel->normal, u, v));
 }
 
-/*
-	get_cy_curve_bm_normal 
-*/
+t_vector	get_pl_bm_normal(t_pixel *pixel, t_pl *plane)
+{
+	double	u;
+	double	v;
+	
+	uv_map_pl(pixel, plane, &u, &v);
+	get_bm_gradient(&plane->bump_img, &u, &v);
+	return (perturb_normal(&pixel->normal, u, v));
+}
+
 t_vector	get_cy_curve_bm_normal(t_pixel *pixel, t_cy *cylinder)
 {
 	double	u;
@@ -35,28 +45,9 @@ t_vector	get_cy_curve_bm_normal(t_pixel *pixel, t_cy *cylinder)
 
 	uv_map_cy_curve(pixel, cylinder, &u, &v);
 	get_bm_gradient(&cylinder->bump_img, &u, &v);
-	// x[0] = (((int)((1 - u) * cylinder->bump_img.width)) + cylinder->bump_img.width / 2) % cylinder->bump_img.width;
-	// y[0] = (((int)((1 - v) * cylinder->bump_img.height)) + cylinder->bump_img.height / 2) % cylinder->bump_img.height;
-	// x[1] = (x[0] + 1) % cylinder->bump_img.width;
-	// y[1] = (y[0] + 1) % cylinder->bump_img.height;
-	// dst = cylinder->bump_img.addr
-	// 	+ (y[0] * cylinder->bump_img.line_length + x[0] * (cylinder->bump_img.bits_per_pixel / 8));
-	// c[0] = *((unsigned int *)dst) & 0xff;
-	// dst = cylinder->bump_img.addr
-	// 	+ (y[0] * cylinder->bump_img.line_length + x[1] * (cylinder->bump_img.bits_per_pixel / 8));
-	// c[1] = *((unsigned int *)dst) & 0xff;
-	// u = -((float)(c[0] - c[1])) / INTENSITY_SCALE;
-	// dst = cylinder->bump_img.addr
-	// 	+ (y[1] * cylinder->bump_img.line_length + x[0] * (cylinder->bump_img.bits_per_pixel / 8));
-	// c[1] = *((unsigned int *)dst) & 0xff;
-	// v = -((float)(c[0] - c[1])) / INTENSITY_SCALE;
-	return (get_world_normal(&pixel->normal, u, v));
+	return (perturb_normal(&pixel->normal, u, v));
 }
 
-
-/*
-	get_cy_base_bm_normal
-*/
 t_vector	get_cy_base_bm_normal(t_pixel *pixel, t_cy *cylinder)
 {
 	double	u;
@@ -64,22 +55,17 @@ t_vector	get_cy_base_bm_normal(t_pixel *pixel, t_cy *cylinder)
 	
 	uv_map_cy_base(pixel, cylinder, &u, &v);
 	get_bm_gradient(&cylinder->bump_img, &u, &v);
-	return (get_world_normal(&pixel->normal, u, v));
-
-	// double area;
-	// area = cylinder->radius * cylinder->radius * M_PI;
-	// double scale;
-	// scale = area / cylinder->bump_img.area;
-	// // u = u * cylinder->bump_img.scale;
-	// // v = v * cylinder->bump_img.scale;
-	// u = fmod(u, 1.0);
-	// v = fmod(v, 1.0);
-	// u = u * (double) cylinder->bump_img.width;
-	// v = v * (double) cylinder->bump_img.height;
-	// bm_normal = extract_bm(u, v, &cylinder->bump_img);
-	// return (get_world_normal(&bm_normal, &pixel->normal));
+	return (perturb_normal(&pixel->normal, u, v));
 }
 
+/*
+	get_bm_gradient extracts height from bumpmap using u & v and its neighbours
+	- wraps u & v as necessary to tile bump map across surface
+	- interprets greyscale value as height
+	- u replaced with horizontal gradient
+	- v replaced with vertical gradient 
+	- INTENSITY_SCALE: increase to make perturbations more subtle
+*/
 void	get_bm_gradient(t_img *img, double *u, double *v)
 {
 	int		x[2];
@@ -105,10 +91,10 @@ void	get_bm_gradient(t_img *img, double *u, double *v)
 }
 
 /*	
-	get_world_normal converts extracted vector from bumpmap
-	from tangent space to world space
+	perturb_normal adjusts the normal vector 
+	by adding scaled versions of tangent and bitangent vectors
 */
-t_vector	get_world_normal(t_vector *ori_normal, double u, double v)
+t_vector	perturb_normal(t_vector *ori_normal, double u, double v)
 {
 	t_vector	tangent;
 	t_vector	bitangent;
@@ -128,21 +114,3 @@ t_vector	get_world_normal(t_vector *ori_normal, double u, double v)
 	vec_normalise(&new_normal);
 	return (new_normal);
 }
-
-// t_vector get_pl_bm_normal(t_pixel *pixel, t_pl *plane) // how to calculate scale for plane
-// {
-// 	double		u;
-// 	double		v;
-// 	t_vector	bm_normal;
-
-// 	uv_map_pl(pixel, plane, &u, &v);
-// 	u = u / plane->bump_img.scale;
-// 	v = v / plane->bump_img.scale;
-// 	u = fmod(u, 1.0);
-// 	v = fmod(v, 1.0);
-// 	// is the bit below needed?
-// 	// u = u * (double) sphere->bump_img.width;
-// 	// v = v * (double) sphere->bump_img.height;
-// 	bm_normal = extract_bm(u, v, &plane->bump_img);
-// 	return (get_world_normal(&bm_normal, &pixel->normal));
-// }
