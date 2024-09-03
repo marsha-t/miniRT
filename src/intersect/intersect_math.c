@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:24:23 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/03 12:50:37 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/03 16:53:42 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 /*	intersect_sp_math finds the intersection between ray and a given sphere
 	- returns -1 if there are no intersections or t <= 0
 	- returns t otherwise  */
-// double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin)
 double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin)
 {
 	double		a;
@@ -30,9 +29,9 @@ double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin)
 	return (quadratic_formula(a, b, c));
 }
 
-// /*	intersect_pl_math finds the intersection between ray and a given plane
-// 	- returns -1 if there are no intersections or t <= 0
-// 	- returns t otherwise  */
+/*	intersect_pl_math finds the intersection between ray and a given plane
+	- returns -1 if there are no intersections or t <= 0
+	- returns t otherwise  */
 double	intersect_pl_math(t_pl *plane, t_vector *ray, t_vector *origin)
 {
 	double		t;
@@ -48,6 +47,7 @@ double	intersect_pl_math(t_pl *plane, t_vector *ray, t_vector *origin)
 		return (-1);
 	return (t);
 }
+
 
 /*	intersect_cy_curve_math checks intersection with curved surface of cylinder
 	- returns -1 if there are no intersections or t <= 0
@@ -76,7 +76,7 @@ double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin)
 	a = vec_dot_product(&d_perpen, &d_perpen);
 	b = vec_dot_product(&w_perpen, &d_perpen) * 2;
 	c = vec_dot_product(&w_perpen, &w_perpen) - (cylinder->radius
-		* cylinder->radius);
+			* cylinder->radius);
 	t = quadratic_formula(a, b, c);
 	if (t > 0)
 	{
@@ -133,18 +133,21 @@ double	intersect_cn_curve_math(t_cn *cone, t_vector *ray, t_vector *origin)
 	double		a;
 	double		b;
 	double		c;
-	double	cos_sq;
+	double		cos_sq;
 	t_vector	temp;
 	t_vector	ray_pt;
 	double		projection;
-	double t;
+	double		t;
 
 	cos_sq = cos(cone->angle) * cos(cone->angle);
-	a = vec_dot_product(ray, &cone->axis) * vec_dot_product(ray, &cone->axis) - cos_sq;
+	a = vec_dot_product(ray, &cone->axis) * vec_dot_product(ray, &cone->axis)
+		- cos_sq;
 	vec_subtract(&temp, origin, &cone->coord);
-	b = vec_dot_product(&temp, &cone->axis) * vec_dot_product(ray, &cone->axis) - (cos_sq * vec_dot_product(&temp, ray));
+	b = vec_dot_product(&temp, &cone->axis) * vec_dot_product(ray, &cone->axis)
+		- (cos_sq * vec_dot_product(&temp, ray));
 	b *= 2;
-	c = vec_dot_product(&temp, &cone->axis) * vec_dot_product(&temp, &cone->axis) - (cos_sq * vec_dot_product(&temp, &temp));
+	c = vec_dot_product(&temp, &cone->axis) * vec_dot_product(&temp,
+			&cone->axis) - (cos_sq * vec_dot_product(&temp, &temp));
 	t = quadratic_formula(a, b, c);
 	if (t > 0)
 	{
