@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 17:32:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/03 16:41:50 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/04 16:21:08 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,18 @@ bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len)
 
 bool	in_shadow_cn(t_meta *meta_data, t_vector *new_origin, double len)
 {
+	t_cn	*cone;
+	double	t;
+
 	cone = meta_data->cn;
 	while (cone)
 	{
 		t = intersect_cn_curve_math(cone, &meta_data->pixel.shadow,
-				&new_origin);
+				new_origin);
 		if (t > 0 && t < len)
 			return (true);
 		t = intersect_cn_base_math(cone, &meta_data->pixel.shadow,
-				&new_origin);
+				new_origin);
 		if (t > 0 && t < len)
 			return (true);
 		cone = cone->next;

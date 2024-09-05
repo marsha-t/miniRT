@@ -300,12 +300,15 @@ t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv)
 {
 	t_img	bump_img;
 
-	if (argv[2] || is_xpm_file(argv[1]) == 1)
+	if (argv[2] || is_xpm_file(argv[1]) == false)
 	{
 		if (temp != NULL)
 			free(temp);
 		free_pointerlist(2, src, argv);
-		ft_printf(RED"Incorrect no. of bump map arguments\n"RST);
+		if (argv[2])
+			ft_printf(RED"Incorrect no. of bump map arguments\n"RST);
+		else
+			ft_printf(RED"Incorrect bump map file\n"RST);
 		free_exit(*meta_data);
 		exit(EXIT_FAILURE);
 	}
@@ -334,7 +337,7 @@ bool	is_xpm_file(char *path)
 	if (dot == NULL)
 		return (false);
 	dot++;
-	if (ft_strncmp(path, "xpm", 4) != 0)
+	if (ft_strncmp(dot, "xpm", 4) != 0)
 		return (false);
 	return (true);
 }
