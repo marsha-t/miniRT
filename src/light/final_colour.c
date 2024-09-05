@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 20:49:00 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/03 16:50:01 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/05 17:22:06 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,96 +14,70 @@
 
 void	gen_final_colour(t_meta *meta_data)
 {
-	t_light		*curr;
-	t_spotlight	*curr_sl;
 	t_colour	ambient_colour;
-	t_vector	light_direction;
 	t_colour	diffuse;
 	t_colour	specular;
-	t_vector	reflection;
-	double		dot_product;
-	double		p2;
 
-	ambient_colour.r = meta_data->amlight->colour.r
-		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.r_n);
-	ambient_colour.g = meta_data->amlight->colour.g
-		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.g_n);
-	ambient_colour.b = meta_data->amlight->colour.b
-		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.b_n);
-	curr = meta_data->light;
-	curr_sl = meta_data->spotlight;
-	diffuse.r = 0;
-	diffuse.g = 0;
-	diffuse.b = 0;
-	specular.r = 0;
-	specular.g = 0;
-	specular.b = 0;
-	while (curr)
-	{
-		if (in_shadow(meta_data, curr) == false)
-		{
-			light_direction = calculate_light_direction(meta_data->pixel.intersect,
-					curr->coord);
-			dot_product = fmax(0.0, vec_dot_product(&meta_data->pixel.normal,
-						&light_direction));
-			diffuse.r += curr->colour.r * curr->brightness * dot_product
-				* (meta_data->pixel.final.r_n);
-			diffuse.g += curr->colour.g * curr->brightness * dot_product
-				* (meta_data->pixel.final.g_n);
-			diffuse.b += curr->colour.b * curr->brightness * dot_product
-				* (meta_data->pixel.final.b_n);
-			vec_multiply_scalar(&reflection, &meta_data->pixel.normal, 2
-				* dot_product);
-			vec_subtract(&reflection, &light_direction, &reflection);
-			dot_product = fmax(0.0, vec_dot_product(&reflection,
-						&meta_data->pixel.ray));
-			if (dot_product > 0.0001)
-				dot_product = pow(fmax(0.0, dot_product),
-						meta_data->pixel.shine_fac)
-					* meta_data->pixel.coeff_ref;
-			p2 = dot_product * curr->brightness;
-			specular.r += fmin(curr->colour.r * p2, 255);
-			specular.g += fmin(curr->colour.g * p2, 255);
-			specular.b += fmin(curr->colour.b * p2, 255);
-		}
-		curr = curr->next;
-	}
-	while (curr_sl)
-	{
-		if (in_shadow_spotlight(meta_data, curr_sl) == false)
-		{
-			light_direction = calculate_light_direction(meta_data->pixel.intersect,
-					curr_sl->coord);
-			dot_product = fmax(0.0, vec_dot_product(&meta_data->pixel.normal,
-						&light_direction));
-			diffuse.r += curr_sl->colour.r * meta_data->pixel.spot_intensity
-				* dot_product * (meta_data->pixel.final.r_n);
-			diffuse.g += curr_sl->colour.g * meta_data->pixel.spot_intensity
-				* dot_product * (meta_data->pixel.final.g_n);
-			diffuse.b += curr_sl->colour.b * meta_data->pixel.spot_intensity
-				* dot_product * (meta_data->pixel.final.b_n);
-			vec_multiply_scalar(&reflection, &meta_data->pixel.normal, 2
-				* dot_product);
-			vec_subtract(&reflection, &light_direction, &reflection);
-			dot_product = fmax(0.0, vec_dot_product(&reflection,
-						&meta_data->pixel.ray));
-			if (dot_product > 0.0001)
-				dot_product = pow(fmax(0.0, dot_product),
-						meta_data->pixel.shine_fac)
-					* meta_data->pixel.coeff_ref;
-			p2 = dot_product * meta_data->pixel.spot_intensity;
-			specular.r += fmin(curr_sl->colour.r * p2, 255);
-			specular.g += fmin(curr_sl->colour.g * p2, 255);
-			specular.b += fmin(curr_sl->colour.b * p2, 255);
-		}
-		curr_sl = curr_sl->next;
-	}
+	init_final_colour(meta_data, &diffuse, &specular, &ambient_colour);
+	gen_final_colour_light(meta_data, &diffuse, &specular);
+	gen_final_colour_spotlight(meta_data, &diffuse, &specular);
 	meta_data->pixel.final.r = fmin((ambient_colour.r + diffuse.r + specular.r),
 			255);
 	meta_data->pixel.final.g = fmin((ambient_colour.g + diffuse.g + specular.g),
 			255);
 	meta_data->pixel.final.b = fmin((ambient_colour.b + diffuse.b + specular.b),
 			255);
+}
+
+void	init_final_colour(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular, t_colour *ambient)
+{
+	ambient->r = meta_data->amlight->colour.r
+		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.r_n);
+	ambient->g = meta_data->amlight->colour.g
+		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.g_n);
+	ambient->b = meta_data->amlight->colour.b
+		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.b_n);
+	diffuse->r = 0;
+	diffuse->g = 0;
+	diffuse->b = 0;
+	specular->r = 0;
+	specular->g = 0;
+	specular->b = 0;
+}
+
+void	gen_final_colour_light(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular)
+{
+	t_light	*curr;
+
+	curr = meta_data->light;
+	while (curr)
+	{
+		if (in_shadow(meta_data, curr) == false)
+		{
+			gen_diffuse(meta_data, curr, diffuse);
+			gen_specular(meta_data, curr, specular);
+		}
+		curr = curr->next;
+	}
+}
+
+void	gen_final_colour_spotlight(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular)
+{
+	t_spotlight	*curr_sl;
+
+	curr_sl = meta_data->spotlight;
+	while (curr_sl)
+	{
+		if (in_shadow_spotlight(meta_data, curr_sl) == false)
+		{
+			gen_diffuse_spotlight(meta_data, curr_sl, diffuse);
+			gen_specular_spotlight(meta_data, curr_sl, specular);
+		}
+		curr_sl = curr_sl->next;
+	}
 }
 
 t_vector	calculate_light_direction(t_vector surface_point,

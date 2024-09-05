@@ -11,14 +11,20 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/parse/fill_settings.c \
 				./src/parse/free_utils.c \
 				./src/parse/print_utils.c \
-				./src/intersect/prepare.c \
+				./src/intersect/prepare1.c \
+				./src/intersect/prepare2.c \
 				./src/intersect/img.c \
 				./src/intersect/intersect.c \
-				./src/intersect/intersect_math.c \
+				./src/intersect/intersect_obj.c \
+				./src/intersect/intersect_math1.c \
+				./src/intersect/intersect_math2.c \
 				./src/intersect/intersect_prepare.c \
+				./src/intersect/get_normal.c \
 				./src/intersect/intersect_utils.c \
 				./src/light/final_colour.c \
+				./src/light/diffuse_specular.c \
 				./src/light/shadow.c \
+				./src/light/shadow_obj.c \
 				./src/light/checkerboard1.c\
 				./src/light/checkerboard2.c\
 				./src/light/uv_map1.c\

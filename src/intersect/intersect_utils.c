@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:03:25 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/02 17:37:25 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/05 17:27:43 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,32 +25,20 @@ double	quadratic_formula(double a, double b, double c)
 		return (-1);
 	t = (-b - sqrt(discriminant)) / (2 * a);
 	t2 = (-b + sqrt(discriminant)) / (2 * a);
-	if (discriminant == 0)
-	{
-		if (t <= 0)
-			return (-1);
-		else
-			return (t);
-	}
-	if (t <= 0)
-	{
-		if (t2 <= 0)
-			return (-1);
-		else
-			return (t2);
-	}
+	if (discriminant == 0 && t <= 0)
+		return (-1);
+	else if (discriminant == 0 && t > 0)
+		return (t);
+	else if (t <= 0 && t2 <= 0)
+		return (-1);
+	else if (t <= 0 && t2 > 0)
+		return (t2);
+	else if (t > 0 && t2 > 0 & t < t2)
+		return (t);
+	else if (t > 0 && t2 > 0 && t >= t2)
+		return (t2);
 	else
-	{
-		if (t2 > 0)
-		{
-			if (t < t2)
-				return (t);
-			else
-				return (t2);
-		}
-		else
-			return (t);
-	}
+		return (t);
 }
 
 /*	get_ray_pt generates coordinates for point on ray

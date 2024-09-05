@@ -318,11 +318,13 @@ void	      map_draw(t_meta *meta_data);
 void	      img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color);
 int	        create_trgb(int r, int g, int b);
 
-// Prepare derived parameters: prepare.c
+// Prepare derived parameters: prepare1.c
 void	prepare_data(t_meta *meta_data);
 void	prepare_img(t_meta *meta_data);
 void	img_basis_vec(t_meta *meta_data);
 void	prepare_light(t_meta *meta_data);
+
+// Prepare derived parameters: prepare2.c
 void	prepare_obj(t_meta *meta_data);
 void	prepare_sp(t_sp *start);
 void	prepare_pl(t_pl *start);
@@ -336,26 +338,34 @@ void  ray_dir(int i, int j, t_meta *meta_data);
 
 // Calculate closest intersection for ray direction: intersect.c
 void	intersect_closest(t_meta *meta_data);
+void	intersect_closest_sp_pl(t_meta *meta_data);
+void	intersect_closest_cy_cn(t_meta *meta_data);
+
 void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray);
 void	intersect_pl(t_meta *meta_data, t_pl *plane, t_vector *ray);
 void	intersect_cy(t_meta *meta_data, t_cy *cylinder, t_vector *ray);
 void	intersect_cn(t_meta *meta_data, t_cn *cone, t_vector *ray);
 
-// Calculate intersection between any given ray and object: intersect_math.c
+// Calculate intersection between any given ray and object: intersect_math1.c
 double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin);
 double	intersect_pl_math(t_pl *plane, t_vector *ray, t_vector *origin);
 double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin);
 double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray, t_vector *origin);
+double	cy_curve_check(t_cy *cy, double t, t_vector *ray, t_vector *origin);
+
+// Calculate intersection between any given ray and object: intersect_math2.c
 double	intersect_cn_curve_math(t_cn *cone, t_vector *ray, t_vector *origin);
 double	intersect_cn_base_math(t_cn *cone, t_vector *ray, t_vector *origin);
 
 // Calculate derived data of intersection: intersect_prepare.c
 void	prepare_intersect(t_pixel *pixel);
 void  prepare_intersect_sp(t_pixel *pixel);
-t_vector	get_sp_normal(t_vector surface_point, t_vector center);
 void	prepare_intersect_pl(t_pixel *pixel);
 void	prepare_intersect_cy(t_pixel *pixel);
 void	prepare_intersect_cn(t_pixel *pixel);
+
+// Calculate normal at intersection point: get_normal.c
+t_vector	get_sp_normal(t_vector surface_point, t_vector center);
 t_vector	get_cy_curve_normal(t_pixel *pixel, t_cy *cylinder);
 t_vector	get_cn_curve_normal(t_pixel *pixel, t_cn *cone);
 
@@ -365,10 +375,33 @@ void	get_ray_pt(t_vector *dest, t_vector *ray, t_vector *origin, double t);
 
 // Calculate final colour at intersection: final_colour.c
 void	gen_final_colour(t_meta *meta_data);
+void	init_final_colour(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular, t_colour *ambient);
+void	gen_final_colour_light(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular);
+void	gen_final_colour_spotlight(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular);
+t_vector	calculate_light_direction(t_vector surface_point,
+		t_vector light_position);
+
+// Calculate diffuse and specular colour components: diffuse_specular.c
+void	gen_diffuse(t_meta *meta_data, t_light *curr, t_colour *diffuse);
+void	gen_specular(t_meta *meta_data, t_light *curr, t_colour *specular);
+void	gen_diffuse_spotlight(t_meta *meta_data, t_spotlight *curr_sl,
+		t_colour *diffuse);
+void	gen_specular_spotlight(t_meta *meta_data, t_spotlight *curr_sl,
+		t_colour *specular);
 
 // Calculate shadow: shadow.c
 bool	in_shadow(t_meta *meta_data, t_light *light);
 bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
+bool	in_shadow_spotlight_setup(t_meta *meta_data, t_spotlight *spotlight, double *len, t_vector *new_origin);
+
+// Calculate shadow for each object: shadow_obj.c
+bool	in_shadow_sp(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_pl(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_cn(t_meta *meta_data, t_vector *new_origin, double len);
 
 // Get UV coordinates: uv_map1.c
 void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v);
@@ -420,8 +453,6 @@ void	vec_cross_product(t_vector *dest, t_vector *a, t_vector *b);
 // Vector utility functions: vector_utils.c
 void	print_vector(char *str, t_vector *vec);
 int	vec_cmp_num(t_vector *vec, double x, double y, double z);
-
-t_vector	calculate_light_direction(t_vector surface_point, t_vector light_position);
 
 // Miscellaneous math functions: misc_math.c
 double	deg_to_rad(int degree);
