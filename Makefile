@@ -19,9 +19,15 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/intersect/intersect_utils.c \
 				./src/light/final_colour.c \
 				./src/light/shadow.c \
-				./src/light/checkerboard.c\
+				./src/light/checkerboard1.c\
+				./src/light/checkerboard2.c\
+				./src/light/uv_map1.c\
+				./src/light/uv_map2.c\
+				./src/intersect/bumpmap.c \
+				./src/intersect/bumpmap_utils.c \
 				./src/utils/misc_math.c \
-				./src/utils/vector_op.c \
+				./src/utils/vector_op1.c \
+				./src/utils/vector_op2.c \
 				./src/utils/vector_utils.c
 
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)

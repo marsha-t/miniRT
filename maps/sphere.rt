@@ -2,4 +2,23 @@ A 0.3 255,120,255
 C 50,50,0 0,0,1 40
 L 65,70,20 0.7 255,255,255
 
-sp 50,0,100 10 255,0,0 b,bumpmaps
+# sp 70,0,100 10 255,0,0 
+
+# sp 70,30,100 10 255,0,0 b,bumpmaps/SoftballBump.xpm 
+# sp 70,15,100 10 255,0,0 b,bumpmaps/SoftballBump.xpm 
+# sp 20,15,100 10 255,0,0 b,bumpmaps/SoftballBump.xpm 
+# sp 20,30,100 10 255,0,0 b,bumpmaps/SoftballBump.xpm 
+
+# sp 70,30,100 14 255,0,0 b,bumpmaps/earthbump1k
+sp 70,30,100 14 255,0,0 b,bumpmaps/earthbump1k.xpm 
+sp 70,15,100 14 255,0,0 b,bumpmaps/earthbump1k.xpm 
+sp 20,15,100 14 255,0,0 b,bumpmaps/earthbump1k.xpm 
+sp 20,30,100 14 255,0,0 b,bumpmaps/earthbump1k.xpm 
+
+# earthbump1k
+# marsbump1k
+# mercurybump
+# moonbump1k
+# plutobump1k
+# SoftballBump
+# venusbump

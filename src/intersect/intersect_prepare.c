@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:54:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/08/28 14:20:55 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/03 13:37:14 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	prepare_intersect_sp(t_pixel *pixel)
 	pixel->final.b_n = sphere->colour.b_n;
 	pixel->coord = sphere->coord;
 	pixel->normal = get_sp_normal(pixel->intersect, pixel->coord);
+	if (sphere->bump == 1)
+		pixel->normal = get_sp_bm_normal(pixel, sphere);
 }
 
 t_vector	get_sp_normal(t_vector surface_point, t_vector center)
@@ -64,9 +66,9 @@ void	prepare_intersect_pl(t_pixel *pixel)
 	pixel->coord = plane->coord;
 	pixel->normal = plane->normal;
 	if (vec_dot_product(&plane->normal, &pixel->ray) > 0)
-	{
 		vec_inv(&pixel->normal, &plane->normal);
-	}
+	if (plane->bump == 1)
+		pixel->normal = get_pl_bm_normal(pixel, plane);
 }
 
 /*	prepare_intersect_cy adds derived parameters about intersection point with a cylinder */
@@ -79,11 +81,24 @@ void	prepare_intersect_cy(t_pixel *pixel)
 	pixel->final.g_n = cylinder->colour.g_n;
 	pixel->final.b_n = cylinder->colour.b_n;
 	if (pixel->surface == SF_CY_CURVE)
+	{
 		pixel->normal = get_cy_curve_normal(pixel, (t_cy *)pixel->obj);
+		if (cylinder->bump == 1)
+			pixel->normal = get_cy_curve_bm_normal(pixel, cylinder);
+	}
 	else if (pixel->surface == SF_CY_BASE_B)
+	{
 		vec_inv(&pixel->normal, &cylinder->axis);
+		if (cylinder->bump == 1)
+			pixel->normal = get_cy_base_bm_normal(pixel, cylinder);
+
+	}
 	else if (pixel->surface == SF_CY_BASE_T)
+	{
 		pixel->normal = cylinder->axis;
+		if (cylinder->bump == 1)
+			pixel->normal = get_cy_base_bm_normal(pixel, cylinder);
+	}
 }
 
 /*	

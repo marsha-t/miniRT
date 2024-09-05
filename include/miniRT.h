@@ -46,6 +46,7 @@
 # define KEY_E 14
 # define KEY_D 2
 
+# define INTENSITY_SCALE 5
 // # define NUMPAD_0 65438
 // # define NUMPAD_1 65436
 // # define NUMPAD_2 65433
@@ -79,6 +80,17 @@
 # include "../libft/ft_printf.h"
 # include "../libft/get_next_line.h"
 # include "../mlx/mlx.h"
+
+typedef struct s_img
+{
+	void	*img;
+	int		width;
+	int		height;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_img;
 
 typedef struct s_sqsize
 {
@@ -142,7 +154,7 @@ typedef struct s_sp
   bool	checker;
   t_sqsize sqsize;
   bool	bump;
-  char  *bump_map;
+  t_img bump_img;
   struct s_sp  *next;
 } t_sp;
 
@@ -154,6 +166,7 @@ typedef struct s_pl
   bool	checker;
   t_sqsize sqsize;
   bool	bump;
+  t_img bump_img;
   struct s_pl  *next;
 } t_pl;
 
@@ -170,6 +183,7 @@ typedef struct s_cy
   bool	checker;
   t_sqsize sqsize;
   bool	bump;
+  t_img bump_img;
   struct s_cy  *next;
 } t_cy;
 
@@ -184,7 +198,6 @@ typedef struct s_cn
   t_colour colour;
   bool	checker;
   t_sqsize sqsize;
-  bool	bump;
   struct s_cn  *next;
 } t_cn;
 
@@ -288,6 +301,8 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
 double      check_double(t_meta **meta_data, void *temp, char **src, char *str);
 int         check_int(t_meta **meta_data, char *str);
 t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv);
+t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv);
+bool	is_xpm_file(char *path);
 
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
@@ -355,23 +370,49 @@ void	gen_final_colour(t_meta *meta_data);
 bool	in_shadow(t_meta *meta_data, t_light *light);
 bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
 
-// Apply checkerboard pattern: checkerboard.c
+// Get UV coordinates: uv_map1.c
+void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v);
+void	uv_map_sp(t_pixel *pixel, t_sp *sphere, double *u, double *v);
+void	uv_map_cy_curve(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
+void	uv_map_cy_base(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
+
+// Get UV coordinates: uv_map2.c
+void	uv_map_cn_curve(t_pixel *pixel, t_cn *cone, double *u, double *v);
+void	uv_map_cn_base(t_pixel *pixel, t_cn *cone, double *u, double *v);
+
+// Apply checkerboard pattern: checkerboard1.c
 void	get_checkerboard(t_meta *meta_data);
 void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane);
 void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere);
 void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder);
-void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder, int base);
+void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder);
+
+// Apply checkerboard pattern: checkerboard2.c
 void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone);
 void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone);
 void	least_parallel_avector(t_vector *a, t_vector *normal);
 void	assign_checker_colour(int row, int column, t_colour *colour);
 
-// Vector operations: vector_op.c
+// Apply bump map textures: bumpmap.c
+t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere);
+t_vector	get_pl_bm_normal(t_pixel *pixel, t_pl *plane);
+t_vector	get_cy_curve_bm_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cy_base_bm_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cn_curve_bm_normal(t_pixel *pixel, t_cn *cone);
+t_vector	get_cn_base_bm_normal(t_pixel *pixel, t_cn *cone);
+
+// Apply bump map textures (utility functions): bumpmap_utils.c
+void	get_bm_gradient(t_img *img, double *u, double *v);
+t_vector	perturb_normal(t_vector *ori_normal, double u, double v);
+
+// Vector operations: vector_op1.c
 double	vec_dot_product(t_vector *a, t_vector *b);
 void	vec_inv(t_vector *dest, t_vector *a);
 double	vec_len(t_vector *vec);
 void	vec_subtract(t_vector *dest, t_vector *a, t_vector *b);
 void	vec_add(t_vector *dest, t_vector *a, t_vector *b);
+
+// Vector operations: vector_op2.c
 void  vec_multiply_scalar(t_vector *dest, t_vector *vec, double n);
 void	vec_normalise(t_vector *vec);
 void	vec_cross_product(t_vector *dest, t_vector *a, t_vector *b);

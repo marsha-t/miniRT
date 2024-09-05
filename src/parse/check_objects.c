@@ -167,7 +167,8 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
         }
     }
     temp = ft_strtod(argv[arg_count]);\
-    if ((temp != 1 && temp != 0 && temp != -1) || arg_count >= 3)
+    if (temp > 1 || temp < -1 || arg_count >= 3)
+    // if ((temp != 1 && temp != 0 && temp != -1) || arg_count >= 3)
     {
         free_exit(meta_data);
         ft_printf(RED"A Incorrect normal vector input values\n"RST);
@@ -288,4 +289,55 @@ t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **arg
 	return (sqsize);
 }
 
-			// sp->bump_map = check_bump(&meta_data, sp, argv, bonus);
+/*
+	check_bump parses the bump map path
+	- checks that only one element (separated by comma) waas given
+	- loads xpm img
+	- if checks fail, it frees the allocated memories and exits the program
+	- otherwise, it returns the path
+*/
+t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv)
+{
+	t_img	bump_img;
+
+	if (argv[2] || is_xpm_file(argv[1]) == false)
+	{
+		if (temp != NULL)
+			free(temp);
+		free_pointerlist(2, src, argv);
+		if (argv[2])
+			ft_printf(RED"Incorrect no. of bump map arguments\n"RST);
+		else
+			ft_printf(RED"Incorrect bump map file\n"RST);
+		free_exit(*meta_data);
+		exit(EXIT_FAILURE);
+	}
+	bump_img.img = mlx_xpm_file_to_image((*meta_data)->mlx_ptr, argv[1], &bump_img.width, &bump_img.height);
+	if (!bump_img.img)
+	{
+		if (temp != NULL)
+			free(temp);
+		free_pointerlist(2, src, argv);
+		ft_printf(RED"Error from mlx_xpm_file_to_image\n"RST);
+		free_exit(*meta_data);
+		exit(EXIT_FAILURE);
+	}
+	bump_img.addr = mlx_get_data_addr(bump_img.img, &bump_img.bits_per_pixel, &bump_img.line_length, &bump_img.endian);
+	return (bump_img);
+}
+
+/*
+	is_xpm_file checks that path ends with .xpm
+*/
+bool	is_xpm_file(char *path)
+{
+	char	*dot;
+
+	dot = ft_strrchr(path, '.');
+	if (dot == NULL)
+		return (false);
+	dot++;
+	if (ft_strncmp(dot, "xpm", 4) != 0)
+		return (false);
+	return (true);
+}
