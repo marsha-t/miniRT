@@ -1,152 +1,99 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_objects.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 17:47:43 by emaravil          #+#    #+#             */
+/*   Updated: 2024/09/11 17:47:43 by emaravil         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRT.h"
 
 /*
 	create_objects checks argv[0] to the id of each objects. 
 	goes to each function of creating each object based on the id
 */
-void create_objects(t_meta *meta_data, char **argv)
+void	create_objects(t_meta *meta_data, char **argv)
 {
-	static int pl;
-	static int sp;
-	static int cy;
-	static int cn;
-	t_cy *temp_cy;
-	t_pl *temp_pl;
-	t_sp *temp_sp;
-	t_cn *temp_cn;
-
 	if (ft_strncmp(argv[0], "pl", 2) == 0 && ft_strlen(argv[0]) == 2)
-	{
-		if (pl == 0)
-		{
-			meta_data->pl = create_pl(meta_data, argv);
-			meta_data->pl_allocated = true;
-		}
-		else
-		{
-			temp_pl = meta_data->pl;
-			while (temp_pl->next != NULL)
-				temp_pl = temp_pl->next;
-			temp_pl->next = create_pl(meta_data, argv);
-		}
-		pl++;
-	}
+		init_plane(meta_data, argv);
 	else if (ft_strncmp(argv[0], "sp", 2) == 0 && ft_strlen(argv[0]) == 2)
-	{
-		if (sp == 0)
-		{
-			meta_data->sp = create_sp(meta_data, argv);
-			meta_data->sp_allocated = true;
-		}
-		else
-		{
-			temp_sp = meta_data->sp;
-			while (temp_sp->next != NULL)
-				temp_sp = temp_sp->next;
-			temp_sp->next = create_sp(meta_data, argv);
-		}
-		sp++;
-	}
+		init_sphere(meta_data, argv);
 	else if (ft_strncmp(argv[0], "cy", 2) == 0 && ft_strlen(argv[0]) == 2)
-	{
-		if (cy == 0)
-		{
-			meta_data->cy = create_cy(meta_data, argv);
-			meta_data->cy_allocated = true;
-		}
-		else
-		{
-			temp_cy = meta_data->cy;
-			while (temp_cy->next != NULL)
-				temp_cy = temp_cy->next;
-			temp_cy->next = create_cy(meta_data, argv);
-		}
-		cy++;
-	}
+		init_cylinder(meta_data, argv);
 	else if (ft_strncmp(argv[0], "cn", 2) == 0 && ft_strlen(argv[0]) == 2)
-	{
-		if (cn == 0)
-		{
-			meta_data->cn = create_cn(meta_data, argv);
-			meta_data->cn_allocated = true;
-		}
-		else
-		{
-			temp_cn = meta_data->cn;
-			while (temp_cn->next != NULL)
-				temp_cn = temp_cn->next;
-			temp_cn->next = create_cn(meta_data, argv);
-		}
-		cn++;
-	}
+		init_cone(meta_data, argv);
 }
 
 /*
 	create_pl creates a plane object and check if each value is valid.
 	returns t_pl pointer.
 */
-t_pl    *create_pl(t_meta *meta_data, char **argv)
-{
-	t_pl    *pl;
-	char    **coord;
-	char    **normal;
-	char    **colour;
-	int	i;
-	char	**bonus;
+// t_pl    *create_pl(t_meta *meta_data, char **argv)
+// {
+// 	t_pl    *pl;
+// 	char    **coord;
+// 	char    **normal;
+// 	char    **colour;
+// 	int	i;
+// 	char	**bonus;
 
-	ft_printf(G"\tPLANE OBJECT ...\t"RST);
-	if (pointer_count(argv) < 4 || pointer_count(argv) > 6)
-	{
-		ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB [checkerboard] [bumpmap]>\n"RST);
-		free_pointer(argv);
-		free_exit(meta_data);
-		exit(EXIT_FAILURE);
-	}
-	pl = malloc(sizeof(t_pl));
-	if (!pl)
-	{
-		free_pointer(argv);
-		free_exit(meta_data);
-		exit(EXIT_FAILURE);
-	}
-	coord = ft_split(argv[1], ',');
-	pl->coord = check_coord(&meta_data, pl, argv, coord);
-	free_pointer(coord);
-	normal = ft_split(argv[2], ',');
-	pl->normal = check_norm(&meta_data, pl, argv, normal);
-	free_pointer(normal);
-	colour = ft_split(argv[3], ',');
-	pl->colour = check_colour(&meta_data, pl, argv, colour);
-	free_pointer(colour);
-	pl->checker = 0;
-	pl->bump = 0;
-	i = 3;
-	while (argv[++i])
-	{
-		bonus = ft_split(argv[i], ',');
-		if (bonus[0][0] == 'c')
-		{
-			pl->checker = 1;
-			pl->sqsize = check_checker(&meta_data, pl, argv, bonus);
-			free_pointer(bonus);
-		}
-		else if (bonus[0][0] == 'b')
-		{
-			pl->bump = 1;
-			pl->bump_img = check_bump(&meta_data, pl, argv, bonus);
-		}
-		else
-		{
-			free_pointer(bonus);
-			ft_printf(RED"Incorrect bonus\n"RST);
-			free_exit(meta_data);
-			exit(EXIT_FAILURE);
-		}
-	}
-	pl->next = NULL;
-	ft_printf(G" OK \n"RST);
-	return (pl);
-}
+// 	ft_printf(G"\tPLANE OBJECT ...\t"RST);
+// 	if (pointer_count(argv) < 4 || pointer_count(argv) > 6)
+// 	{
+// 		ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB [checkerboard] [bumpmap]>\n"RST);
+// 		free_pointer(argv);
+// 		free_exit(meta_data);
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	pl = malloc(sizeof(t_pl));
+// 	if (!pl)
+// 	{
+// 		free_pointer(argv);
+// 		free_exit(meta_data);
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	coord = ft_split(argv[1], ',');
+// 	pl->coord = check_coord(&meta_data, pl, argv, coord);
+// 	free_pointer(coord);
+// 	normal = ft_split(argv[2], ',');
+// 	pl->normal = check_norm(&meta_data, pl, argv, normal);
+// 	free_pointer(normal);
+// 	colour = ft_split(argv[3], ',');
+// 	pl->colour = check_colour(&meta_data, pl, argv, colour);
+// 	free_pointer(colour);
+// 	pl->checker = 0;
+// 	pl->bump = 0;
+// 	i = 3;
+// 	while (argv[++i])
+// 	{
+// 		bonus = ft_split(argv[i], ',');
+// 		if (bonus[0][0] == 'c')
+// 		{
+// 			pl->checker = 1;
+// 			pl->sqsize = check_checker(&meta_data, pl, argv, bonus);
+// 			free_pointer(bonus);
+// 		}
+// 		else if (bonus[0][0] == 'b')
+// 		{
+// 			pl->bump = 1;
+// 			pl->bump_img = check_bump(&meta_data, pl, argv, bonus);
+// 		}
+// 		else
+// 		{
+// 			free_pointer(bonus);
+// 			ft_printf(RED"Incorrect bonus\n"RST);
+// 			free_exit(meta_data);
+// 			exit(EXIT_FAILURE);
+// 		}
+// 	}
+// 	pl->next = NULL;
+// 	ft_printf(G" OK \n"RST);
+// 	return (pl);
+// }
 
 /*
 	create_sp creates a sphere object and check if each value is valid.

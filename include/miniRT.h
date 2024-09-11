@@ -286,10 +286,21 @@ void    free_pointerlist(int num, ...);
 int	    ft_strlen_dp(char **s);
 
 void    create_objects(t_meta *meta_data, char **argv);
+void	init_cylinder(t_meta *meta_data, char **argv);
+void	init_plane(t_meta *meta_data, char **argv);
+void	init_sphere(t_meta *meta_data, char **argv);
+void	init_cone(t_meta *meta_data, char **argv);
+
+
+
 t_light    *create_light(t_meta *meta_data, char **argv);
 t_spotlight    *create_spotlight(t_meta *meta_data, char **argv);
 t_cy    *create_cy(t_meta *meta_data, char **argv);
+
 t_pl    *create_pl(t_meta *meta_data, char **argv);
+t_pl	  *check_pl_args(t_meta *meta_data, char **argv);
+void	  pl_elements(t_meta *meta_data, t_pl *pl, char **argv);
+
 t_sp    *create_sp(t_meta *meta_data, char **argv);
 t_cn    *create_cn(t_meta *meta_data, char **argv);
 

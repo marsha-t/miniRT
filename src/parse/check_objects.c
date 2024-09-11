@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_objects.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 17:26:43 by emaravil          #+#    #+#             */
+/*   Updated: 2024/09/11 17:26:43 by emaravil         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRT.h"
 
 /*
@@ -5,17 +17,17 @@
 	is a digit. Also checks if the number of inputs is equal to three.
 	if condition fails, it frees the allocated memories and exits the program
 */
-t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
+t_vector	check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
 {
-	t_vector    vec;
-	int         index;
-	int         arg_count;
+	t_vector	vec;
+	int			index;
+	int			arg_count;
 
 	arg_count = -1;
-	while(argv[++arg_count])
+	while (argv[++arg_count])
 	{
 		index = -1;
-		while(argv[arg_count][++index])
+		while (argv[arg_count][++index])
 		{
 			if (ft_isdigit(argv[arg_count][index]) == 0 && \
 				argv[arg_count][index] != '.' && argv[arg_count][index] != '-' \
@@ -51,15 +63,15 @@ t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv)
 	the value is between -1 and 1, and if all values are not 0.
 	if condition fails, it frees the allocated memories and exits the program
 */
-t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
+t_vector	check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
 {
-	t_vector    vec;
-	int         arg_count;
-	double      temp_val;
-	static int  count_zeroes;
+	t_vector	vec;
+	int			arg_count;
+	double		temp_val;
+	static int	count_zeroes;
 
 	arg_count = -1;
-	while(argv[++arg_count])
+	while (argv[++arg_count])
 	{
 		if (!(check_norm_val(*meta_data, src, arg_count, argv)))
 		{
@@ -96,14 +108,13 @@ t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv)
 	return (vec);
 }
 
-/*
-	check_double iterates through each input value and check if each character
-	is a digit. if condition fails, it frees the allocated memories and exits the program
-*/
-double    check_double(t_meta **meta_data, void *temp, char **src, char *str)
+// check_double iterates through each input value and check if each character
+// is a digit. if condition fails, it frees the allocated memories an
+//  exits the program
+double	check_double(t_meta **meta_data, void *temp, char **src, char *str)
 {
-	int index;
-	double result;
+	int		index;
+	double	result;
 
 	index = -1;
 	while (str[++index])
@@ -122,16 +133,16 @@ double    check_double(t_meta **meta_data, void *temp, char **src, char *str)
 	return (result);
 }
 
-int    check_int(t_meta **meta_data, char *str)
+int	check_int(t_meta **meta_data, char *str)
 {
-	int index;
-	double result;
+	int		index;
+	double	result;
 
 	index = -1;
-	while(str[++index])
+	while (str[++index])
 	{
 		if (ft_isdigit(str[index]) == 0 && str[index] != '-' && \
-			 str[index] != '+')
+			str[index] != '+')
 		{
 			free_exit(*meta_data);
 			ft_printf(RED"Incorrect INT input values\n"RST);
@@ -148,33 +159,33 @@ int    check_int(t_meta **meta_data, char *str)
 	the value is between -1 and 1, and if all values are not 0.
 	if condition fails, it frees the allocated memories and exits the program
 */
-bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv)
+bool	check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv)
 {
-	double temp;
-	int index;\
+	double	temp;
+	int		index;
 
 	index = -1;
-    while(argv[arg_count][++index])
-    {
-        if (ft_isdigit(argv[arg_count][index]) == 0 && \
-            argv[arg_count][index] != '.'\
-            && argv[arg_count][index] != '-' && argv[arg_count][index] != '+')
-        {
-            free_exit(meta_data);
-            ft_printf(RED"Incorrect normal vector input values\n"RST);
-            free_pointerlist(2, src, argv);
-            return (false);
-        }
-    }
-    temp = ft_strtod(argv[arg_count]);\
-    if (temp > 1 || temp < -1 || arg_count >= 3)
-    // if ((temp != 1 && temp != 0 && temp != -1) || arg_count >= 3)
-    {
-        free_exit(meta_data);
-        ft_printf(RED"A Incorrect normal vector input values\n"RST);
-        free_pointerlist(2, src, argv);
-        return (false);
-    }
+	while (argv[arg_count][++index])
+	{
+		if (ft_isdigit(argv[arg_count][index]) == 0 && \
+			argv[arg_count][index] != '.'\
+			&& argv[arg_count][index] != '-' && argv[arg_count][index] != '+')
+		{
+			free_exit(meta_data);
+			ft_printf(RED"Incorrect normal vector input values\n"RST);
+			free_pointerlist(2, src, argv);
+			return (false);
+		}
+	}
+	temp = ft_strtod(argv[arg_count]);
+	// if ((temp != 1 && temp != 0 && temp != -1) || arg_count >= 3)
+	if (temp > 1 || temp < -1 || arg_count >= 3)
+	{
+		free_exit(meta_data);
+		ft_printf(RED"A Incorrect normal vector input values\n"RST);
+		free_pointerlist(2, src, argv);
+		return (false);
+	}
     return (true);
 }
 
@@ -184,13 +195,14 @@ bool    check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv
 	the value is between 0 and 255.
 	if condition fails, it frees the allocated memories and exits the program
 */
-bool    check_colour_val(t_meta *meta_data, char **src, int arg_count, char **argv)
+bool	check_colour_val(t_meta *meta_data, char **src, int arg_count,\
+	char **argv)
 {
-	int temp;
-	int index;
+	int	temp;
+	int	index;
 
 	index = -1;
-	while(argv[arg_count][++index])
+	while (argv[arg_count][++index])
 	{
 		if (ft_isdigit(argv[arg_count][index]) == 0 && \
 			argv[arg_count][index] != '-' && argv[arg_count][index] != '+')
