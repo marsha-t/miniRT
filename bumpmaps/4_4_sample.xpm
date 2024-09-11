@@ -1,0 +1,12 @@
+/* XPM */
+static char * exaggerated_normal_map_xpm[] = {
+"4 4 4 2",
+"ur c #ff8080",
+"ul c #80ff80",
+"dr c #8000ff",
+"dl c #ff00ff",
+"urulurul",
+"drdldrdl",
+"urulurul",
+"drdldrdl"
+};

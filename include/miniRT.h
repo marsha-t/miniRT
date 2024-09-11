@@ -17,32 +17,56 @@
 # define SF_CY_BASE_T 5
 # define SF_CONE_CURVE 6
 # define SF_CONE_BASE 7
+# define SQSIZE_FLAT  5
+# define SQSIZE_CURVE M_PI / 4
 
 # define WINDOW_WIDTH 1000
 # define WINDOW_HEIGHT 800
 # define FOCAL_LENGTH 0.5
 
 # define KEY_ESC 53
-# define NUMPAD_0 65438
-# define NUMPAD_1 65436
-# define NUMPAD_2 65433
-# define NUMPAD_3 65435
-# define NUMPAD_4 65430
-# define NUMPAD_5 65437
-# define NUMPAD_6 65432
-# define NUMPAD_7 65429
-# define NUMPAD_8 65431
-# define NUMPAD_9 65434
-# define ARROW_LEFT 65361
-# define ARROW_UP 65362
-# define ARROW_DOWN 65364
-# define ARROW_RIGHT 65363
-# define KEY_Q 113
-# define KEY_A 97
-# define KEY_W 119
-# define KEY_S 115
-# define KEY_E 101
-# define KEY_D 100
+# define NUMPAD_0 82
+# define NUMPAD_1 83
+# define NUMPAD_2 84
+# define NUMPAD_3 85
+# define NUMPAD_4 86
+# define NUMPAD_5 87
+# define NUMPAD_6 88
+# define NUMPAD_7 89
+# define NUMPAD_8 91
+# define NUMPAD_9 92
+# define ARROW_LEFT 126
+# define ARROW_UP 123
+# define ARROW_DOWN 125
+# define ARROW_RIGHT 124
+# define KEY_Q 12
+# define KEY_A 0
+# define KEY_W 13
+# define KEY_S 1
+# define KEY_E 14
+# define KEY_D 2
+
+# define INTENSITY_SCALE 5
+// # define NUMPAD_0 65438
+// # define NUMPAD_1 65436
+// # define NUMPAD_2 65433
+// # define NUMPAD_3 65435
+// # define NUMPAD_4 65430
+// # define NUMPAD_5 65437
+// # define NUMPAD_6 65432
+// # define NUMPAD_7 65429
+// # define NUMPAD_8 65431
+// # define NUMPAD_9 65434
+// # define ARROW_LEFT 65361
+// # define ARROW_UP 65362
+// # define ARROW_DOWN 65364
+// # define ARROW_RIGHT 65363
+// # define KEY_Q 113
+// # define KEY_A 97
+// # define KEY_W 119
+// # define KEY_S 115
+// # define KEY_E 101
+// # define KEY_D 100
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -56,6 +80,23 @@
 # include "../libft/ft_printf.h"
 # include "../libft/get_next_line.h"
 # include "../mlx/mlx.h"
+
+typedef struct s_img
+{
+	void	*img;
+	int		width;
+	int		height;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_img;
+
+typedef struct s_sqsize
+{
+	double  row;
+	double  col;
+}	t_sqsize;
 
 typedef struct s_colour
 {
@@ -110,7 +151,10 @@ typedef struct s_sp
   double diameter;
   t_colour  colour;
 	double radius;
-  bool  exclude;
+  bool	checker;
+  t_sqsize sqsize;
+  bool	bump;
+  t_img bump_img;
   struct s_sp  *next;
 } t_sp;
 
@@ -119,7 +163,10 @@ typedef struct s_pl
   t_vector  coord;
   t_vector  normal;
   t_colour colour;
-  bool  exclude;
+  bool	checker;
+  t_sqsize sqsize;
+  bool	bump;
+  t_img bump_img;
   struct s_pl  *next;
 } t_pl;
 
@@ -133,7 +180,10 @@ typedef struct s_cy
   t_colour colour;
   t_vector base_bottom;
 	t_vector base_top;
-  bool  exclude;
+  bool	checker;
+  t_sqsize sqsize;
+  bool	bump;
+  t_img bump_img;
   struct s_cy  *next;
 } t_cy;
 
@@ -146,7 +196,8 @@ typedef struct s_cn
   double  height;
   t_vector  base;
   t_colour colour;
-  bool  exclude;
+  bool	checker;
+  t_sqsize sqsize;
   struct s_cn  *next;
 } t_cn;
 
@@ -235,10 +286,21 @@ void    free_pointerlist(int num, ...);
 int	    ft_strlen_dp(char **s);
 
 void    create_objects(t_meta *meta_data, char **argv);
+void	init_cylinder(t_meta *meta_data, char **argv);
+void	init_plane(t_meta *meta_data, char **argv);
+void	init_sphere(t_meta *meta_data, char **argv);
+void	init_cone(t_meta *meta_data, char **argv);
+
+
+
 t_light    *create_light(t_meta *meta_data, char **argv);
 t_spotlight    *create_spotlight(t_meta *meta_data, char **argv);
 t_cy    *create_cy(t_meta *meta_data, char **argv);
+
 t_pl    *create_pl(t_meta *meta_data, char **argv);
+t_pl	  *check_pl_args(t_meta *meta_data, char **argv);
+void	  pl_elements(t_meta *meta_data, t_pl *pl, char **argv);
+
 t_sp    *create_sp(t_meta *meta_data, char **argv);
 t_cn    *create_cn(t_meta *meta_data, char **argv);
 
@@ -249,6 +311,9 @@ bool        check_norm_val(t_meta *meta_data, char **src, int arg_count, char **
 t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv);
 double      check_double(t_meta **meta_data, void *temp, char **src, char *str);
 int         check_int(t_meta **meta_data, char *str);
+t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv);
+t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv);
+bool	is_xpm_file(char *path);
 
 void        print_cylinders(t_meta *meta_data);
 void        print_spheres(t_meta *meta_data);
@@ -264,11 +329,13 @@ void	      map_draw(t_meta *meta_data);
 void	      img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color);
 int	        create_trgb(int r, int g, int b);
 
-// Prepare derived parameters: prepare.c
+// Prepare derived parameters: prepare1.c
 void	prepare_data(t_meta *meta_data);
 void	prepare_img(t_meta *meta_data);
 void	img_basis_vec(t_meta *meta_data);
 void	prepare_light(t_meta *meta_data);
+
+// Prepare derived parameters: prepare2.c
 void	prepare_obj(t_meta *meta_data);
 void	prepare_sp(t_sp *start);
 void	prepare_pl(t_pl *start);
@@ -282,27 +349,36 @@ void  ray_dir(int i, int j, t_meta *meta_data);
 
 // Calculate closest intersection for ray direction: intersect.c
 void	intersect_closest(t_meta *meta_data);
+void	intersect_closest_sp_pl(t_meta *meta_data);
+void	intersect_closest_cy_cn(t_meta *meta_data);
+
 void	intersect_sp(t_meta *meta_data, t_sp *sphere, t_vector *ray);
 void	intersect_pl(t_meta *meta_data, t_pl *plane, t_vector *ray);
 void	intersect_cy(t_meta *meta_data, t_cy *cylinder, t_vector *ray);
 void	intersect_cn(t_meta *meta_data, t_cn *cone, t_vector *ray);
 
-// Calculate intersection between any given ray and object: intersect_math.c
+// Calculate intersection between any given ray and object: intersect_math1.c
 double	intersect_sp_math(t_sp *sphere, t_vector *ray, t_vector *origin);
 double	intersect_pl_math(t_pl *plane, t_vector *ray, t_vector *origin);
 double	intersect_cy_curve_math(t_cy *cylinder, t_vector *ray, t_vector *origin);
 double	intersect_cy_base_math(t_cy *cylinder, int base, t_vector *ray, t_vector *origin);
+double	cy_curve_check(t_cy *cy, double t, t_vector *ray, t_vector *origin);
+
+// Calculate intersection between any given ray and object: intersect_math2.c
 double	intersect_cn_curve_math(t_cn *cone, t_vector *ray, t_vector *origin);
 double	intersect_cn_base_math(t_cn *cone, t_vector *ray, t_vector *origin);
 
 // Calculate derived data of intersection: intersect_prepare.c
 void	prepare_intersect(t_pixel *pixel);
 void  prepare_intersect_sp(t_pixel *pixel);
-t_vector	get_sp_normal(t_vector surface_point, t_vector center);
 void	prepare_intersect_pl(t_pixel *pixel);
 void	prepare_intersect_cy(t_pixel *pixel);
 void	prepare_intersect_cn(t_pixel *pixel);
+
+// Calculate normal at intersection point: get_normal.c
+t_vector	get_sp_normal(t_vector surface_point, t_vector center);
 t_vector	get_cy_curve_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cn_curve_normal(t_pixel *pixel, t_cn *cone);
 
 // Utility functions needed for intersection calculation: intersect_utils.c
 double	quadratic_formula(double a, double b, double c);
@@ -310,17 +386,77 @@ void	get_ray_pt(t_vector *dest, t_vector *ray, t_vector *origin, double t);
 
 // Calculate final colour at intersection: final_colour.c
 void	gen_final_colour(t_meta *meta_data);
+void	init_final_colour(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular, t_colour *ambient);
+void	gen_final_colour_light(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular);
+void	gen_final_colour_spotlight(t_meta *meta_data, t_colour *diffuse,
+		t_colour *specular);
+t_vector	calculate_light_direction(t_vector surface_point,
+		t_vector light_position);
+
+// Calculate diffuse and specular colour components: diffuse_specular.c
+void	gen_diffuse(t_meta *meta_data, t_light *curr, t_colour *diffuse);
+void	gen_specular(t_meta *meta_data, t_light *curr, t_colour *specular);
+void	gen_diffuse_spotlight(t_meta *meta_data, t_spotlight *curr_sl,
+		t_colour *diffuse);
+void	gen_specular_spotlight(t_meta *meta_data, t_spotlight *curr_sl,
+		t_colour *specular);
 
 // Calculate shadow: shadow.c
 bool	in_shadow(t_meta *meta_data, t_light *light);
 bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
+bool	in_shadow_spotlight_setup(t_meta *meta_data, t_spotlight *spotlight, double *len, t_vector *new_origin);
 
-// Vector operations: vector_op.c
+// Calculate shadow for each object: shadow_obj.c
+bool	in_shadow_sp(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_pl(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_cn(t_meta *meta_data, t_vector *new_origin, double len);
+
+// Get UV coordinates: uv_map1.c
+void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v);
+void	uv_map_sp(t_pixel *pixel, t_sp *sphere, double *u, double *v);
+void	uv_map_cy_curve(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
+void	uv_map_cy_base(t_pixel *pixel, t_cy *cylinder, double *u, double *v);
+
+// Get UV coordinates: uv_map2.c
+void	uv_map_cn_curve(t_pixel *pixel, t_cn *cone, double *u, double *v);
+void	uv_map_cn_base(t_pixel *pixel, t_cn *cone, double *u, double *v);
+
+// Apply checkerboard pattern: checkerboard1.c
+void	get_checkerboard(t_meta *meta_data);
+void	get_checkerboard_pl(t_meta *meta_data, t_pl *plane);
+void	get_checkerboard_sp(t_meta *meta_data, t_sp *sphere);
+void	get_checkerboard_cy_curve(t_meta *meta_data, t_cy *cylinder);
+void	get_checkerboard_cy_base(t_meta *meta_data, t_cy *cylinder);
+
+// Apply checkerboard pattern: checkerboard2.c
+void	get_checkerboard_cn_curve(t_meta *meta_data, t_cn *cone);
+void	get_checkerboard_cn_base(t_meta *meta_data, t_cn *cone);
+void	least_parallel_avector(t_vector *a, t_vector *normal);
+void	assign_checker_colour(int row, int column, t_colour *colour);
+
+// Apply bump map textures: bumpmap.c
+t_vector get_sp_bm_normal(t_pixel *pixel, t_sp *sphere);
+t_vector	get_pl_bm_normal(t_pixel *pixel, t_pl *plane);
+t_vector	get_cy_curve_bm_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cy_base_bm_normal(t_pixel *pixel, t_cy *cylinder);
+t_vector	get_cn_curve_bm_normal(t_pixel *pixel, t_cn *cone);
+t_vector	get_cn_base_bm_normal(t_pixel *pixel, t_cn *cone);
+
+// Apply bump map textures (utility functions): bumpmap_utils.c
+void	get_bm_gradient(t_img *img, double *u, double *v);
+t_vector	perturb_normal(t_vector *ori_normal, double u, double v);
+
+// Vector operations: vector_op1.c
 double	vec_dot_product(t_vector *a, t_vector *b);
 void	vec_inv(t_vector *dest, t_vector *a);
 double	vec_len(t_vector *vec);
 void	vec_subtract(t_vector *dest, t_vector *a, t_vector *b);
 void	vec_add(t_vector *dest, t_vector *a, t_vector *b);
+
+// Vector operations: vector_op2.c
 void  vec_multiply_scalar(t_vector *dest, t_vector *vec, double n);
 void	vec_normalise(t_vector *vec);
 void	vec_cross_product(t_vector *dest, t_vector *a, t_vector *b);
@@ -328,8 +464,6 @@ void	vec_cross_product(t_vector *dest, t_vector *a, t_vector *b);
 // Vector utility functions: vector_utils.c
 void	print_vector(char *str, t_vector *vec);
 int	vec_cmp_num(t_vector *vec, double x, double y, double z);
-
-t_vector	calculate_light_direction(t_vector surface_point, t_vector light_position);
 
 // Miscellaneous math functions: misc_math.c
 double	deg_to_rad(int degree);

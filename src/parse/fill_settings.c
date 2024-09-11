@@ -149,8 +149,15 @@ void    fill_camera(t_meta *meta_data, char **argv)
     free_pointer(coord_p);
     orient_p = ft_split(argv[2], ',');
     meta_data->camera->orient = check_norm(&meta_data, NULL, argv, orient_p);
+    vec_normalise(&meta_data->camera->orient);
     free_pointer(orient_p);
     meta_data->camera->fov = check_double(&meta_data, NULL, argv, argv[3]);
+    if (meta_data->camera->fov > 180)
+    {
+        free_pointer(argv);
+        free_exit(meta_data);
+        exit(EXIT_FAILURE);
+    }
 }
 
 /*
