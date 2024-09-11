@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     parse_data(&meta_data, argc, argv);
     rt_mlxinit(&meta_data);
     draw(&meta_data);
-    print_spotlight(&meta_data);
+    // print_spotlight(&meta_data);
     // prepare_data(&meta_data);
     // gen_img(&meta_data);
     // print_light(&meta_data);
@@ -37,16 +37,6 @@ int main(int argc, char **argv)
     free_exit(&meta_data);
     return (1);
 }
-
-// void    copy_img(t_meta *meta_data)
-// {
-    
-// }
-
-// void    restore_img(t_meta *meta_data)
-// {
-
-// }
 
 void    draw(t_meta *meta_data)
 {
@@ -307,7 +297,6 @@ void    read_data(t_meta *meta_data, char *argv)
             free(singleline);
             break ;
         }
-        // ft_printf("single line %s\n", singleline);
         while (singleline[index++] != '\n')
             ;
         while (index >= 1 && ft_isspace(singleline[index - 1]) > 0)
@@ -315,7 +304,6 @@ void    read_data(t_meta *meta_data, char *argv)
             singleline[index - 1] = '\0';
             index--;
         }
-        // ft_printf("single line %s\n", singleline);
         if (*singleline && (singleline[0] != '\n') && singleline[0] != '#' && (ft_strlen(singleline) > 0))
             ft_fill_data(meta_data, singleline);
         else

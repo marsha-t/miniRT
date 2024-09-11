@@ -7,12 +7,24 @@ CFLAGS = -Wall -Wextra -Werror
 MINIRT_SRCS = 	./src/miniRT.c \
 				./src/parse/check_args.c \
 				./src/parse/check_objects.c \
+				./src/parse/check_coord.c \
+				./src/parse/check_norm.c \
+				./src/parse/check_colour.c \
 				./src/parse/create_objects.c \
 				./src/parse/init_objects.c \
 				./src/parse/create_plane.c \
+				./src/parse/create_sphere.c \
+				./src/parse/create_cylinder.c \
+				./src/parse/create_cone.c \
+				./src/parse/create_light.c \
+				./src/parse/create_spotlight.c \
 				./src/parse/fill_settings.c \
+				./src/parse/fill_camera_ambient.c \
 				./src/parse/free_utils.c \
+				./src/parse/free_objects.c \
+				./src/parse/free_exit.c \
 				./src/parse/print_utils.c \
+				./src/parse/print_banner.c \
 				./src/intersect/prepare1.c \
 				./src/intersect/prepare2.c \
 				./src/intersect/img.c \

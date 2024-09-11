@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 17:32:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 15:14:10 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/12 00:30:36 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ bool	in_shadow_spotlight_setup(t_meta *meta_data, t_spotlight *spotlight,
 	meta_data->pixel.spot_attenuate = pow(meta_data->pixel.spot_attenuate,
 			meta_data->pixel.spot_p);
 	d_attenuation = (double)1.0 / (meta_data->pixel.spot_k0
-			+ (meta_data->pixel.spot_k1 * *len) + (meta_data->pixel.spot_k2
-				* *len * *len));
+			+ (meta_data->pixel.spot_k1 * (*len)) + (meta_data->pixel.spot_k2
+				* (*len) * (*len)));
 	meta_data->pixel.spot_intensity = spotlight->brightness * d_attenuation
 		* meta_data->pixel.spot_attenuate;
 	return (false);

@@ -264,10 +264,15 @@ void    rt_mlxinit(t_meta *meta_data);
 void    draw(t_meta *meta_data);
 void    print_banner();
 void    fill_camera(t_meta *meta_data, char **argv);
+void	  fill_camera_args(t_meta *meta_data, int count, char **argv);
 void    fill_ambient(t_meta *meta_data, char **argv);
+void	  fill_exit(t_meta *meta_data, char **argv);
 t_light    *create_light(t_meta *meta_data, char **argv);
 int     pointer_count(char **argv);
 void    ft_fill_data(t_meta *meta_data, char *singleline);
+void	  ft_fill_light(t_meta *meta_data, char **argv);
+void	  ft_fill_spotlight(t_meta *meta_data, char **argv);
+void	  ft_fill_objects(t_meta *meta_data, char **argv);
 void    read_data(t_meta *meta_data, char *argv);
 void	  parse_data(t_meta *data, int argc, char **argv);
 void    meta_data_init(t_meta *meta_data);
@@ -281,7 +286,14 @@ void    check_fd(char *argv);
 int	    get_fd(char *argv);
 void	  free_pointer(char **s);
 void    free_exit(t_meta *meta_data);
+
 void    free_objects(t_meta *meta_data);
+void	free_spheres(t_meta *meta_data);
+void	free_planes(t_meta *meta_data);
+void	free_cylinders(t_meta *meta_data);
+void	free_cones(t_meta *meta_data);
+
+void	free_args(t_meta *meta_data, char **argv);
 void    free_pointerlist(int num, ...);
 int	    ft_strlen_dp(char **s);
 
@@ -294,25 +306,51 @@ void	init_cone(t_meta *meta_data, char **argv);
 
 
 t_light    *create_light(t_meta *meta_data, char **argv);
+t_light	*check_light_args(t_meta *meta_data, char **argv);
+
 t_spotlight    *create_spotlight(t_meta *meta_data, char **argv);
+t_spotlight	*check_spotlight_args(t_meta *meta_data, char **argv);
+
 t_cy    *create_cy(t_meta *meta_data, char **argv);
+t_cy	  *check_cy_args(t_meta *meta_data, char **argv);
+void	  cy_bonus(t_meta *meta_data, t_cy *cy, char **argv);
+void	  cy_elements(t_meta *meta_data, t_cy *cy, char **argv);
+void	cylinder_exit(t_meta *meta_data, char **argv, char *message);
 
 t_pl    *create_pl(t_meta *meta_data, char **argv);
 t_pl	  *check_pl_args(t_meta *meta_data, char **argv);
 void	  pl_elements(t_meta *meta_data, t_pl *pl, char **argv);
 
 t_sp    *create_sp(t_meta *meta_data, char **argv);
+void	sp_bonus(t_meta *meta_data, t_sp *sp, char **argv);
+void	sp_elements(t_meta *meta_data, t_sp *sp, char **argv);
+t_sp	*check_sp_args(t_meta *meta_data, char **argv);
+
 t_cn    *create_cn(t_meta *meta_data, char **argv);
+t_cn	*check_cn_args(t_meta *meta_data, char **argv);
+void	cn_bonus(t_meta *meta_data, t_cn *cn, char **argv);
+void	cn_elements(t_meta *meta_data, t_cn *cn, char **argv);
+void	cone_exit(t_meta *meta_data, char **argv);
 
 t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv);
 bool        check_colour_val(t_meta *meta_data, char **src, int arg_count, char **argv);
+void	colour_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv);
+void	norm_exit(t_meta **meta_data, void *temp, char **src, char **argv);
 bool        check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv);
+
 t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv);
+void        coord_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 double      check_double(t_meta **meta_data, void *temp, char **src, char *str);
 int         check_int(t_meta **meta_data, char *str);
 t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv);
+void	checker_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv);
+void	bump_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 bool	is_xpm_file(char *path);
 
 void        print_cylinders(t_meta *meta_data);

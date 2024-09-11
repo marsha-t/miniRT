@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow_obj.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 14:48:37 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 15:14:34 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/12 00:22:31 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len)
 	cylinder = meta_data->cy;
 	while (cylinder)
 	{
-		t = intersect_cy_curve_math(cylinder, &meta_data->pixel.shadow_spot,
+		t = intersect_cy_curve_math(cylinder, &meta_data->pixel.shadow,
 				new_origin);
 		if (t > 0 && t < len)
 			return (true);
 		t = intersect_cy_base_math(cylinder, SF_CY_BASE_B,
-				&meta_data->pixel.shadow_spot, new_origin);
+				&meta_data->pixel.shadow, new_origin);
 		if (t > 0 && t < len)
 			return (true);
 		t = intersect_cy_base_math(cylinder, SF_CY_BASE_T,
-				&meta_data->pixel.shadow_spot, new_origin);
+				&meta_data->pixel.shadow, new_origin);
 		if (t > 0 && t < len)
 			return (true);
 		cylinder = cylinder->next;
