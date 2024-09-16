@@ -447,10 +447,10 @@ bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
 bool	in_shadow_spotlight_setup(t_meta *meta_data, t_spotlight *spotlight, double *len, t_vector *new_origin);
 
 // Calculate shadow for each object: shadow_obj.c
-bool	in_shadow_sp(t_meta *meta_data, t_vector *new_origin, double len);
-bool	in_shadow_pl(t_meta *meta_data, t_vector *new_origin, double len);
-bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len);
-bool	in_shadow_cn(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_sp(t_meta *meta_data, t_vector *new_origin, double len, bool check);
+bool	in_shadow_pl(t_meta *meta_data, t_vector *new_origin, double len, bool check);
+bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len, bool check);
+bool	in_shadow_cn(t_meta *meta_data, t_vector *new_origin, double len, bool check);
 
 // Get UV coordinates: uv_map1.c
 void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v);

@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 17:32:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/12 00:30:36 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:20:57 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@ bool	in_shadow(t_meta *meta_data, t_light *light)
 	vec_multiply_scalar(&temp, &meta_data->pixel.normal, 0.001);
 	vec_add(&new_origin, &meta_data->pixel.intersect, &temp);
 	if (meta_data->sp_allocated && meta_data->sp != NULL
-		&& in_shadow_sp(meta_data, &new_origin, len) == true)
+		&& in_shadow_sp(meta_data, &new_origin, len, false) == true)
 		return (true);
 	if (meta_data->pl_allocated && meta_data->pl != NULL
-		&& in_shadow_pl(meta_data, &new_origin, len) == true)
+		&& in_shadow_pl(meta_data, &new_origin, len, false) == true)
 		return (true);
 	if (meta_data->cy_allocated && meta_data->cy != NULL
-		&& in_shadow_cy(meta_data, &new_origin, len) == true)
+		&& in_shadow_cy(meta_data, &new_origin, len, false) == true)
 		return (true);
 	if (meta_data->cn_allocated && meta_data->cn != NULL
-		&& in_shadow_cn(meta_data, &new_origin, len) == true)
+		&& in_shadow_cn(meta_data, &new_origin, len, false) == true)
 		return (true);
 	return (false);
 }
@@ -81,16 +81,16 @@ bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight)
 			&new_origin) == true)
 		return (true);
 	if (meta_data->sp_allocated && meta_data->sp != NULL
-		&& in_shadow_sp(meta_data, &new_origin, len) == true)
+		&& in_shadow_sp(meta_data, &new_origin, len, true) == true)
 		return (true);
 	if (meta_data->pl_allocated && meta_data->pl != NULL
-		&& in_shadow_pl(meta_data, &new_origin, len) == true)
+		&& in_shadow_pl(meta_data, &new_origin, len, true) == true)
 		return (true);
 	if (meta_data->cy_allocated && meta_data->cy != NULL
-		&& in_shadow_cy(meta_data, &new_origin, len) == true)
+		&& in_shadow_cy(meta_data, &new_origin, len, true) == true)
 		return (true);
 	if (meta_data->cn_allocated && meta_data->cn != NULL
-		&& in_shadow_cn(meta_data, &new_origin, len) == true)
+		&& in_shadow_cn(meta_data, &new_origin, len, true) == true)
 		return (true);
 	return (false);
 }
