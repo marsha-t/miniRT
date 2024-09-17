@@ -35,6 +35,10 @@ void	ft_fill_data(t_meta *meta_data, char *singleline)
 		fill_camera(meta_data, argv);
 		meta_data->camera_allocated = true;
 		ft_printf(G" OK \n"RST);
+		meta_data->obj = (void *)meta_data->camera;
+		meta_data->obj_select = 7;
+		meta_data->obj_option->coord = &meta_data->camera->coord;
+		meta_data->obj_option->size = &meta_data->camera->fov;
 	}
 	else
 		ft_fill_light(meta_data, argv);

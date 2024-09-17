@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 22:19:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/11 22:52:10 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/17 12:44:07 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ void	fill_camera(t_meta *meta_data, char **argv)
 	count++;
 	meta_data->camera = malloc(sizeof(t_camera));
 	if (!meta_data->camera)
+		fill_exit(meta_data, argv);
+	meta_data->obj_option = malloc(sizeof(t_objoption));
+	if (!meta_data->obj_option)
 		fill_exit(meta_data, argv);
 	coord_p = ft_split(argv[1], ',');
 	meta_data->camera->coord = check_coord(&meta_data, NULL, argv, coord_p);

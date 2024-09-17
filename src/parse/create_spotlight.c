@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 21:36:32 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/11 21:39:37 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/17 14:44:28 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_spotlight	*create_spotlight(t_meta *meta_data, char **argv)
 	temp_spotlight->colour = check_colour(&meta_data, \
 		temp_spotlight, argv, rgb);
 	free_pointer(rgb);
+	temp_spotlight->spot_theta = &meta_data->pixel.spot_theta;
 	temp_spotlight->next = NULL;
 	ft_printf(G" OK \n"RST);
 	return (temp_spotlight);
