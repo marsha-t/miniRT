@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:03:25 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 17:27:43 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/19 00:28:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ double	quadratic_formula(double a, double b, double c)
 		return (-1);
 	else if (t <= 0 && t2 > 0)
 		return (t2);
-	else if (t > 0 && t2 > 0 & t < t2)
+	else if (t > 0 && t2 > 0 && t < t2)
 		return (t);
 	else if (t > 0 && t2 > 0 && t >= t2)
 		return (t2);

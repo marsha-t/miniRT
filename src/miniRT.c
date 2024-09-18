@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	meta_data_init(&meta_data);
 	parse_data(&meta_data, argc, argv);
 	rt_mlxinit(&meta_data);
-	// draw(&meta_data);
+	draw(&meta_data);
 	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, meta_data.img, 0, 0);
 	// print_spotlight(&meta_data);
 	// prepare_data(&meta_data);
@@ -80,7 +80,7 @@ void	rotate_camera_y(t_vector *orientation, double theta_y)
 
 	cos_theta = cos(theta_y);
 	sin_theta = sin(theta_y);
-	new_x = (cos_theta * orientation->x) + (sin_theta * orientation->z); 
+	new_x = (cos_theta * orientation->x) + (sin_theta * orientation->z);
 	new_z = (-sin_theta * orientation->x) + (cos_theta * orientation->z);
 	orientation->x = new_x;
 	orientation->z = new_z;
@@ -96,7 +96,7 @@ void	rotate_camera_x(t_vector *orientation, double theta_x)
 
 	cos_theta = cos(theta_x);
 	sin_theta = sin(theta_x);
-	new_y = (cos_theta * orientation->y) - (sin_theta * orientation->z); 
+	new_y = (cos_theta * orientation->y) - (sin_theta * orientation->z);
 	new_z = (sin_theta * orientation->y) + (cos_theta * orientation->z);
 	orientation->y = new_y;
 	orientation->z = new_z;
@@ -112,7 +112,7 @@ void	rotate_camera_z(t_vector *orientation, double theta_z)
 
 	cos_theta = cos(theta_z);
 	sin_theta = sin(theta_z);
-	new_x = (cos_theta * orientation->x) - (sin_theta * orientation->y); 
+	new_x = (cos_theta * orientation->x) - (sin_theta * orientation->y);
 	new_y = (sin_theta * orientation->x) + (cos_theta * orientation->y);
 	orientation->x = new_x;
 	orientation->y = new_y;
@@ -482,14 +482,16 @@ void    read_data(t_meta *meta_data, char *argv)
 			free(singleline);
 			break ;
 		}
-		while (singleline[index++] != '\n')
-			;
-		while (index >= 1 && ft_isspace(singleline[index - 1]) > 0)
+		if ((ft_strchr(singleline, '\n')))
 		{
-			singleline[index - 1] = '\0';
-			index--;
+			while (singleline[index++] != '\n')
+				;
+			while (index >= 1 && ft_isspace(singleline[index - 1]) > 0)
+			{
+				singleline[index - 1] = '\0';
+				index--;
+			}
 		}
-		printf("singeline %s\n", singleline);
 		if (*singleline && (singleline[0] != '\n') && singleline[0] != '#' && (ft_strlen(singleline) > 0))
 			ft_fill_data(meta_data, singleline);
 		else
