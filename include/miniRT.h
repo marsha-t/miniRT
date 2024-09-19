@@ -20,8 +20,8 @@
 # define SQSIZE_FLAT  5
 # define SQSIZE_CURVE M_PI / 4
 
-# define WINDOW_WIDTH 400
-# define WINDOW_HEIGHT 400
+# define WINDOW_WIDTH 1000
+# define WINDOW_HEIGHT 800
 # define FOCAL_LENGTH 0.5
 # define LOW_RES 45
 # define MID_RES 22
@@ -215,6 +215,7 @@ typedef struct s_cn
   t_vector  coord;
   t_vector  axis;
   double  angle;
+  double  angle_rad;
   double  radius;
   double  height;
   t_vector  base;

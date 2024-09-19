@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:07:32 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 18:07:46 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/19 17:42:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ double	intersect_cn_curve_math(t_cn *cone, t_vector *ray, t_vector *origin)
 	double		t;
 
 	abc[0] = vec_dot_product(ray, &cone->axis) * vec_dot_product(ray,
-			&cone->axis) - cos(cone->angle) * cos(cone->angle);
+			&cone->axis) - cos(cone->angle_rad) * cos(cone->angle_rad);
 	vec_subtract(&temp, origin, &cone->coord);
 	abc[1] = 2 * (vec_dot_product(&temp, &cone->axis) * vec_dot_product(ray,
-				&cone->axis) - (cos(cone->angle) * cos(cone->angle)
+				&cone->axis) - (cos(cone->angle_rad) * cos(cone->angle_rad)
 				* vec_dot_product(&temp, ray)));
 	abc[2] = vec_dot_product(&temp, &cone->axis) * vec_dot_product(&temp,
-			&cone->axis) - (cos(cone->angle) * cos(cone->angle)
+			&cone->axis) - (cos(cone->angle_rad) * cos(cone->angle_rad)
 			* vec_dot_product(&temp, &temp));
 	t = quadratic_formula(abc[0], abc[1], abc[2]);
 	if (t > 0)

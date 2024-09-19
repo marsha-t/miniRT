@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 17:34:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 18:15:28 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/19 17:42:01 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_vector	get_cn_curve_normal(t_pixel *pixel, t_cn *cone)
 	vec_multiply_scalar(&parallel, &cone->axis, vec_dot_product(&temp,
 			&cone->axis));
 	vec_subtract(&perpen, &temp, &parallel);
-	vec_multiply_scalar(&temp, &cone->axis, tan(cone->angle)
+	vec_multiply_scalar(&temp, &cone->axis, tan(cone->angle_rad)
 		* vec_len(&perpen));
 	vec_subtract(&normal, &perpen, &temp);
 	vec_normalise(&normal);

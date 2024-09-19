@@ -126,6 +126,8 @@ void ft_controls(t_meta *meta_data, int key)
 	vector = meta_data->obj_option->coord;
 	printf("vector x: %f y: %f z: %f\n", vector->x, vector->y, vector->z);
 	printf("camera x: %f y: %f z: %f\n", meta_data->camera->coord.x, meta_data->camera->coord.y, meta_data->camera->coord.z);
+	if (key == KEY_ESC)
+		ft_close(meta_data);
 	if (key == NUMPAD_8)
 		vector->y += 5;
 	if (key == NUMPAD_2)
