@@ -23,6 +23,9 @@
 # define WINDOW_WIDTH 400
 # define WINDOW_HEIGHT 400
 # define FOCAL_LENGTH 0.5
+# define LOW_RES 45
+# define MID_RES 22
+# define HIGH_RES 5
 
 # define KEY_ESC 53
 # define NUMPAD_0 82
@@ -64,6 +67,7 @@
 
 
 # define INTENSITY_SCALE 5
+
 // # define NUMPAD_0 65438
 // # define NUMPAD_1 65436
 // # define NUMPAD_2 65433
@@ -424,6 +428,9 @@ void	prepare_cn(t_cn *start);
 void	gen_img(t_meta *meta_data);
 void	init_pixel(t_pixel *pixel);
 void  ray_dir(int i, int j, t_meta *meta_data);
+double	color_diff(t_colour prev, t_colour curr);
+void	render_image(t_meta *meta_data, int x, int y);
+void	interpolate(t_meta *meta_data, t_colour prev, int x, int y);
 
 // Calculate closest intersection for ray direction: intersect.c
 void	intersect_closest(t_meta *meta_data);

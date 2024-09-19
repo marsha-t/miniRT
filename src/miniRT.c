@@ -303,7 +303,7 @@ int	ft_key(int key, void *param)
 {
 	t_meta *meta_data;
 
-	printf("key: %d\n", key);
+	// printf("key: %d\n", key);
 	meta_data = (t_meta *)param;
 	ft_controls(meta_data, key);
 	ft_objectselect(meta_data, key);
@@ -356,8 +356,8 @@ void    translate_camera(t_meta *meta_data, int key)
 		meta_data->pixel.theta_z = 0;
 		meta_data->camera->orient = meta_data->orient;
 	}
-	printf("theta x: %f y: %f z: %f\n", meta_data->pixel.theta_x, meta_data->pixel.theta_y, meta_data->pixel.theta_z);
-	printf("orientation x: %f y: %f z: %f\n", meta_data->camera->orient.x, meta_data->camera->orient.y, meta_data->camera->orient.z);
+	// printf("theta x: %f y: %f z: %f\n", meta_data->pixel.theta_x, meta_data->pixel.theta_y, meta_data->pixel.theta_z);
+	// printf("orientation x: %f y: %f z: %f\n", meta_data->camera->orient.x, meta_data->camera->orient.y, meta_data->camera->orient.z);
 }
 
 void    translate_light(t_vector *vector, int key)
