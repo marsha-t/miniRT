@@ -20,8 +20,8 @@
 # define SQSIZE_FLAT  5
 # define SQSIZE_CURVE M_PI / 4
 
-# define WINDOW_WIDTH 1000
-# define WINDOW_HEIGHT 800
+# define WINDOW_WIDTH 400
+# define WINDOW_HEIGHT 400
 # define FOCAL_LENGTH 0.5
 
 # define KEY_ESC 53
@@ -35,6 +35,8 @@
 # define NUMPAD_7 89
 # define NUMPAD_8 91
 # define NUMPAD_9 92
+# define NUMPAD_PLUS 69
+# define NUMPAD_MIN 78
 # define ARROW_LEFT 126
 # define ARROW_UP 123
 # define ARROW_DOWN 125
@@ -45,6 +47,21 @@
 # define KEY_S 1
 # define KEY_E 14
 # define KEY_D 2
+# define KEY_R 15
+# define KEY_U 32
+# define KEY_J 38
+# define KEY_I 34
+# define KEY_K 40
+# define KEY_O 31
+# define KEY_L 37
+# define KEY_1 18
+# define KEY_2 19
+# define KEY_3 20
+# define KEY_4 21
+# define KEY_5 23
+# define KEY_6 22
+# define KEY_7 26
+
 
 # define INTENSITY_SCALE 5
 // # define NUMPAD_0 65438
@@ -92,6 +109,7 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
+
 typedef struct s_sqsize
 {
 	double  row;
@@ -134,6 +152,7 @@ typedef struct s_spotlight
     double brightness;
     t_colour colour;
     t_vector spot_dir;
+    double  *spot_theta;
     struct s_spotlight  *next;
 }  t_spotlight;
 
@@ -222,7 +241,17 @@ typedef struct s_pixel
   t_vector  coord;
   t_colour  final;
   t_vector  normal;
+  double    theta_x;
+  double    theta_y;
+  double    theta_z;
 }				t_pixel;
+
+typedef struct s_objoption
+{
+  t_vector  *coord;
+  t_colour  *colour;
+  double    *size;
+} t_objoption;
 
 typedef struct s_meta
 {
@@ -234,6 +263,9 @@ typedef struct s_meta
   t_pl  *pl;
   t_cy  *cy;
   t_cn  *cn;
+  int       obj_select;
+  t_objoption     *obj_option;
+  void      *obj;
   double		aspect_ratio;
 	double		img_width;
 	double		img_height;
@@ -258,21 +290,27 @@ typedef struct s_meta
   bool  pl_allocated;
   bool  cy_allocated;
   bool  cn_allocated;
+  t_vector orient;
 } t_meta;
 
 void    rt_mlxinit(t_meta *meta_data);
 void    draw(t_meta *meta_data);
 void    print_banner();
 void    fill_camera(t_meta *meta_data, char **argv);
+void	  fill_camera_args(t_meta *meta_data, int count, char **argv);
 void    fill_ambient(t_meta *meta_data, char **argv);
+void	  fill_exit(t_meta *meta_data, char **argv);
 t_light    *create_light(t_meta *meta_data, char **argv);
 int     pointer_count(char **argv);
 void    ft_fill_data(t_meta *meta_data, char *singleline);
+void	  ft_fill_light(t_meta *meta_data, char **argv);
+void	  ft_fill_spotlight(t_meta *meta_data, char **argv);
+void	  ft_fill_objects(t_meta *meta_data, char **argv);
 void    read_data(t_meta *meta_data, char *argv);
 void	  parse_data(t_meta *data, int argc, char **argv);
 void    meta_data_init(t_meta *meta_data);
 
-void    translate_camera(t_vector *vector, int key);
+void    translate_camera(t_meta *meta_data, int key);
 void    translate_light(t_vector *vector, int key);
 void    translate_spotlight(t_vector *vector, int key);
 
@@ -281,27 +319,71 @@ void    check_fd(char *argv);
 int	    get_fd(char *argv);
 void	  free_pointer(char **s);
 void    free_exit(t_meta *meta_data);
+
 void    free_objects(t_meta *meta_data);
+void	free_spheres(t_meta *meta_data);
+void	free_planes(t_meta *meta_data);
+void	free_cylinders(t_meta *meta_data);
+void	free_cones(t_meta *meta_data);
+
+void	free_args(t_meta *meta_data, char **argv);
 void    free_pointerlist(int num, ...);
 int	    ft_strlen_dp(char **s);
 
 void    create_objects(t_meta *meta_data, char **argv);
+void	init_cylinder(t_meta *meta_data, char **argv);
+void	init_plane(t_meta *meta_data, char **argv);
+void	init_sphere(t_meta *meta_data, char **argv);
+void	init_cone(t_meta *meta_data, char **argv);
+
+
+
 t_light    *create_light(t_meta *meta_data, char **argv);
+t_light	*check_light_args(t_meta *meta_data, char **argv);
+
 t_spotlight    *create_spotlight(t_meta *meta_data, char **argv);
+t_spotlight	*check_spotlight_args(t_meta *meta_data, char **argv);
+
 t_cy    *create_cy(t_meta *meta_data, char **argv);
+t_cy	  *check_cy_args(t_meta *meta_data, char **argv);
+void	  cy_bonus(t_meta *meta_data, t_cy *cy, char **argv);
+void	  cy_elements(t_meta *meta_data, t_cy *cy, char **argv);
+void	cylinder_exit(t_meta *meta_data, char **argv, char *message);
+
 t_pl    *create_pl(t_meta *meta_data, char **argv);
+t_pl	  *check_pl_args(t_meta *meta_data, char **argv);
+void	  pl_elements(t_meta *meta_data, t_pl *pl, char **argv);
+
 t_sp    *create_sp(t_meta *meta_data, char **argv);
+void	sp_bonus(t_meta *meta_data, t_sp *sp, char **argv);
+void	sp_elements(t_meta *meta_data, t_sp *sp, char **argv);
+t_sp	*check_sp_args(t_meta *meta_data, char **argv);
+
 t_cn    *create_cn(t_meta *meta_data, char **argv);
+t_cn	*check_cn_args(t_meta *meta_data, char **argv);
+void	cn_bonus(t_meta *meta_data, t_cn *cn, char **argv);
+void	cn_elements(t_meta *meta_data, t_cn *cn, char **argv);
+void	cone_exit(t_meta *meta_data, char **argv);
 
 t_colour    check_colour(t_meta **meta_data, void *temp, char **src, char **argv);
 bool        check_colour_val(t_meta *meta_data, char **src, int arg_count, char **argv);
+void	colour_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 t_vector    check_norm(t_meta **meta_data, void *temp, char **src, char **argv);
+void	norm_exit(t_meta **meta_data, void *temp, char **src, char **argv);
 bool        check_norm_val(t_meta *meta_data, char **src, int arg_count, char **argv);
+
 t_vector    check_coord(t_meta **meta_data, void *temp, char **src, char **argv);
+void        coord_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 double      check_double(t_meta **meta_data, void *temp, char **src, char *str);
 int         check_int(t_meta **meta_data, char *str);
 t_sqsize    check_checker(t_meta** meta_data, void *temp, char **src, char **argv);
+void	checker_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 t_img	check_bump(t_meta** meta_data, void *temp, char **src, char **argv);
+void	bump_exit(t_meta **meta_data, void *temp, char **src, char **argv);
+
 bool	is_xpm_file(char *path);
 
 void        print_cylinders(t_meta *meta_data);
@@ -313,6 +395,13 @@ void        print_spotlight(t_meta *meta_data);
 
 int	ft_key(int key, void *param);
 int	ft_close(t_meta *meta_data);
+void ft_objectselect(t_meta *meta_data, int key);
+void ft_controls(t_meta *meta_data, int key);
+void    navigate(t_meta *meta_data, int key);
+void    increase_size(t_meta *meta_data, int key);
+void	rotate_camera_z(t_vector *orientation, double theta_x);
+void	rotate_camera_x(t_vector *orientation, double theta_x);
+void	rotate_camera_y(t_vector *orientation, double theta_y);
 
 void	      map_draw(t_meta *meta_data);
 void	      img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color);
@@ -398,10 +487,10 @@ bool	in_shadow_spotlight(t_meta *meta_data, t_spotlight *spotlight);
 bool	in_shadow_spotlight_setup(t_meta *meta_data, t_spotlight *spotlight, double *len, t_vector *new_origin);
 
 // Calculate shadow for each object: shadow_obj.c
-bool	in_shadow_sp(t_meta *meta_data, t_vector *new_origin, double len);
-bool	in_shadow_pl(t_meta *meta_data, t_vector *new_origin, double len);
-bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len);
-bool	in_shadow_cn(t_meta *meta_data, t_vector *new_origin, double len);
+bool	in_shadow_sp(t_meta *meta_data, t_vector *new_origin, double len, bool check);
+bool	in_shadow_pl(t_meta *meta_data, t_vector *new_origin, double len, bool check);
+bool	in_shadow_cy(t_meta *meta_data, t_vector *new_origin, double len, bool check);
+bool	in_shadow_cn(t_meta *meta_data, t_vector *new_origin, double len, bool check);
 
 // Get UV coordinates: uv_map1.c
 void	uv_map_pl(t_pixel *pixel, t_pl *plane, double *u, double *v);
