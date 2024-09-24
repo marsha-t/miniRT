@@ -2,7 +2,7 @@ NAME = miniRT
 
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror -fsanitize=address -O1
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I/usr/include -Imlx
 
 MINIRT_SRCS = 	./src/miniRT.c \
 				./src/parse/check_args.c \
@@ -28,6 +28,7 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/intersect/prepare1.c \
 				./src/intersect/prepare2.c \
 				./src/intersect/img.c \
+				./src/intersect/interpolate.c \
 				./src/intersect/intersect.c \
 				./src/intersect/intersect_obj.c \
 				./src/intersect/intersect_math1.c \
@@ -53,7 +54,6 @@ MINIRT_SRCS = 	./src/miniRT.c \
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
 VPATH = src:lib:lib/libft
 
-
 ifeq ($(shell uname), Linux)
 	INCLUDES = -I/usr/include -Imlx -O3
 	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
@@ -61,7 +61,7 @@ ifeq ($(shell uname), Linux)
 	MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
 else
 	INCLUDES = -I/opt/X11/include -Imlx
-	MLX_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
+	MLX_FLAGS = -framework OpenGL -framework AppKit
 	MLX_DIR = ./mlx_mac
 	MLX_LIB = $(MLX_DIR)/libmlx.a
 endif
@@ -82,14 +82,13 @@ LB = ar rcs
 all: $(MLX_LIB) $(LIBFT_LIB) $(NAME)
 
 $(NAME): $(MINIRT_OBJS)
-		$(CC) $(CFLAGS) $(MINIRT_OBJS) $(MLX_FLAGS) $(LIBFT_LIB) -o $(NAME) -lm
+		$(CC) $(CFLAGS) $(MINIRT_OBJS) $(MLX_FLAGS) $(MLX_LIB) $(LIBFT_LIB) -o $(NAME)
 
 $(LIBFT_LIB):
 	$(MAKE_LIBR) $(LIBFT_DIR)
 
 $(MLX_LIB):
-	@$(MAKE_LIBR) $(MLX_DIR)
-	@echo	"$(GREEN) $(MLX_DIR) $(DEFAULT)"
+	$(MAKE_LIBR) $(MLX_DIR)
 
 clean:
 	$(RM) $(MINIRT_OBJS)

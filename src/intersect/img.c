@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/19 15:15:39 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/24 22:30:56 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,79 +17,52 @@
 		light components to get final colour for pixel */
 void	gen_img(t_meta *meta_data)
 {
-	int	x;
-	int	y;
-	t_colour prev;
+	int			x;
+	int			y;
+	int			step;
+	int			count;
 
-	y = -1;
-	while (++y < WINDOW_HEIGHT)
+	y = 0;
+	count = 0;
+	if (!meta_data->low_quality)
+		step = 1;
+	else
+		step = 3;
+	while (y < WINDOW_HEIGHT)
 	{
 		x = 0;
+		count = 0;
 		while (x < WINDOW_WIDTH)
 		{
 			render_image(meta_data, x, y);
-			if (x > 0 && y > 0)
-			{
-				if (color_diff(prev, meta_data->pixel.final) > LOW_RES)
-				{
-					render_image(meta_data, x - 1, y);
-					render_image(meta_data, x - 2, y);
-				}
-				else
-					interpolate(meta_data, prev, x, y);
-			}
-			prev = meta_data->pixel.final;
+			meta_data->curr_arr[x] = meta_data->pixel.final;
+			if (x > 0)
+				render_x(meta_data, x, y);
+			if (y > 0 && meta_data->low_quality == true)
+				render_y(meta_data, x, y);
 			x = x + 3;
 		}
+		while (count < WINDOW_WIDTH + 1)
+		{
+			meta_data->prev_arr[count] = meta_data->curr_arr[count];
+			count++;
+		}
+		y = y + step;
 	}
 }
 
-void	interpolate(t_meta *meta_data, t_colour prev, int x, int y)
+void	render_x(t_meta *meta_data, int x, int y)
 {
-	int	x_prev;
-	t_colour curr;
-	t_colour out;
-
-	x_prev = x - 3;
-	curr = meta_data->pixel.final;
-	out.r = prev.r + (((curr.r - prev.r) / (x - x_prev)) * ((x - 2) - x_prev));
-	out.g = prev.g + (((curr.g - prev.g) / (x - x_prev)) * ((x - 2) - x_prev));
-	out.b = prev.b + (((curr.b - prev.b) / (x - x_prev)) * ((x - 2) - x_prev));
-	img_mlx_pixel_put(meta_data, x - 2, y, create_trgb(out.r, out.g, out.b));
-	out.r = prev.r + (((curr.r - prev.r) / (x - x_prev)) * ((x - 1) - x_prev));
-	out.g = prev.g + (((curr.g - prev.g) / (x - x_prev)) * ((x - 1) - x_prev));
-	out.b = prev.b + (((curr.b - prev.b) / (x - x_prev)) * ((x - 1) - x_prev));
-	img_mlx_pixel_put(meta_data, x - 1, y, create_trgb(out.r, out.g, out.b));
-}
-
-double	color_diff(t_colour prev, t_colour curr)
-{
-	double out;
-
-	out = sqrt(pow(prev.r - curr.r, 2) + pow(prev.g - curr.g, 2) + pow(prev.b - curr.b, 2));
-	// printf("color diff %f\n", out);
-	// printf("\tprev r %f g %f b %f || curr r %f g %f b %f\n", prev.r, prev.g, prev.b, curr.r, curr.g, curr.b);
-	return (out);
-}
-
-
-
-void	render_image(t_meta *meta_data, int x, int y)
-{
-	init_pixel(&meta_data->pixel);
-	ray_dir(x, y, meta_data);
-	intersect_closest(meta_data);
-	prepare_intersect(&meta_data->pixel);
-	if (meta_data->pixel.t >= 0 && meta_data->pixel.t != DBL_MAX)
+	if (color_diff(meta_data->curr_arr[x - 3], meta_data->pixel.final) \
+		> LOW_RES)
 	{
-		get_checkerboard(meta_data);
-		gen_final_colour(meta_data);
-		img_mlx_pixel_put(meta_data, x, y,
-			create_trgb(meta_data->pixel.final.r,
-				meta_data->pixel.final.g, meta_data->pixel.final.b));
+		render_image(meta_data, x - 1, y);
+		meta_data->curr_arr[x - 1] = meta_data->pixel.final;
+		render_image(meta_data, x - 2, y);
+		meta_data->curr_arr[x - 2] = meta_data->pixel.final;
 	}
 	else
-		img_mlx_pixel_put(meta_data, x, y, create_trgb(0, 0, 0));
+		interpolate_x(meta_data, meta_data->curr_arr[x - 3], x, y);
 }
 
 int	create_trgb(int r, int g, int b)
@@ -125,4 +98,25 @@ void	ray_dir(int i, int j, t_meta *meta_data)
 	vec_subtract(&meta_data->pixel.ray, &pixel, &meta_data->camera->coord);
 	meta_data->pixel.ray.z = FOCAL_LENGTH;
 	vec_normalise(&meta_data->pixel.ray);
+}
+
+void	render_y(t_meta *meta_data, int x, int y)
+{
+	int	x_min;
+	int	y_min;
+
+	x_min = x - 3;
+	y_min = y - 3;
+	while (x_min <= x)
+	{
+		if (color_diff(meta_data->prev_arr[x_min], meta_data->curr_arr[x_min]) \
+			> LOW_RES)
+		{
+			render_image(meta_data, x_min, y - 1);
+			render_image(meta_data, x_min, y - 2);
+		}
+		else
+			interpolate_y(meta_data, meta_data->prev_arr[x_min], x_min, y);
+		x_min++;
+	}
 }

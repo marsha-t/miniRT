@@ -20,8 +20,8 @@
 # define SQSIZE_FLAT  5
 # define SQSIZE_CURVE M_PI / 4
 
-# define WINDOW_WIDTH 400
-# define WINDOW_HEIGHT 400
+# define WINDOW_WIDTH 1000
+# define WINDOW_HEIGHT 800
 # define FOCAL_LENGTH 0.5
 # define LOW_RES 45
 # define MID_RES 22
@@ -294,11 +294,42 @@ typedef struct s_meta
   bool  pl_allocated;
   bool  cy_allocated;
   bool  cn_allocated;
+  bool  move;
+  bool  rotate;
+  bool  move_x_d;
+  bool  move_x_i;
+  bool  move_y_d;
+  bool  move_y_i;
+  bool  move_z_d;
+  bool  move_z_i;
+  bool  rot_x_d;
+  bool  rot_x_i;
+  bool  rot_y_d;
+  bool  rot_y_i;
+  bool  rot_z_d;
+  bool  rot_z_i;
+  bool  rot_reset;
+  t_colour  q1;
+  t_colour  q2;
+  t_colour  q3;
+  t_colour  q4;
+  int x;
+  int y;
+  int a1;
+  int a2;
+  int b1;
+  int b2;
   t_vector orient;
+  struct s_colour prev_arr[WINDOW_WIDTH + 1];
+  struct s_colour curr_arr[WINDOW_WIDTH + 1];
+  bool  low_quality;
 } t_meta;
 
 void    rt_mlxinit(t_meta *meta_data);
 void    draw(t_meta *meta_data);
+int     handle_keyrelease(int key, void *param);
+int     handle_keypress(int key, void *param);
+int	    update(t_meta *meta_data);
 void    print_banner();
 void    fill_camera(t_meta *meta_data, char **argv);
 void	  fill_camera_args(t_meta *meta_data, int count, char **argv);
@@ -314,7 +345,7 @@ void    read_data(t_meta *meta_data, char *argv);
 void	  parse_data(t_meta *data, int argc, char **argv);
 void    meta_data_init(t_meta *meta_data);
 
-void    translate_camera(t_meta *meta_data, int key);
+void    translate_camera(t_meta *meta_data);
 void    translate_light(t_vector *vector, int key);
 void    translate_spotlight(t_vector *vector, int key);
 
@@ -400,12 +431,16 @@ void        print_spotlight(t_meta *meta_data);
 int	ft_key(int key, void *param);
 int	ft_close(t_meta *meta_data);
 void ft_objectselect(t_meta *meta_data, int key);
-void ft_controls(t_meta *meta_data, int key);
+// void ft_controls(t_meta *meta_data, int key);
+void ft_controls(t_meta *meta_data);
+void ft_controls_status(t_meta *meta_data, int key, bool status);
 void    navigate(t_meta *meta_data, int key);
 void    increase_size(t_meta *meta_data, int key);
 void	rotate_camera_z(t_vector *orientation, double theta_x);
 void	rotate_camera_x(t_vector *orientation, double theta_x);
 void	rotate_camera_y(t_vector *orientation, double theta_y);
+void ft_rotation_status(t_meta *meta_data, int key, bool status);
+
 
 void	      map_draw(t_meta *meta_data);
 void	      img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color);
@@ -430,7 +465,11 @@ void	init_pixel(t_pixel *pixel);
 void  ray_dir(int i, int j, t_meta *meta_data);
 double	color_diff(t_colour prev, t_colour curr);
 void	render_image(t_meta *meta_data, int x, int y);
-void	interpolate(t_meta *meta_data, t_colour prev, int x, int y);
+void	render_y(t_meta *meta_data, int x, int y);
+void	render_x(t_meta *meta_data, int x, int y);
+void	interpolate_x(t_meta *meta_data, t_colour prev, int x, int y);
+void	interpolate_y(t_meta *meta_data, t_colour prev, int x, int y);
+void	bilinear_interpolation(t_meta *meta_data, int x, int y);
 
 // Calculate closest intersection for ray direction: intersect.c
 void	intersect_closest(t_meta *meta_data);

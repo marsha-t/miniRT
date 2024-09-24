@@ -12,39 +12,83 @@
 
 #include "../include/miniRT.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_meta meta_data;
+	t_meta	meta_data;
 
 	print_banner();
 	meta_data_init(&meta_data);
 	parse_data(&meta_data, argc, argv);
 	rt_mlxinit(&meta_data);
 	draw(&meta_data);
-	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, meta_data.img, 0, 0);
-	// print_spotlight(&meta_data);
-	// prepare_data(&meta_data);
-	// gen_img(&meta_data);
-	// print_light(&meta_data);
-	// print_planes(&meta_data);
-	// print_spheres(&meta_data);
-	// print_cones(&meta_data);
-	// print_cylinders(&meta_data);
-	mlx_hook(meta_data.mlx_win, 2, 1L << 0, ft_key, &meta_data);
-	mlx_hook(meta_data.mlx_win, 17, 0, ft_close, &meta_data);
+	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, \
+		meta_data.img, 0, 0);
+	mlx_hook(meta_data.mlx_win, 2, 1L << 0, handle_keypress, &meta_data);
+	mlx_hook(meta_data.mlx_win, 3, 1L << 1, handle_keyrelease, &meta_data);
+	mlx_loop_hook(meta_data.mlx_ptr, &update, &meta_data);
 	mlx_loop(meta_data.mlx_ptr);
 	ft_close(&meta_data);
 	free_exit(&meta_data);
 	return (1);
 }
 
-void    draw(t_meta *meta_data)
+int	update(t_meta *meta_data)
 {
+	if (meta_data->move || meta_data->rotate)
+	{
+		mlx_clear_window(meta_data->mlx_ptr, meta_data->mlx_win);
+		mlx_destroy_image(meta_data->mlx_ptr, meta_data->img);
+		meta_data->img = mlx_new_image(meta_data->mlx_ptr, WINDOW_WIDTH, \
+			WINDOW_HEIGHT);
+		draw(meta_data);
+		mlx_put_image_to_window(meta_data->mlx_ptr, meta_data->mlx_win, \
+			meta_data->img, 0, 0);
+	}
+	return (0);
+}
+
+
+int	handle_keypress(int key, void *param)
+{
+	t_meta	*meta_data;
+
+	meta_data = (t_meta *)param;
+	if (key == KEY_ESC)
+		ft_close(meta_data);
+	ft_key(key, meta_data);
+	ft_controls_status(meta_data, key, true);
+	ft_rotation_status(meta_data, key, true);
+	if (key == NUMPAD_2 || key == NUMPAD_4 || key == NUMPAD_6 || key == NUMPAD_8 \
+		|| key == NUMPAD_PLUS || key == NUMPAD_MIN || key == KEY_Q || key == KEY_A)
+		meta_data->move = true;
+	if (key == KEY_U || key == KEY_J || key == KEY_I || key == KEY_K || key == KEY_O \
+		|| key == KEY_L)
+		meta_data->rotate = true;
+	return (0);
+}
+
+int	handle_keyrelease(int key, void *param)
+{
+	t_meta	*meta_data;
+
+	meta_data = (t_meta *)param;
+	ft_controls_status(meta_data, key, false);
+	ft_rotation_status(meta_data, key, false);
+	meta_data->move = false;
+	meta_data->rotate = false;
+	return (0);
+}
+
+void	draw(t_meta *meta_data)
+{
+	ft_controls(meta_data);
+	if (meta_data->obj_select == 7)
+		translate_camera(meta_data);
 	prepare_data(meta_data);
 	gen_img(meta_data);
 }
 
-void    rt_mlxinit(t_meta *meta_data)
+void	rt_mlxinit(t_meta *meta_data)
 {
 	meta_data->mlx_ptr = mlx_init();
 	if (!meta_data->mlx_ptr)
@@ -73,10 +117,10 @@ void    rt_mlxinit(t_meta *meta_data)
 
 void	rotate_camera_y(t_vector *orientation, double theta_y)
 {
-	double cos_theta;
-	double sin_theta;
-	double new_x;
-	double new_z;
+	double	cos_theta;
+	double	sin_theta;
+	double	new_x;
+	double	new_z;
 
 	cos_theta = cos(theta_y);
 	sin_theta = sin(theta_y);
@@ -84,15 +128,14 @@ void	rotate_camera_y(t_vector *orientation, double theta_y)
 	new_z = (-sin_theta * orientation->x) + (cos_theta * orientation->z);
 	orientation->x = new_x;
 	orientation->z = new_z;
-	// orientation->y = 1;
 }
 
 void	rotate_camera_x(t_vector *orientation, double theta_x)
 {
-	double cos_theta;
-	double sin_theta;
-	double new_y;
-	double new_z;
+	double	cos_theta;
+	double	sin_theta;
+	double	new_y;
+	double	new_z;
 
 	cos_theta = cos(theta_x);
 	sin_theta = sin(theta_x);
@@ -100,15 +143,14 @@ void	rotate_camera_x(t_vector *orientation, double theta_x)
 	new_z = (sin_theta * orientation->y) + (cos_theta * orientation->z);
 	orientation->y = new_y;
 	orientation->z = new_z;
-	// orientation->x = 1;
 }
 
 void	rotate_camera_z(t_vector *orientation, double theta_z)
 {
-	double cos_theta;
-	double sin_theta;
-	double new_x;
-	double new_y;
+	double	cos_theta;
+	double	sin_theta;
+	double	new_x;
+	double	new_y;
 
 	cos_theta = cos(theta_z);
 	sin_theta = sin(theta_z);
@@ -116,28 +158,59 @@ void	rotate_camera_z(t_vector *orientation, double theta_z)
 	new_y = (sin_theta * orientation->x) + (cos_theta * orientation->y);
 	orientation->x = new_x;
 	orientation->y = new_y;
-	// orientation->z = 1;
 }
 
-void ft_controls(t_meta *meta_data, int key)
+void ft_controls(t_meta *meta_data)
 {
-	t_vector *vector;
+	t_vector	*vector;
 
 	vector = meta_data->obj_option->coord;
-	printf("vector x: %f y: %f z: %f\n", vector->x, vector->y, vector->z);
-	printf("camera x: %f y: %f z: %f\n", meta_data->camera->coord.x, meta_data->camera->coord.y, meta_data->camera->coord.z);
+	if (meta_data->move_y_i)
+		vector->y += 1;
+	if (meta_data->move_y_d)
+		vector->y -= 1;
+	if (meta_data->move_x_d)
+		vector->x -= 1;
+	if (meta_data->move_x_i)
+		vector->x += 1;
+	if (meta_data->move_z_i)
+		vector->z += 1;
+	if (meta_data->move_z_d)
+		vector->z -= 1;
+}
+
+void ft_controls_status(t_meta *meta_data, int key, bool status)
+{
 	if (key == NUMPAD_8)
-		vector->y += 5;
+		meta_data->move_y_i = status;
 	if (key == NUMPAD_2)
-		vector->y -= 5;
+		meta_data->move_y_d = status;
 	if (key == NUMPAD_4)
-		vector->x -= 5;
+		meta_data->move_x_d = status;
 	if (key == NUMPAD_6)
-		vector->x += 5;
+		meta_data->move_x_i = status;
 	if (key == NUMPAD_PLUS)
-		vector->z += 5;
+		meta_data->move_z_i = status;
 	if (key == NUMPAD_MIN)
-		vector->z -= 5;
+		meta_data->move_z_d = status;
+}
+
+void ft_rotation_status(t_meta *meta_data, int key, bool status)
+{
+	if (key == KEY_U)
+		meta_data->rot_x_i = status;
+	if (key == KEY_J)
+		meta_data->rot_x_d = status;
+	if (key == KEY_I)
+		meta_data->rot_y_i = status;
+	if (key == KEY_K)
+		meta_data->rot_y_d = status;
+	if (key == KEY_O)
+		meta_data->rot_z_i = status;
+	if (key == KEY_L)
+		meta_data->rot_z_d = status;
+	if (key == KEY_R)
+		meta_data->rot_reset = status;
 }
 
 void ft_objectselect(t_meta *meta_data, int key)
@@ -217,7 +290,7 @@ void    navigate(t_meta *meta_data, int key)
 			meta_data->obj = (void *)sp->next;
 		else
 			meta_data->obj = (void *)meta_data->sp;
-	}    
+	}
 	if (meta_data->obj_select == 2 && key == NUMPAD_5)
 	{
 		cy = (t_cy *)meta_data->obj;
@@ -293,7 +366,6 @@ void    increase_size(t_meta *meta_data, int key)
 		*size += step;
 	if (key == KEY_A && *size > min)
 		*size -= step;
-	printf("size: %f\n", *meta_data->obj_option->size);
 }
 
 /*	ft_key directs specific keypresses to various actions
@@ -301,63 +373,58 @@ void    increase_size(t_meta *meta_data, int key)
 */
 int	ft_key(int key, void *param)
 {
-	t_meta *meta_data;
+	t_meta	*meta_data;
 
-	// printf("key: %d\n", key);
 	meta_data = (t_meta *)param;
-	ft_controls(meta_data, key);
 	ft_objectselect(meta_data, key);
 	navigate(meta_data, key);
 	increase_size(meta_data, key);
-	if (meta_data->obj_select == 7)
-		translate_camera(meta_data, key);
-	mlx_clear_window(meta_data->mlx_ptr, meta_data->mlx_win);
-	draw(meta_data);
-	mlx_put_image_to_window(meta_data->mlx_ptr, meta_data->mlx_win, meta_data->img, 0, 0);
+	if (key == KEY_W)
+		meta_data->low_quality = true;
+	if (key == KEY_S)
+		meta_data->low_quality = false;
 	return (0);
 }
 
-void    translate_camera(t_meta *meta_data, int key)
+void    translate_camera(t_meta *meta_data)
 {
-	if (key == KEY_U)
+	if (meta_data->rot_x_i)
 	{
 		meta_data->pixel.theta_x += 0.001;
 		rotate_camera_x(&meta_data->camera->orient, meta_data->pixel.theta_x);
 	}
-	if (key == KEY_J)
+	if (meta_data->rot_x_d)
 	{
 		meta_data->pixel.theta_x -= 0.001;
 		rotate_camera_x(&meta_data->camera->orient, meta_data->pixel.theta_x);
 	}
-	if (key == KEY_I)
+	if (meta_data->rot_y_i)
 	{
 		meta_data->pixel.theta_y += 0.001;
 		rotate_camera_y(&meta_data->camera->orient, meta_data->pixel.theta_y);
 	}
-	if (key == KEY_K)
+	if (meta_data->rot_y_d)
 	{
 		meta_data->pixel.theta_y -= 0.001;
 		rotate_camera_y(&meta_data->camera->orient, meta_data->pixel.theta_y);
 	}
-	if (key == KEY_O)
+	if (meta_data->rot_z_i)
 	{
 		meta_data->pixel.theta_z += 0.001;
 		rotate_camera_z(&meta_data->camera->orient, meta_data->pixel.theta_z);
 	}
-	if (key == KEY_L)
+	if (meta_data->rot_z_d)
 	{
 		meta_data->pixel.theta_z -= 0.001;
 		rotate_camera_z(&meta_data->camera->orient, meta_data->pixel.theta_z);
 	}
-	if (key == KEY_R)
+	if (meta_data->rot_reset)
 	{
 		meta_data->pixel.theta_x = 0;
 		meta_data->pixel.theta_y = 0;
 		meta_data->pixel.theta_z = 0;
 		meta_data->camera->orient = meta_data->orient;
 	}
-	// printf("theta x: %f y: %f z: %f\n", meta_data->pixel.theta_x, meta_data->pixel.theta_y, meta_data->pixel.theta_z);
-	// printf("orientation x: %f y: %f z: %f\n", meta_data->camera->orient.x, meta_data->camera->orient.y, meta_data->camera->orient.z);
 }
 
 void    translate_light(t_vector *vector, int key)
@@ -436,6 +503,7 @@ void    meta_data_init(t_meta *meta_data)
 	meta_data->pixel.spot_k0 = 0.001;
 	meta_data->pixel.spot_k1 = 0.0001;
 	meta_data->pixel.spot_k2 = 0.00001;
+	meta_data->low_quality = false;
 }
 
 // void    meta_data_init(t_meta *meta_data)
