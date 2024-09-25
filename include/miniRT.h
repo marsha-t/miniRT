@@ -225,6 +225,7 @@ typedef struct s_cn
 	t_vector			coord;
 	t_vector			axis;
 	double				angle;
+  double        angle_rad;
 	double				radius;
 	double				height;
 	t_vector			base;

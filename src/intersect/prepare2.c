@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 17:32:29 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 17:32:47 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/19 17:45:33 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 /*	prepare_obj adds derived parameters to object structs*/
 void	prepare_obj(t_meta *meta_data)
 {
-	if (meta_data->sp)
+	if (meta_data->sp_allocated && meta_data->sp)
 		prepare_sp(meta_data->sp);
-	if (meta_data->pl)
+	if (meta_data->pl_allocated && meta_data->pl)
 		prepare_pl(meta_data->pl);
-	if (meta_data->cy)
+	if (meta_data->cy_allocated && meta_data->cy)
 		prepare_cy(meta_data->cy);
-	if (meta_data->cn)
+	if (meta_data->cn_allocated && meta_data->cn)
 		prepare_cn(meta_data->cn);
 }
 
@@ -96,8 +96,8 @@ void	prepare_cn(t_cn *start)
 	curr = start;
 	while (curr)
 	{
-		curr->angle = curr->angle * (M_PI / 180);
-		curr->radius = curr->height * tan(curr->angle);
+		curr->angle_rad = curr->angle * (M_PI / 180);
+		curr->radius = curr->height * tan(curr->angle_rad);
 		vec_multiply_scalar(&temp, &curr->axis, curr->height);
 		vec_add(&curr->base, &curr->coord, &temp);
 		curr->colour.r_n = curr->colour.r / 255;
