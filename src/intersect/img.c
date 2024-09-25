@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/24 22:30:56 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:00:06 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,37 @@ void	gen_img(t_meta *meta_data)
 {
 	int			x;
 	int			y;
-	int			step;
+	int			step_y;
+	int			step_x;
 	int			count;
+	t_colour	init;
 
 	y = 0;
 	count = 0;
-	if (!meta_data->low_quality)
-		step = 1;
+	if (meta_data->low_quality)
+	{
+		step_y = 3;
+		step_x = 3;
+	}
+	else if (meta_data->mid_quality)
+	{
+		step_y = 1;
+		step_x = 3;
+	}
 	else
-		step = 3;
+	{
+		step_x = 1;
+		step_y = 1;
+	}
+	init.r = 0;
+	init.g = 0;
+	init.b = 0;
+	while (count < WINDOW_WIDTH + 1)
+	{
+		meta_data->prev_arr[count] = init;
+		meta_data->curr_arr[count] = init;
+		count++;
+	}
 	while (y < WINDOW_HEIGHT)
 	{
 		x = 0;
@@ -36,24 +58,24 @@ void	gen_img(t_meta *meta_data)
 		{
 			render_image(meta_data, x, y);
 			meta_data->curr_arr[x] = meta_data->pixel.final;
-			if (x > 0)
+			if (x > 0 && meta_data->mid_quality == true)
 				render_x(meta_data, x, y);
 			if (y > 0 && meta_data->low_quality == true)
 				render_y(meta_data, x, y);
-			x = x + 3;
+			x = x + step_x;
 		}
 		while (count < WINDOW_WIDTH + 1)
 		{
 			meta_data->prev_arr[count] = meta_data->curr_arr[count];
 			count++;
 		}
-		y = y + step;
+		y = y + step_y;
 	}
 }
 
 void	render_x(t_meta *meta_data, int x, int y)
 {
-	if (color_diff(meta_data->curr_arr[x - 3], meta_data->pixel.final) \
+	if (color_diff(meta_data->curr_arr[x - 3], meta_data->curr_arr[x]) \
 		> LOW_RES)
 	{
 		render_image(meta_data, x - 1, y);

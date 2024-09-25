@@ -23,8 +23,9 @@ int	main(int argc, char **argv)
 	draw(&meta_data);
 	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, \
 		meta_data.img, 0, 0);
-	mlx_hook(meta_data.mlx_win, 2, 1L << 0, handle_keypress, &meta_data);
+	mlx_hook(meta_data.mlx_win, 2, 0, handle_keypress, &meta_data);
 	mlx_hook(meta_data.mlx_win, 3, 1L << 1, handle_keyrelease, &meta_data);
+	mlx_hook(meta_data.mlx_win, 17, 0, ft_close, &meta_data);
 	mlx_loop_hook(meta_data.mlx_ptr, &update, &meta_data);
 	mlx_loop(meta_data.mlx_ptr);
 	ft_close(&meta_data);
@@ -218,47 +219,54 @@ void ft_objectselect(t_meta *meta_data, int key)
 
 	if (key == KEY_1 && meta_data->sp_allocated)
 	{
+		printf(Y"SPHERE SELECTED\n"RST);
 		meta_data->obj = (void *)meta_data->sp;
 		meta_data->obj_option->coord = &meta_data->sp->coord;
 		meta_data->obj_option->size = &meta_data->sp->diameter;
 		meta_data->obj_select = 1;
 	}
-	if (key == KEY_2 && meta_data->cy_allocated)
+	else if (key == KEY_2 && meta_data->cy_allocated)
 	{
+		printf(Y"CYLINDER SELECTED\n"RST);
 		meta_data->obj = (void *)meta_data->cy;
 		meta_data->obj_option->coord = &meta_data->cy->coord;
 		meta_data->obj_option->size = &meta_data->cy->diameter;
 		meta_data->obj_select = 2;
 	}
-	if (key == KEY_3 && meta_data->pl_allocated)
+	else if (key == KEY_3 && meta_data->pl_allocated)
 	{
+		printf(Y"PLANE SELECTED\n"RST);
 		meta_data->obj = (void *)meta_data->pl;
 		meta_data->obj_option->coord = &meta_data->pl->coord;
 		meta_data->obj_select = 3;
 	}
-	if (key == KEY_4 && meta_data->cn_allocated)
+	else if (key == KEY_4 && meta_data->cn_allocated)
 	{
+		printf(Y"CONE SELECTED\n"RST);
 		meta_data->obj = (void *)meta_data->cn;
 		meta_data->obj_option->coord = &meta_data->cn->coord;
 		meta_data->obj_option->size = &meta_data->cn->height;
 		meta_data->obj_select = 4;
 	}
-	if (key == KEY_5 && meta_data->light_allocated)
+	else if (key == KEY_5 && meta_data->light_allocated)
 	{
+		printf(Y"LIGHT SELECTED\n"RST);
 		meta_data->obj = (void *)meta_data->light;
 		meta_data->obj_option->coord = &meta_data->light->coord;
 		meta_data->obj_option->size = &meta_data->light->brightness;
 		meta_data->obj_select = 5;
 	}
-	if (key == KEY_6 && meta_data->sl_allocated)
+	else if (key == KEY_6 && meta_data->sl_allocated)
 	{
+		printf(Y"SPOTLIGHT SELECTED\n"RST);
 		meta_data->obj = (void *)meta_data->spotlight;
 		meta_data->obj_option->coord = &meta_data->spotlight->coord;
 		meta_data->obj_option->size = &meta_data->spotlight->brightness;
 		meta_data->obj_select = 6;
 	}
-	if (key == KEY_7 && meta_data->camera_allocated)
+	else if (key == KEY_7 && meta_data->camera_allocated)
 	{
+		printf(Y"CAMERA SELECTED\n"RST);
 		meta_data->obj = (void *)meta_data->camera;
 		meta_data->obj_option->coord = &meta_data->camera->coord;
 		meta_data->obj_option->size = &meta_data->camera->fov;
@@ -380,9 +388,20 @@ int	ft_key(int key, void *param)
 	navigate(meta_data, key);
 	increase_size(meta_data, key);
 	if (key == KEY_W)
+	{
+		meta_data->mid_quality = true;
 		meta_data->low_quality = true;
+	}
 	if (key == KEY_S)
+	{
+		meta_data->mid_quality = true;
 		meta_data->low_quality = false;
+	}
+	if (key == KEY_E)
+	{
+		meta_data->mid_quality = false;
+		meta_data->low_quality = false;
+	}
 	return (0);
 }
 
@@ -391,31 +410,43 @@ void    translate_camera(t_meta *meta_data)
 	if (meta_data->rot_x_i)
 	{
 		meta_data->pixel.theta_x += 0.001;
+		if (meta_data->pixel.theta_x > (2 * M_PI))
+			meta_data->pixel.theta_x = 0;
 		rotate_camera_x(&meta_data->camera->orient, meta_data->pixel.theta_x);
 	}
 	if (meta_data->rot_x_d)
 	{
 		meta_data->pixel.theta_x -= 0.001;
+		if (meta_data->pixel.theta_x < 0)
+			meta_data->pixel.theta_x = 2 * M_PI;
 		rotate_camera_x(&meta_data->camera->orient, meta_data->pixel.theta_x);
 	}
 	if (meta_data->rot_y_i)
 	{
 		meta_data->pixel.theta_y += 0.001;
+		if (meta_data->pixel.theta_y > (2 * M_PI))
+			meta_data->pixel.theta_y = 0;
 		rotate_camera_y(&meta_data->camera->orient, meta_data->pixel.theta_y);
 	}
 	if (meta_data->rot_y_d)
 	{
 		meta_data->pixel.theta_y -= 0.001;
+		if (meta_data->pixel.theta_y < 0)
+			meta_data->pixel.theta_y = 2 * M_PI;
 		rotate_camera_y(&meta_data->camera->orient, meta_data->pixel.theta_y);
 	}
 	if (meta_data->rot_z_i)
 	{
 		meta_data->pixel.theta_z += 0.001;
+		if (meta_data->pixel.theta_z > (2 * M_PI))
+			meta_data->pixel.theta_z = 0;
 		rotate_camera_z(&meta_data->camera->orient, meta_data->pixel.theta_z);
 	}
 	if (meta_data->rot_z_d)
 	{
 		meta_data->pixel.theta_z -= 0.001;
+		if (meta_data->pixel.theta_z < 0)
+			meta_data->pixel.theta_z = 2 * M_PI;
 		rotate_camera_z(&meta_data->camera->orient, meta_data->pixel.theta_z);
 	}
 	if (meta_data->rot_reset)
@@ -504,6 +535,7 @@ void    meta_data_init(t_meta *meta_data)
 	meta_data->pixel.spot_k1 = 0.0001;
 	meta_data->pixel.spot_k2 = 0.00001;
 	meta_data->low_quality = false;
+	meta_data->mid_quality = false;
 }
 
 // void    meta_data_init(t_meta *meta_data)

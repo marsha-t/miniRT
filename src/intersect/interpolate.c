@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 19:59:07 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/24 21:21:42 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:02:42 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,10 @@ void	render_image(t_meta *meta_data, int x, int y)
 				meta_data->pixel.final.g, meta_data->pixel.final.b));
 	}
 	else
+	{
+		meta_data->pixel.final.r = 0;
+		meta_data->pixel.final.g = 0;
+		meta_data->pixel.final.b = 0;
 		img_mlx_pixel_put(meta_data, x, y, create_trgb(0, 0, 0));
+	}
 }

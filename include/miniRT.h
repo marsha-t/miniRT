@@ -323,6 +323,7 @@ typedef struct s_meta
   struct s_colour prev_arr[WINDOW_WIDTH + 1];
   struct s_colour curr_arr[WINDOW_WIDTH + 1];
   bool  low_quality;
+  bool  mid_quality;
 } t_meta;
 
 void    rt_mlxinit(t_meta *meta_data);
