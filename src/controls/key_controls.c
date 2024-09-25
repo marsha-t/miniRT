@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:54:15 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 13:58:19 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:20:51 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ int	handle_keypress(int key, void *param)
 	meta_data = (t_meta *)param;
 	if (key == KEY_ESC)
 		ft_close(meta_data);
+	if (meta_data->obj_select != 2 && meta_data->obj_select != 4)
+	{
+		meta_data->obj_option->size_a = NULL;
+		increase_size(meta_data, key);
+	}
+	else
+		increase_size_a(meta_data, key);
 	ft_key(key, meta_data);
 	ft_controls_status(meta_data, key, true);
 	ft_rotation_status(meta_data, key, true);

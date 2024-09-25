@@ -6,34 +6,43 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:51:15 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 14:06:51 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:53:28 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
 
-void	navigate_cycn(t_meta *meta_data, int key)
+void	navigate_cy(t_meta *meta_data, int key)
 {
 	t_cy		*cy;
-	t_cn		*cn;
 
 	cy = NULL;
-	cn = NULL;
 	if (meta_data->obj_select == 2 && key == NUMPAD_5)
 	{
 		cy = (t_cy *)meta_data->obj;
 		meta_data->obj_option->coord = &cy->coord;
 		meta_data->obj_option->size = &cy->diameter;
+		meta_data->obj_option->size_a = &cy->height;
+		meta_data->obj_option->orient = &cy->axis;
 		if (cy->next != NULL)
 			meta_data->obj = (void *)cy->next;
 		else
 			meta_data->obj = (void *)meta_data->cy;
 	}
+	navigate_cn(meta_data, key);
+}
+
+void	navigate_cn(t_meta *meta_data, int key)
+{
+	t_cn		*cn;
+
 	if (meta_data->obj_select == 4 && key == NUMPAD_5)
 	{
 		cn = (t_cn *)meta_data->obj;
 		meta_data->obj_option->coord = &cn->coord;
 		meta_data->obj_option->size = &cn->height;
+		meta_data->obj_option->size_a = &cn->radius;
+		meta_data->obj_option->orient = &cn->axis;
 		if (cn->next != NULL)
 			meta_data->obj = (void *)cn->next;
 		else
@@ -91,6 +100,7 @@ void	navigate_sppl(t_meta *meta_data, int key)
 	{
 		pl = (t_pl *)meta_data->obj;
 		meta_data->obj_option->coord = &pl->coord;
+		meta_data->obj_option->orient = &pl->normal;
 		if (pl->next != NULL)
 			meta_data->obj = (void *)pl->next;
 		else
