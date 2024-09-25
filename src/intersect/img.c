@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/25 13:00:06 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:53:08 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,72 +19,42 @@ void	gen_img(t_meta *meta_data)
 {
 	int			x;
 	int			y;
-	int			step_y;
-	int			step_x;
 	int			count;
-	t_colour	init;
 
 	y = 0;
-	count = 0;
-	if (meta_data->low_quality)
-	{
-		step_y = 3;
-		step_x = 3;
-	}
-	else if (meta_data->mid_quality)
-	{
-		step_y = 1;
-		step_x = 3;
-	}
-	else
-	{
-		step_x = 1;
-		step_y = 1;
-	}
-	init.r = 0;
-	init.g = 0;
-	init.b = 0;
-	while (count < WINDOW_WIDTH + 1)
-	{
-		meta_data->prev_arr[count] = init;
-		meta_data->curr_arr[count] = init;
-		count++;
-	}
 	while (y < WINDOW_HEIGHT)
 	{
 		x = 0;
 		count = 0;
 		while (x < WINDOW_WIDTH)
 		{
-			render_image(meta_data, x, y);
-			meta_data->curr_arr[x] = meta_data->pixel.final;
-			if (x > 0 && meta_data->mid_quality == true)
-				render_x(meta_data, x, y);
-			if (y > 0 && meta_data->low_quality == true)
-				render_y(meta_data, x, y);
-			x = x + step_x;
+			render(meta_data, x, y);
+			x = x + meta_data->step_x;
 		}
 		while (count < WINDOW_WIDTH + 1)
 		{
 			meta_data->prev_arr[count] = meta_data->curr_arr[count];
 			count++;
 		}
-		y = y + step_y;
+		y = y + meta_data->step_y;
 	}
 }
 
-void	render_x(t_meta *meta_data, int x, int y)
+void	init_colours(t_meta *meta_data)
 {
-	if (color_diff(meta_data->curr_arr[x - 3], meta_data->curr_arr[x]) \
-		> LOW_RES)
-	{
-		render_image(meta_data, x - 1, y);
-		meta_data->curr_arr[x - 1] = meta_data->pixel.final;
-		render_image(meta_data, x - 2, y);
-		meta_data->curr_arr[x - 2] = meta_data->pixel.final;
-	}
+	int			count;
+
+	count = 0;
+	if (meta_data->low_quality)
+		meta_data->step_y = 3;
 	else
-		interpolate_x(meta_data, meta_data->curr_arr[x - 3], x, y);
+		meta_data->step_y = 1;
+	while (count < WINDOW_WIDTH + 1)
+	{
+		meta_data->prev_arr[count] = meta_data->colour_init;
+		meta_data->curr_arr[count] = meta_data->colour_init;
+		count++;
+	}
 }
 
 int	create_trgb(int r, int g, int b)
@@ -120,25 +90,4 @@ void	ray_dir(int i, int j, t_meta *meta_data)
 	vec_subtract(&meta_data->pixel.ray, &pixel, &meta_data->camera->coord);
 	meta_data->pixel.ray.z = FOCAL_LENGTH;
 	vec_normalise(&meta_data->pixel.ray);
-}
-
-void	render_y(t_meta *meta_data, int x, int y)
-{
-	int	x_min;
-	int	y_min;
-
-	x_min = x - 3;
-	y_min = y - 3;
-	while (x_min <= x)
-	{
-		if (color_diff(meta_data->prev_arr[x_min], meta_data->curr_arr[x_min]) \
-			> LOW_RES)
-		{
-			render_image(meta_data, x_min, y - 1);
-			render_image(meta_data, x_min, y - 2);
-		}
-		else
-			interpolate_y(meta_data, meta_data->prev_arr[x_min], x_min, y);
-		x_min++;
-	}
 }

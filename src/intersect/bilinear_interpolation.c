@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 20:04:27 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/24 20:18:55 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:12:25 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	bilinear_interpolation(t_meta *meta_data, t_colour prev, int x, int y)
 // 	a2 = x - (meta_data->x - 3);
 // 	b1 = meta_data->y - y;
 // 	b2 = y - (meta_data->y - 3);
-// 	out.r = ((double)1 / (double)9) * ((((meta_data->q1.r * a1) + (meta_data->q3.r * a2)) * b1) \
+// 	out.r = ((double)1 / (double)9) * ((((meta_data->q1.r * a1) 
+// + (meta_data->q3.r * a2)) * b1) 
 // 		+ (((a1 * meta_data->q))))
 // }

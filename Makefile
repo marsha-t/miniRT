@@ -25,6 +25,9 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/parse/free_exit.c \
 				./src/parse/print_utils.c \
 				./src/parse/print_banner.c \
+				./src/parse/data_init.c \
+				./src/parse/parse.c \
+				./src/parse/mlx_init.c \
 				./src/intersect/prepare1.c \
 				./src/intersect/prepare2.c \
 				./src/intersect/img.c \
@@ -36,6 +39,7 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/intersect/intersect_prepare.c \
 				./src/intersect/get_normal.c \
 				./src/intersect/intersect_utils.c \
+				./src/intersect/render.c \
 				./src/light/final_colour.c \
 				./src/light/diffuse_specular.c \
 				./src/light/shadow.c \
@@ -49,7 +53,13 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/utils/misc_math.c \
 				./src/utils/vector_op1.c \
 				./src/utils/vector_op2.c \
-				./src/utils/vector_utils.c
+				./src/utils/vector_utils.c \
+				./src/controls/key_controls.c \
+				./src/controls/ft_keys.c \
+				./src/controls/camera_rotation.c \
+				./src/controls/camera_translation.c \
+				./src/controls/navigate.c \
+				./src/controls/object_select.c
 
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
 VPATH = src:lib:lib/libft

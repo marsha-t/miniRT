@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 19:59:07 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 13:02:42 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:32:27 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	interpolate_y(t_meta *meta_data, t_colour prev, int x, int y)
 	img_mlx_pixel_put(meta_data, x, y - 1, create_trgb(out.r, out.g, out.b));
 }
 
-
 double	color_diff(t_colour prev, t_colour curr)
 {
 	double	out;
@@ -60,27 +59,4 @@ double	color_diff(t_colour prev, t_colour curr)
 	out = sqrt(pow(prev.r - curr.r, 2) + pow(prev.g - curr.g, 2) + \
 		pow(prev.b - curr.b, 2));
 	return (out);
-}
-
-void	render_image(t_meta *meta_data, int x, int y)
-{
-	init_pixel(&meta_data->pixel);
-	ray_dir(x, y, meta_data);
-	intersect_closest(meta_data);
-	prepare_intersect(&meta_data->pixel);
-	if (meta_data->pixel.t >= 0 && meta_data->pixel.t != DBL_MAX)
-	{
-		get_checkerboard(meta_data);
-		gen_final_colour(meta_data);
-		img_mlx_pixel_put(meta_data, x, y,
-			create_trgb(meta_data->pixel.final.r,
-				meta_data->pixel.final.g, meta_data->pixel.final.b));
-	}
-	else
-	{
-		meta_data->pixel.final.r = 0;
-		meta_data->pixel.final.g = 0;
-		meta_data->pixel.final.b = 0;
-		img_mlx_pixel_put(meta_data, x, y, create_trgb(0, 0, 0));
-	}
 }
