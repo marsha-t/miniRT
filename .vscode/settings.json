@@ -1,6 +1,13 @@
 {
     "files.associations": {
         "iosfwd": "c",
-        "iterator": "c"
+        "iterator": "c",
+        "__node_handle": "c",
+        "minirt.h": "c",
+        "ios": "c",
+        "get_next_line.h": "c"
+    }
+    "[c]": {
+        "editor.defaultFormatter": "keyhr.42-c-format"
     }
 }
