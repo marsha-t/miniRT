@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 20:53:41 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/11 21:30:18 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/19 17:41:04 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_exit(t_meta *meta_data)
 		meta_data->light = NULL;
 		meta_data->light = light;
 	}
-	while (meta_data->sp_allocated && meta_data->spotlight != NULL)
+	while (meta_data->sl_allocated && meta_data->spotlight != NULL)
 	{
 		spotlight = spotlight->next;
 		free(meta_data->spotlight);
