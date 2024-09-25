@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 14:19:06 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 14:30:49 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:25:45 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,8 @@ void	render_x(t_meta *meta_data, int x, int y)
 void	render_y(t_meta *meta_data, int x, int y)
 {
 	int	x_min;
-	int	y_min;
 
 	x_min = x - 3;
-	y_min = y - 3;
 	while (x_min <= x)
 	{
 		if (color_diff(meta_data->prev_arr[x_min], meta_data->curr_arr[x_min]) \

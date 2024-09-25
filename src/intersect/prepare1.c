@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/17 21:25:18 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 18:00:32 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,22 @@ void	prepare_light(t_meta *meta_data)
 	t_light		*curr;
 	t_spotlight	*curr_spotlight;
 
-	meta_data->amlight->colour.r_n = meta_data->amlight->colour.r / 255;
-	meta_data->amlight->colour.g_n = meta_data->amlight->colour.g / 255;
-	meta_data->amlight->colour.b_n = meta_data->amlight->colour.b / 255;
+	if (meta_data->amlight_allocated)
+	{
+		meta_data->amlight->colour.r_n = meta_data->amlight->colour.r / 255;
+		meta_data->amlight->colour.g_n = meta_data->amlight->colour.g / 255;
+		meta_data->amlight->colour.b_n = meta_data->amlight->colour.b / 255;
+	}
 	curr = meta_data->light;
 	curr_spotlight = meta_data->spotlight;
-	while (curr)
+	while (meta_data->light_allocated && curr)
 	{
 		curr->colour.r_n = curr->colour.r / 255;
 		curr->colour.g_n = curr->colour.g / 255;
 		curr->colour.b_n = curr->colour.b / 255;
 		curr = curr->next;
 	}
-	while (curr_spotlight)
+	while (meta_data->sl_allocated && curr_spotlight)
 	{
 		curr_spotlight->colour.r_n = curr_spotlight->colour.r / 255;
 		curr_spotlight->colour.g_n = curr_spotlight->colour.g / 255;

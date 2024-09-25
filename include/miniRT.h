@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 16:35:59 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:43:38 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@
 # include "../libft/get_next_line.h"
 # include "../libft/libft.h"
 # include "../mlx/mlx.h"
+# include "../mlx_mac/mlx.h"
 # include <stdint.h>
 
 typedef struct s_img

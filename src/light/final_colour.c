@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   final_colour.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 20:49:00 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 17:22:06 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/25 18:02:15 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ void	gen_final_colour(t_meta *meta_data)
 void	init_final_colour(t_meta *meta_data, t_colour *diffuse,
 		t_colour *specular, t_colour *ambient)
 {
-	ambient->r = meta_data->amlight->colour.r
-		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.r_n);
-	ambient->g = meta_data->amlight->colour.g
-		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.g_n);
-	ambient->b = meta_data->amlight->colour.b
-		* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.b_n);
+	if (meta_data->amlight_allocated)
+	{
+		ambient->r = meta_data->amlight->colour.r
+			* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.r_n);
+		ambient->g = meta_data->amlight->colour.g
+			* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.g_n);
+		ambient->b = meta_data->amlight->colour.b
+			* meta_data->amlight->amlight_ratio * (meta_data->pixel.final.b_n);
+	}
 	diffuse->r = 0;
 	diffuse->g = 0;
 	diffuse->b = 0;
