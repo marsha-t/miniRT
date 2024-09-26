@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_sphere.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 19:07:18 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/11 22:51:21 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 09:44:17 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_sp	*check_sp_args(t_meta *meta_data, char **argv)
 
 	if (pointer_count(argv) < 4 || pointer_count(argv) > 6)
 	{
-		ft_printf(RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB\
+		ft_printf(RED"Incorrect SP data <cy X,Y,Z diameter RGB\
 			[checkerboard] [bumpmap]>\n"RST);
 		free_args(meta_data, argv);
 		exit(EXIT_FAILURE);

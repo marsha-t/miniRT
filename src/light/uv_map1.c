@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 20:17:13 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/03 16:43:05 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/26 09:40:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	uv_map_sp(t_pixel *pixel, t_sp *sphere, double *u, double *v)
 	if (*v < 0)
 		*v += (2 * M_PI);
 	*u = acos(temp.y / sphere->radius);
-	*u /= (2 * M_PI);
-	*v /= (M_PI);
+	*v /= (2 * M_PI);
+	*u /= (M_PI);
 }
 
 /*

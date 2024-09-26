@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_cylinder.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 19:07:18 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/11 22:50:54 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 09:44:59 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ t_cy	*check_cy_args(t_meta *meta_data, char **argv)
 {
 	t_cy	*cy;
 
-	if (pointer_count(argv) < 4 || pointer_count(argv) > 6)
-		cylinder_exit(meta_data, argv, RED"Incorrect PL data <cy X,Y,Z NVector diameter height RGB\
+	if (pointer_count(argv) < 6 || pointer_count(argv) > 8)
+		cylinder_exit(meta_data, argv, RED"Incorrect CY data <cy X,Y,Z NVector diameter height RGB\
 			[checkerboard] [bumpmap]>\n"RST);
 	cy = malloc(sizeof(t_cy));
 	if (!cy)
