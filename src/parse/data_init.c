@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:53:09 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 14:27:42 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:29:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,24 @@ void	meta_data_init_a(t_meta *meta_data)
 	meta_data->colour_init.b = 0;
 	meta_data->step_x = 3;
 	meta_data->step_y = 1;
+	meta_data->move = false;
+	meta_data->rotate = false;
+	meta_data->move_x_i = false;
+	meta_data->move_x_d = false;
+	meta_data->move_y_i = false;
+	meta_data->move_y_d = false;
+	meta_data->move_z_i = false;
+	meta_data->move_z_d = false;
+	meta_data_init_b(meta_data);
+}
+
+void	meta_data_init_b(t_meta *meta_data)
+{
+	meta_data->rot_x_i = false;
+	meta_data->rot_x_d = false;
+	meta_data->rot_y_i = false;
+	meta_data->rot_y_d = false;
+	meta_data->rot_z_i = false;
+	meta_data->rot_z_d = false;
+	meta_data->rot_reset = false;
 }

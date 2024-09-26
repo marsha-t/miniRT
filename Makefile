@@ -66,8 +66,8 @@ VPATH = src:lib:lib/libft
 
 ifeq ($(shell uname), Linux)
 	INCLUDES = -I/usr/include -Imlx -O3
-	MLX_FLAGS = -Lmlx -lmlx -L/usr/lib/X11 -lXext -lX11
 	MLX_DIR = ./mlx
+	MLX_FLAGS = -L$(MLX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm
 	MLX_LIB = $(MLX_DIR)/libmlx_Linux.a
 else
 	INCLUDES = -I/opt/X11/include -Imlx

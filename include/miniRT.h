@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 19:51:57 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:28:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,67 +37,92 @@
 # define LOW_RES 45
 # define MID_RES 22
 # define HIGH_RES 5
-
-# define KEY_ESC 53
-# define NUMPAD_0 82
-# define NUMPAD_1 83
-# define NUMPAD_2 84
-# define NUMPAD_3 85
-# define NUMPAD_4 86
-# define NUMPAD_5 87
-# define NUMPAD_6 88
-# define NUMPAD_7 89
-# define NUMPAD_8 91
-# define NUMPAD_9 92
-# define NUMPAD_PLUS 69
-# define NUMPAD_MIN 78
-# define ARROW_LEFT 126
-# define ARROW_UP 123
-# define ARROW_DOWN 125
-# define ARROW_RIGHT 124
-# define KEY_Q 12
-# define KEY_A 0
-# define KEY_W 13
-# define KEY_S 1
-# define KEY_E 14
-# define KEY_D 2
-# define KEY_R 15
-# define KEY_U 32
-# define KEY_J 38
-# define KEY_I 34
-# define KEY_K 40
-# define KEY_O 31
-# define KEY_L 37
-# define KEY_1 18
-# define KEY_2 19
-# define KEY_3 20
-# define KEY_4 21
-# define KEY_5 23
-# define KEY_6 22
-# define KEY_7 26
 # define DBL_MAX 1.7976931348623158e+308
 # define INTENSITY_SCALE 5
 
-// # define NUMPAD_0 65438
-// # define NUMPAD_1 65436
-// # define NUMPAD_2 65433
-// # define NUMPAD_3 65435
-// # define NUMPAD_4 65430
-// # define NUMPAD_5 65437
-// # define NUMPAD_6 65432
-// # define NUMPAD_7 65429
-// # define NUMPAD_8 65431
-// # define NUMPAD_9 65434
-// # define ARROW_LEFT 65361
-// # define ARROW_UP 65362
-// # define ARROW_DOWN 65364
-// # define ARROW_RIGHT 65363
-// # define KEY_Q 113
-// # define KEY_A 97
-// # define KEY_W 119
-// # define KEY_S 115
-// # define KEY_E 101
-// # define KEY_D 100
+// #ifdef ___APPLE__
+// 	#pragma message("Compiling for macOS")
+// #elif	__linux__
+// 	#pragma message("Compiling for Linux")
+// #endif
+
+#ifdef __APPLE__
+	# define KEY_ESC 53
+	# define NUMPAD_0 82
+	# define NUMPAD_1 83
+	# define NUMPAD_2 84
+	# define NUMPAD_3 85
+	# define NUMPAD_4 86
+	# define NUMPAD_5 87
+	# define NUMPAD_6 88
+	# define NUMPAD_7 89
+	# define NUMPAD_8 91
+	# define NUMPAD_9 92
+	# define NUMPAD_PLUS 69
+	# define NUMPAD_MIN 78
+	# define ARROW_LEFT 126
+	# define ARROW_UP 123
+	# define ARROW_DOWN 125
+	# define ARROW_RIGHT 124
+	# define KEY_Q 12
+	# define KEY_A 0
+	# define KEY_W 13
+	# define KEY_S 1
+	# define KEY_E 14
+	# define KEY_D 2
+	# define KEY_R 15
+	# define KEY_U 32
+	# define KEY_J 38
+	# define KEY_I 34
+	# define KEY_K 40
+	# define KEY_O 31
+	# define KEY_L 37
+	# define KEY_1 18
+	# define KEY_2 19
+	# define KEY_3 20
+	# define KEY_4 21
+	# define KEY_5 23
+	# define KEY_6 22
+	# define KEY_7 26
+#elif __linux__
+	# define KEY_ESC 65307
+	# define NUMPAD_0 65438
+	# define NUMPAD_1 65436
+	# define NUMPAD_2 65433
+	# define NUMPAD_3 65435
+	# define NUMPAD_4 65430
+	# define NUMPAD_5 65437
+	# define NUMPAD_6 65432
+	# define NUMPAD_7 65429
+	# define NUMPAD_8 65431
+	# define NUMPAD_9 65434
+	# define NUMPAD_PLUS 65451
+	# define NUMPAD_MIN 65453
+	# define ARROW_LEFT 65361
+	# define ARROW_UP 65362
+	# define ARROW_DOWN 65364
+	# define ARROW_RIGHT 65363
+	# define KEY_Q 113
+	# define KEY_A 97
+	# define KEY_W 119
+	# define KEY_S 115
+	# define KEY_E 101
+	# define KEY_D 100
+	# define KEY_R 114
+	# define KEY_U 117
+	# define KEY_J 106
+	# define KEY_I 105
+	# define KEY_K 107
+	# define KEY_O 111
+	# define KEY_L 108
+	# define KEY_1 49
+	# define KEY_2 50
+	# define KEY_3 51
+	# define KEY_4 52
+	# define KEY_5 53
+	# define KEY_6 54
+	# define KEY_7 55
+#endif
 
 # include <errno.h>
 # include <fcntl.h>
@@ -365,6 +390,7 @@ void					clean_data(t_meta *meta_data, char *singleline,
 							int index);
 void					meta_data_init(t_meta *meta_data);
 void					meta_data_init_a(t_meta *meta_data);
+void					meta_data_init_b(t_meta *meta_data);
 void					rotation(t_meta *meta_data);
 void					rotation_a(t_meta *meta_data);
 void					rotation_b(t_meta *meta_data);
@@ -449,6 +475,7 @@ int						ft_close(t_meta *meta_data);
 void					ft_objectselect(t_meta *meta_data, int key);
 void					object_select_a(t_meta *meta_data, int key);
 void					object_select_b(t_meta *meta_data, int key);
+void					object_select_c(t_meta *meta_data, int key);
 void					ft_controls(t_meta *meta_data);
 void					ft_controls_status(t_meta *meta_data, int key,
 							bool status);

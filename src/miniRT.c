@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 	draw(&meta_data);
 	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, \
 		meta_data.img, 0, 0);
-	mlx_hook(meta_data.mlx_win, 2, 0, handle_keypress, &meta_data);
+	mlx_hook(meta_data.mlx_win, 2, 1L << 0, handle_keypress, &meta_data);
 	mlx_hook(meta_data.mlx_win, 3, 1L << 1, handle_keyrelease, &meta_data);
 	mlx_hook(meta_data.mlx_win, 17, 0, ft_close, &meta_data);
 	mlx_loop_hook(meta_data.mlx_ptr, &update, &meta_data);
@@ -35,8 +35,10 @@ int	main(int argc, char **argv)
 
 void	draw(t_meta *meta_data)
 {
-	ft_controls(meta_data);
-	if (meta_data->rotate == true)
+	if (meta_data->move == true)
+		ft_controls(meta_data);
+	if (meta_data->rotate == true && meta_data->obj_select != 1 && \
+		meta_data->obj_select != 5 && meta_data->obj_select != 6)
 		rotation(meta_data);
 	prepare_data(meta_data);
 	gen_img(meta_data);
