@@ -56,8 +56,8 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/utils/vector_utils.c \
 				./src/controls/key_controls.c \
 				./src/controls/ft_keys.c \
-				./src/controls/camera_rotation.c \
-				./src/controls/camera_translation.c \
+				./src/controls/rotation.c \
+				./src/controls/translation.c \
 				./src/controls/navigate.c \
 				./src/controls/object_select.c
 

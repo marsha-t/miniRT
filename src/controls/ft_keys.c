@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:52:23 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 14:51:12 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:55:34 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	ft_key(int key, void *param)
 
 	meta_data = (t_meta *)param;
 	ft_objectselect(meta_data, key);
-	navigate_cycn(meta_data, key);
+	navigate_cy(meta_data, key);
+	navigate_cn(meta_data, key);
 	navigate_light(meta_data, key);
 	navigate_sppl(meta_data, key);
-	increase_size(meta_data, key);
 	if (key == KEY_W)
 		meta_data->low_quality = true;
 	if (key == KEY_S)
@@ -36,4 +36,23 @@ int	ft_close(t_meta *meta_data)
 	free(meta_data->mlx_ptr);
 	exit(0);
 	return (0);
+}
+
+void	increase_size_a(t_meta *meta_data, int key)
+{
+	double	*size;
+	double	*size_a;
+
+	size = meta_data->obj_option->size;
+	size_a = meta_data->obj_option->size_a;
+	if (key == KEY_Q && *size < DBL_MAX)
+	{
+		*size_a += 1;
+		*size += 1;
+	}
+	if (key == KEY_A && *size > 1)
+	{
+		*size -= 1;
+		*size_a -= 1;
+	}
 }

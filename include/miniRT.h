@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 16:35:59 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:51:57 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@
 # include "../libft/get_next_line.h"
 # include "../libft/libft.h"
 # include "../mlx/mlx.h"
+# include "../mlx_mac/mlx.h"
 # include <stdint.h>
 
 typedef struct s_img
@@ -224,7 +225,7 @@ typedef struct s_cn
 	t_vector			coord;
 	t_vector			axis;
 	double				angle;
-  double        angle_rad;
+	double				angle_rad;
 	double				radius;
 	double				height;
 	t_vector			base;
@@ -264,7 +265,9 @@ typedef struct s_objoption
 {
 	t_vector			*coord;
 	t_colour			*colour;
+	t_vector			*orient;
 	double				*size;
+	double				*size_a;
 }						t_objoption;
 
 typedef struct s_meta
@@ -362,9 +365,9 @@ void					clean_data(t_meta *meta_data, char *singleline,
 							int index);
 void					meta_data_init(t_meta *meta_data);
 void					meta_data_init_a(t_meta *meta_data);
-void					translate_camera(t_meta *meta_data);
-void					translate_camera_a(t_meta *meta_data);
-void					translate_camera_b(t_meta *meta_data);
+void					rotation(t_meta *meta_data);
+void					rotation_a(t_meta *meta_data);
+void					rotation_b(t_meta *meta_data);
 void					translate_light(t_vector *vector, int key);
 void					translate_spotlight(t_vector *vector, int key);
 void					ft_check_args(int argc, char **argv);
@@ -449,13 +452,15 @@ void					object_select_b(t_meta *meta_data, int key);
 void					ft_controls(t_meta *meta_data);
 void					ft_controls_status(t_meta *meta_data, int key,
 							bool status);
-void					navigate_cycn(t_meta *meta_data, int key);
+void					navigate_cn(t_meta *meta_data, int key);
+void					navigate_cy(t_meta *meta_data, int key);
 void					navigate_light(t_meta *meta_data, int key);
 void					navigate_sppl(t_meta *meta_data, int key);
 void					increase_size(t_meta *meta_data, int key);
-void					rotate_camera_z(t_vector *orientation, double theta_x);
-void					rotate_camera_x(t_vector *orientation, double theta_x);
-void					rotate_camera_y(t_vector *orientation, double theta_y);
+void					increase_size_a(t_meta *meta_data, int key);
+void					rotate_z(t_vector *orientation, double theta_x);
+void					rotate_x(t_vector *orientation, double theta_x);
+void					rotate_y(t_vector *orientation, double theta_y);
 void					ft_rotation_status(t_meta *meta_data, int key,
 							bool status);
 void					map_draw(t_meta *meta_data);

@@ -36,8 +36,8 @@ int	main(int argc, char **argv)
 void	draw(t_meta *meta_data)
 {
 	ft_controls(meta_data);
-	if (meta_data->obj_select == 7)
-		translate_camera(meta_data);
+	if (meta_data->rotate == true)
+		rotation(meta_data);
 	prepare_data(meta_data);
 	gen_img(meta_data);
 }

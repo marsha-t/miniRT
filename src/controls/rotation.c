@@ -6,13 +6,13 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:39:56 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 14:01:57 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:43:57 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
 
-void	rotate_camera_y(t_vector *orientation, double theta_y)
+void	rotate_y(t_vector *orientation, double theta_y)
 {
 	double	cos_theta;
 	double	sin_theta;
@@ -27,7 +27,7 @@ void	rotate_camera_y(t_vector *orientation, double theta_y)
 	orientation->z = new_z;
 }
 
-void	rotate_camera_x(t_vector *orientation, double theta_x)
+void	rotate_x(t_vector *orientation, double theta_x)
 {
 	double	cos_theta;
 	double	sin_theta;
@@ -42,7 +42,7 @@ void	rotate_camera_x(t_vector *orientation, double theta_x)
 	orientation->z = new_z;
 }
 
-void	rotate_camera_z(t_vector *orientation, double theta_z)
+void	rotate_z(t_vector *orientation, double theta_z)
 {
 	double	cos_theta;
 	double	sin_theta;
