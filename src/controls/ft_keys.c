@@ -33,7 +33,7 @@ int	ft_close(t_meta *meta_data)
 {
 	mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
 	mlx_destroy_image(meta_data->mlx_ptr, meta_data->img);
-	mlx_destroy_display(meta_data->mlx_ptr);
+	// mlx_destroy_display(meta_data->mlx_ptr);
 	free(meta_data->mlx_ptr);
 	free_exit(meta_data);
 	exit(0);
