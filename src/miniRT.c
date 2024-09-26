@@ -20,6 +20,7 @@ int	main(int argc, char **argv)
 	rt_mlxinit(&meta_data);
 	meta_data_init(&meta_data);
 	parse_data(&meta_data, argc, argv);
+	setup_handlesignal(&meta_data);
 	draw(&meta_data);
 	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, \
 		meta_data.img, 0, 0);

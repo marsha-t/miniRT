@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 20:53:41 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/19 17:41:04 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/26 12:43:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	free_exit(t_meta *meta_data)
 	light = NULL;
 	light = meta_data->light;
 	spotlight = meta_data->spotlight;
-	if (meta_data->amlight != NULL)
+	if (meta_data->amlight_allocated && meta_data->amlight != NULL)
 		free(meta_data->amlight);
-	if (meta_data->camera != NULL)
+	if (meta_data->camera_allocated && meta_data->camera != NULL)
 		free(meta_data->camera);
 	while (meta_data->light_allocated && meta_data->light != NULL)
 	{

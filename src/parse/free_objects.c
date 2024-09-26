@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_objects.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 20:48:30 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/11 20:53:09 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:02:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	free_objects(t_meta *meta_data)
 	free_planes(meta_data);
 	free_cones(meta_data);
 	free_cylinders(meta_data);
+	free(meta_data->obj_option);
 }
 
 void	free_spheres(t_meta *meta_data)

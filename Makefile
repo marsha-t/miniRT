@@ -59,7 +59,8 @@ MINIRT_SRCS = 	./src/miniRT.c \
 				./src/controls/rotation.c \
 				./src/controls/translation.c \
 				./src/controls/navigate.c \
-				./src/controls/object_select.c
+				./src/controls/object_select.c \
+				./src/controls/handle_signal.c
 
 MINIRT_OBJS = $(MINIRT_SRCS:.c=.o)
 VPATH = src:lib:lib/libft
