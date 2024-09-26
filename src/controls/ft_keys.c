@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_keys.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:52:23 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 19:55:34 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:58:36 by emaravil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ int	ft_close(t_meta *meta_data)
 {
 	mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
 	mlx_destroy_image(meta_data->mlx_ptr, meta_data->img);
+	// mlx_destroy_display(meta_data->mlx_ptr);
 	free(meta_data->mlx_ptr);
+	free_exit(meta_data);
 	exit(0);
 	return (0);
 }

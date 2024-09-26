@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:53:09 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 11:29:41 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/26 13:20:46 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,7 @@ void	meta_data_init_b(t_meta *meta_data)
 	meta_data->rot_z_i = false;
 	meta_data->rot_z_d = false;
 	meta_data->rot_reset = false;
+	meta_data->pixel.theta_x = 0;
+	meta_data->pixel.theta_y = 0;
+	meta_data->pixel.theta_z = 0;
 }

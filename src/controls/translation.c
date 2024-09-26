@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   translation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:41:34 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 11:37:13 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/26 13:21:38 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	rotation_b(t_meta *meta_data)
 	}
 	if (meta_data->rot_reset)
 	{
+		printf("pressed reset\n");
 		meta_data->pixel.theta_x = 0;
 		meta_data->pixel.theta_y = 0;
 		meta_data->pixel.theta_z = 0;

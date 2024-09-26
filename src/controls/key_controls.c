@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_controls.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:54:15 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 11:37:33 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/26 13:39:01 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ int	handle_keypress(int key, void *param)
 		NUMPAD_MIN || key == KEY_Q || key == KEY_A)
 		meta_data->move = true;
 	if (key == KEY_U || key == KEY_J || key == KEY_I || \
-		key == KEY_K || key == KEY_O || key == KEY_L)
+		key == KEY_K || key == KEY_O || key == KEY_L || \
+		key == KEY_R)
 		meta_data->rotate = true;
 	return (0);
 }

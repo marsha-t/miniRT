@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 11:28:40 by marvin           ###   ########.fr       */
+/*   Updated: 2024/09/26 13:41:23 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-// # include <float.h>
+# include <signal.h>
 # include "../libft/ft_printf.h"
 # include "../libft/get_next_line.h"
 # include "../libft/libft.h"
@@ -368,6 +368,8 @@ typedef struct s_meta
 }						t_meta;
 
 void					rt_mlxinit(t_meta *meta_data);
+void					handle_signal(int signal, siginfo_t *siginfo, void *context);
+void					setup_handlesignal(t_meta *meta_data);
 void					draw(t_meta *meta_data);
 int						handle_keyrelease(int key, void *param);
 int						handle_keypress(int key, void *param);
