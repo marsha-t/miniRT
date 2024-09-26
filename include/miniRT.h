@@ -6,7 +6,7 @@
 /*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 13:41:23 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 18:24:29 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -487,9 +487,9 @@ void					navigate_light(t_meta *meta_data, int key);
 void					navigate_sppl(t_meta *meta_data, int key);
 void					increase_size(t_meta *meta_data, int key);
 void					increase_size_a(t_meta *meta_data, int key);
-void					rotate_z(t_vector *orientation, double theta_x);
-void					rotate_x(t_vector *orientation, double theta_x);
-void					rotate_y(t_vector *orientation, double theta_y);
+void					rotate_z(t_meta *meta_data, t_vector *orientation, double theta_z);
+void					rotate_x(t_meta *meta_data, t_vector *orientation, double theta_x);
+void					rotate_y(t_meta *meta_data, t_vector *orientation, double theta_y);
 void					ft_rotation_status(t_meta *meta_data, int key,
 							bool status);
 void					map_draw(t_meta *meta_data);
