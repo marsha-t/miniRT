@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 17:54:46 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/05 17:36:23 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/26 19:30:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	prepare_intersect(t_pixel *pixel)
 	else if (pixel->surface == SF_PLANE)
 		prepare_intersect_pl(pixel);
 	else if (pixel->surface == SF_CY_CURVE || pixel->surface == SF_CY_BASE_B
-		|| pixel->surface == SF_CY_CURVE)
+		|| pixel->surface == SF_CY_BASE_T)
 		prepare_intersect_cy(pixel);
 	else if (pixel->surface == SF_CONE_CURVE || pixel->surface == SF_CONE_BASE)
 		prepare_intersect_cn(pixel);
