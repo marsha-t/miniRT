@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_select.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:50:31 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 19:49:53 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:14:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	ft_objectselect(t_meta *meta_data, int key)
 		meta_data->obj_option->size = &meta_data->cy->diameter;
 		meta_data->obj_option->size_a = &meta_data->cy->height;
 		meta_data->obj_option->orient = &meta_data->cy->axis;
+		meta_data->orient = meta_data->cy->axis;
 		meta_data->obj_select = 2;
 	}
 	object_select_a(meta_data, key);
@@ -53,14 +54,6 @@ void	object_select_a(t_meta *meta_data, int key)
 		meta_data->obj_option->size = &meta_data->spotlight->brightness;
 		meta_data->obj_select = 6;
 	}
-	else if (key == KEY_3 && meta_data->pl_allocated)
-	{
-		printf(Y"PLANE SELECTED\n"RST);
-		meta_data->obj = (void *)meta_data->pl;
-		meta_data->obj_option->coord = &meta_data->pl->coord;
-		meta_data->obj_option->orient = &meta_data->pl->normal;
-		meta_data->obj_select = 3;
-	}
 	object_select_b(meta_data, key);
 }
 
@@ -74,6 +67,7 @@ void	object_select_b(t_meta *meta_data, int key)
 		meta_data->obj_option->size = &meta_data->cn->radius;
 		meta_data->obj_option->size_a = &meta_data->cn->height;
 		meta_data->obj_option->orient = &meta_data->cn->axis;
+		meta_data->orient = meta_data->cn->axis;
 		meta_data->obj_select = 4;
 	}
 	else if (key == KEY_7 && meta_data->camera_allocated)
@@ -83,6 +77,21 @@ void	object_select_b(t_meta *meta_data, int key)
 		meta_data->obj_option->coord = &meta_data->camera->coord;
 		meta_data->obj_option->size = &meta_data->camera->fov;
 		meta_data->obj_option->orient = &meta_data->camera->orient;
+		meta_data->orient = meta_data->camera->orient;
 		meta_data->obj_select = 7;
+	}
+	object_select_c(meta_data, key);
+}
+
+void	object_select_c(t_meta *meta_data, int key)
+{
+	if (key == KEY_3 && meta_data->pl_allocated)
+	{
+		printf(Y"PLANE SELECTED\n"RST);
+		meta_data->obj = (void *)meta_data->pl;
+		meta_data->obj_option->coord = &meta_data->pl->coord;
+		meta_data->obj_option->orient = &meta_data->pl->normal;
+		meta_data->orient = meta_data->pl->normal;
+		meta_data->obj_select = 3;
 	}
 }

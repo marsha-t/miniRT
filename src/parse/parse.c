@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:47:33 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 18:24:40 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:22:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	parse_data(t_meta *meta_data, int argc, char **argv)
 		printf(RED"No camera allocated!\n"RST);
 		exit(EXIT_FAILURE);
 	}
+	meta_data->obj_option->orient = &meta_data->camera->orient;
+	meta_data->obj_option->coord = &meta_data->camera->coord;
 	meta_data->orient = meta_data->camera->orient;
 }
 
