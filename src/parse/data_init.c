@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:53:09 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 21:17:12 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:28:18 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ void	meta_data_init(t_meta *meta_data)
 	meta_data->pixel.theta_x = 0;
 	meta_data->pixel.theta_y = 0;
 	meta_data->pixel.theta_z = 0;
+	meta_data->pixel.cam_theta_x = 0;
+	meta_data->pixel.cam_theta_y = 0;
+	meta_data->pixel.cam_theta_z = 0;
 	meta_data->light = NULL;
 	meta_data->spotlight = NULL;
 	meta_data->sp = NULL;

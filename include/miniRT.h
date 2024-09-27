@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/27 17:04:26 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/27 17:27:14 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,6 +284,9 @@ typedef struct s_pixel
 	double				theta_x;
 	double				theta_y;
 	double				theta_z;
+	double				cam_theta_x;
+	double				cam_theta_y;
+	double				cam_theta_z;
 }						t_pixel;
 
 typedef struct s_objoption
