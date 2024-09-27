@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_controls.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:54:15 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 13:39:01 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/26 21:20:15 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ int	update(t_meta *meta_data)
 		mlx_destroy_image(meta_data->mlx_ptr, meta_data->img);
 		meta_data->img = mlx_new_image(meta_data->mlx_ptr, WINDOW_WIDTH, \
 			WINDOW_HEIGHT);
+		meta_data->addr = mlx_get_data_addr(meta_data->img, \
+			&meta_data->bits_per_pixel, &meta_data->line_length, \
+			&meta_data->endian);
+		if (!meta_data->addr)
+		{
+			printf("here!!\n");
+			exit (EXIT_FAILURE);
+		}
 		draw(meta_data);
 		mlx_put_image_to_window(meta_data->mlx_ptr, meta_data->mlx_win, \
 			meta_data->img, 0, 0);

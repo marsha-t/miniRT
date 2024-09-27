@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/25 16:50:15 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/27 17:10:26 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ void	ray_dir(int i, int j, t_meta *meta_data)
 	vec_multiply_scalar(&temp1, &meta_data->img_right, ((2 * ((double)i + 0.5)
 				/ (double)(WINDOW_WIDTH)) - 1) * (meta_data->img_width / 2)
 		* meta_data->aspect_ratio);
-	vec_add(&temp2, &meta_data->camera->orient, &temp1);
+	vec_add(&temp2, &meta_data->img_forward, &temp1);
+
 	vec_multiply_scalar(&temp1, &meta_data->img_up, (meta_data->img_width / 2)
 		* (1 - (2 * ((double)j + 0.5) / (double)WINDOW_HEIGHT)));
 	vec_add(&temp2, &temp2, &temp1);
