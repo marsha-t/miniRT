@@ -48,26 +48,12 @@ void	draw(t_meta *meta_data)
 void	img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color)
 {
 	char	*dst;
-
-	 if (x < 0 || y < 0 || x >= WINDOW_WIDTH || y >= WINDOW_HEIGHT)
-        return;
-
-    if (!meta_data )
-    {
-        fprintf(stderr, "Error: meta_data  is not initialized.\n");
-        return;
-    }
-	if (!meta_data->addr)
+	if (!(x < 0 || y < 0 || x >= WINDOW_WIDTH || y >= WINDOW_HEIGHT))
 	{
-		fprintf(stderr, "Error: meta_data->addr is not initialized.\n");
-        return;
-	}
-	// if (!(x < 0 || y < 0 || x >= WINDOW_WIDTH || y >= WINDOW_HEIGHT))
-	// {
 		dst = meta_data->addr + (y * meta_data->line_length + x * \
 			(meta_data->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
-	// }
+	}
 }
 
 void	increase_size(t_meta *meta_data, int key)
