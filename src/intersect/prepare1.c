@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prepare1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/25 18:00:32 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:16:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	prepare_img(t_meta *meta_data)
 	meta_data->img_width = tan(fov_rad / 2) * 2;
 	meta_data->img_height = meta_data->img_width / meta_data->aspect_ratio;
 	img_basis_vec(meta_data);
+	if (meta_data->rotate == true && meta_data->obj_select == 7)
+		rotate_camera_x(meta_data);
 }
 
 /*	img_basis_vec calculates the right and up vectors for image plane
@@ -42,20 +44,23 @@ void	img_basis_vec(t_meta *meta_data)
 {
 	t_vector	world_up;
 
+	meta_data->img_forward.x = meta_data->camera->orient.x;
+	meta_data->img_forward.y = meta_data->camera->orient.y;
+	meta_data->img_forward.z = meta_data->camera->orient.z;
 	world_up.x = 0;
 	world_up.y = 1;
 	world_up.z = 0;
-	if (vec_cmp_num(&meta_data->camera->orient, 0, 1, 0)
-		|| vec_cmp_num(&meta_data->camera->orient, 0, -1, 0))
+	if (vec_cmp_num(&meta_data->img_forward, 0, 1, 0)
+		|| vec_cmp_num(&meta_data->img_forward, 0, -1, 0))
 	{
 		world_up.x = 0;
 		world_up.y = 0;
 		world_up.z = 1;
 	}
 	vec_cross_product(&meta_data->img_right, &world_up,
-		&meta_data->camera->orient);
+		&meta_data->img_forward);
 	vec_normalise(&meta_data->img_right);
-	vec_cross_product(&meta_data->img_up, &meta_data->camera->orient,
+	vec_cross_product(&meta_data->img_up, &meta_data->img_forward,
 		&meta_data->img_right);
 	vec_normalise(&meta_data->img_up);
 }

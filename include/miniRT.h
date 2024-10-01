@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 18:24:29 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:22:07 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 # define SF_CONE_BASE 7
 # define SQSIZE_FLAT 5
 
-# define WINDOW_WIDTH 1000
-# define WINDOW_HEIGHT 800
+# define WINDOW_WIDTH 300
+# define WINDOW_HEIGHT 300
 # define FOCAL_LENGTH 0.5
 # define LOW_RES 45
 # define MID_RES 22
@@ -284,6 +284,9 @@ typedef struct s_pixel
 	double				theta_x;
 	double				theta_y;
 	double				theta_z;
+	double				cam_theta_x;
+	double				cam_theta_y;
+	double				cam_theta_z;
 }						t_pixel;
 
 typedef struct s_objoption
@@ -313,6 +316,7 @@ typedef struct s_meta
 	double				img_height;
 	t_vector			img_up;
 	t_vector			img_right;
+	t_vector			img_forward;
 	t_vector			img_center;
 	t_pixel				pixel;
 	int					row;
@@ -366,6 +370,8 @@ typedef struct s_meta
 	int					step_x;
 	t_colour			colour_init;
 }						t_meta;
+
+typedef void (*rotate_ft)(t_vector *orientation, double theta);
 
 void					rt_mlxinit(t_meta *meta_data);
 void					handle_signal(int signal, siginfo_t *siginfo, void *context);
@@ -487,9 +493,9 @@ void					navigate_light(t_meta *meta_data, int key);
 void					navigate_sppl(t_meta *meta_data, int key);
 void					increase_size(t_meta *meta_data, int key);
 void					increase_size_a(t_meta *meta_data, int key);
-void					rotate_z(t_meta *meta_data, t_vector *orientation, double theta_z);
-void					rotate_x(t_meta *meta_data, t_vector *orientation, double theta_x);
-void					rotate_y(t_meta *meta_data, t_vector *orientation, double theta_y);
+void					rotate_z(t_vector *orientation, double theta_z);
+void					rotate_x(t_vector *orientation, double theta_x);
+void					rotate_y(t_vector *orientation, double theta_y);
 void					ft_rotation_status(t_meta *meta_data, int key,
 							bool status);
 void					map_draw(t_meta *meta_data);
@@ -509,6 +515,12 @@ void					prepare_sp(t_sp *start);
 void					prepare_pl(t_pl *start);
 void					prepare_cy(t_cy *start);
 void					prepare_cn(t_cn *start);
+
+// Rotate camera: rotation_camera.c
+void	rotate_camera_vectors(t_meta *meta_data);
+void	rotate_camera_x(t_meta *meta_data);
+void	rotate_camera_y(t_meta *meta_data);
+void	rotate_camera_z(t_meta *meta_data);
 
 // Prepare image: img.c
 void					gen_img(t_meta *meta_data);
@@ -682,5 +694,6 @@ int						vec_cmp_num(t_vector *vec, double x, double y,
 
 // Miscellaneous math functions: misc_math.c
 double					deg_to_rad(int degree);
+
 
 #endif

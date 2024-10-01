@@ -3,64 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   rotation.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:39:56 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 18:39:02 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/09/27 18:08:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
 
-void	rotate_y(t_meta *meta_data, t_vector *orientation, double theta_y)
+void	rotate_y(t_vector *orientation, double theta_y)
 {
 	double	cos_theta;
 	double	sin_theta;
 	double	new_x;
 	double	new_z;
 
+	if (theta_y == 0)
+		return ;
 	cos_theta = cos(theta_y);
 	sin_theta = sin(theta_y);
-	new_x = (cos_theta * meta_data->orient.x) + (sin_theta * meta_data->orient.z);
-	new_z = (-sin_theta * meta_data->orient.x) + (cos_theta * meta_data->orient.z);
+	new_x = (cos_theta * orientation->x) + (sin_theta * orientation->z);
+	new_z = (-sin_theta * orientation->x) + (cos_theta * orientation->z);
 	orientation->x = new_x;
 	orientation->z = new_z;
-	// print_vector("ori: ", &meta_data->orient);
-	// print_vector("new: ", orientation);
+	vec_normalise(orientation);
 }
 
-void	rotate_x(t_meta *meta_data, t_vector *orientation, double theta_x)
+void	rotate_x(t_vector *orientation, double theta_x)
 {
 	double	cos_theta;
 	double	sin_theta;
 	double	new_y;
 	double	new_z;
 
+	if (theta_x == 0)
+		return ;
 	cos_theta = cos(theta_x);
 	sin_theta = sin(theta_x);
-	new_y = (cos_theta * meta_data->orient.y) - (sin_theta * meta_data->orient.z);
-	new_z = (sin_theta * meta_data->orient.y) + (cos_theta * meta_data->orient.z);
+	new_y = (cos_theta * orientation->y) - (sin_theta * orientation->z);
+	new_z = (sin_theta * orientation->y) + (cos_theta * orientation->z);
 	orientation->y = new_y;
 	orientation->z = new_z;
-	// print_vector("ori: ", &meta_data->orient);
-	// print_vector("new: ", orientation);
+	vec_normalise(orientation);
 }
 
-void	rotate_z(t_meta *meta_data, t_vector *orientation, double theta_z)
+void	rotate_z(t_vector *orientation, double theta_z)
 {
 	double	cos_theta;
 	double	sin_theta;
 	double	new_x;
 	double	new_y;
 
+	if (theta_z == 0)
+		return ;
 	cos_theta = cos(theta_z);
 	sin_theta = sin(theta_z);
-	new_x = (cos_theta * meta_data->orient.x) - (sin_theta * meta_data->orient.y);
-	new_y = (sin_theta * meta_data->orient.x) + (cos_theta * meta_data->orient.y);
+	new_x = (cos_theta * orientation->x) - (sin_theta * orientation->y);
+	new_y = (sin_theta * orientation->x) + (cos_theta * orientation->y);
 	orientation->x = new_x;
 	orientation->y = new_y;
-	// print_vector("ori: ", &meta_data->orient);
-	// print_vector("new: ", orientation);
+	vec_normalise(orientation);
 }
 
 void	ft_rotation_status(t_meta *meta_data, int key, bool status)

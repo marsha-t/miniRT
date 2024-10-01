@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/07 18:47:25 by emaravil          #+#    #+#             */
-/*   Updated: 2024/08/07 18:51:48 by emaravil         ###   ########.fr       */
+/*   Created: 2024/10/01 16:20:51 by mateo             #+#    #+#             */
+/*   Updated: 2024/10/01 16:20:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	main(int argc, char **argv)
 	parse_data(&meta_data, argc, argv);
 	setup_handlesignal(&meta_data);
 	draw(&meta_data);
-	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, \
-		meta_data.img, 0, 0);
+	mlx_put_image_to_window(meta_data.mlx_ptr, meta_data.mlx_win, meta_data.img,
+		0, 0);
 	mlx_hook(meta_data.mlx_win, 2, 1L << 0, handle_keypress, &meta_data);
 	mlx_hook(meta_data.mlx_win, 3, 1L << 1, handle_keyrelease, &meta_data);
 	mlx_hook(meta_data.mlx_win, 17, 0, ft_close, &meta_data);
@@ -38,8 +38,9 @@ void	draw(t_meta *meta_data)
 {
 	if (meta_data->move == true)
 		ft_controls(meta_data);
-	if (meta_data->rotate == true && meta_data->obj_select != 1 && \
-		meta_data->obj_select != 5 && meta_data->obj_select != 6)
+	if (meta_data->rotate == true && meta_data->obj_select != 1
+		&& meta_data->obj_select != 5 && meta_data->obj_select != 6
+		&& meta_data->obj_select != 7)
 		rotation(meta_data);
 	prepare_data(meta_data);
 	gen_img(meta_data);
@@ -49,10 +50,10 @@ void	img_mlx_pixel_put(t_meta *meta_data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (!(x < 0 || y < 0 || x > WINDOW_WIDTH || y > WINDOW_HEIGHT))
+	if (!(x < 0 || y < 0 || x >= WINDOW_WIDTH || y >= WINDOW_HEIGHT))
 	{
-		dst = meta_data->addr + (y * meta_data->line_length + x * \
-			(meta_data->bits_per_pixel / 8));
+		dst = meta_data->addr + (y * meta_data->line_length + x
+				* (meta_data->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
 	}
 }
