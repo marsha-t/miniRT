@@ -2,9 +2,12 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_keys.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                                    +:+ +:+        
+	+:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+      
+	+#+        */
+/*                                                +#+#+#+#+#+  
+	+#+           */
 /*   Created: 2024/09/25 13:52:23 by emaravil          #+#    #+#             */
 /*   Updated: 2024/09/26 11:58:36 by marvin           ###   ########.fr       */
 /*                                                                            */
@@ -24,14 +27,11 @@ void	handle_signal(int signal, siginfo_t *siginfo, void *context)
 	printf("SIGINT %d captured. Exiting gracefully...\n", signal);
 	ft_close(meta_data);
 	exit(EXIT_SUCCESS);
-	// if (signal == SIGINT && meta_data != NULL)
-	// {
-	// }
 }
 
 void	setup_handlesignal(t_meta *meta_data)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handle_signal;

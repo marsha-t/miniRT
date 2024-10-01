@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 16:20:15 by mateo             #+#    #+#             */
-/*   Updated: 2024/10/01 16:20:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/01 16:41:28 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int	ft_close(t_meta *meta_data)
 {
 	mlx_destroy_window(meta_data->mlx_ptr, meta_data->mlx_win);
 	mlx_destroy_image(meta_data->mlx_ptr, meta_data->img);
-	// mlx_destroy_display(meta_data->mlx_ptr);
 	free(meta_data->mlx_ptr);
 	free_exit(meta_data);
 	exit(0);
