@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 07:58:38 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/27 17:25:29 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/01 16:16:55 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ void	prepare_img(t_meta *meta_data)
 	meta_data->img_height = meta_data->img_width / meta_data->aspect_ratio;
 	img_basis_vec(meta_data);
 	if (meta_data->rotate == true && meta_data->obj_select == 7)
-	{
 		rotate_camera_x(meta_data);
-	}
 }
 
 /*	img_basis_vec calculates the right and up vectors for image plane

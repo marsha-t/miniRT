@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 16:10:24 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/27 17:27:58 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/01 16:19:26 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,18 @@ void	rotate_camera_vectors(t_meta *meta_data)
 		&meta_data->img_right);
 	vec_normalise(&meta_data->img_up);
 }
+
 void	rotate_camera_x(t_meta *meta_data)
 {
 	if (meta_data->rot_x_i)
 	{
-		meta_data->pixel.cam_theta_x += 0.01;
+		meta_data->pixel.cam_theta_x += M_PI / 36;
 		if (meta_data->pixel.cam_theta_x < 0)
 			meta_data->pixel.cam_theta_x = 2 * M_PI;
 	}
 	if (meta_data->rot_x_d)
 	{
-		meta_data->pixel.cam_theta_x += -0.01;
+		meta_data->pixel.cam_theta_x -= M_PI / 36;
 		if (meta_data->pixel.cam_theta_x < 0)
 			meta_data->pixel.cam_theta_x = 2 * M_PI;
 	}
@@ -51,13 +52,13 @@ void	rotate_camera_y(t_meta *meta_data)
 {
 	if (meta_data->rot_y_i)
 	{
-		meta_data->pixel.cam_theta_y += 0.01;
+		meta_data->pixel.cam_theta_y += M_PI / 36;
 		if (meta_data->pixel.cam_theta_y < 0)
 			meta_data->pixel.cam_theta_y = 2 * M_PI;
 	}
 	if (meta_data->rot_y_d)
 	{
-		meta_data->pixel.cam_theta_y += -0.01;
+		meta_data->pixel.cam_theta_y -= M_PI / 36;
 		if (meta_data->pixel.cam_theta_y < 0)
 			meta_data->pixel.cam_theta_y = 2 * M_PI;
 	}
@@ -68,23 +69,22 @@ void	rotate_camera_z(t_meta *meta_data)
 {
 	if (meta_data->rot_z_i)
 	{
-		meta_data->pixel.cam_theta_z += 0.01;
+		meta_data->pixel.cam_theta_z += M_PI / 36;
 		if (meta_data->pixel.cam_theta_z > (2 * M_PI))
 			meta_data->pixel.cam_theta_z = 0;
 	}
 	if (meta_data->rot_z_d)
 	{
-		meta_data->pixel.cam_theta_z += -0.01;
+		meta_data->pixel.cam_theta_z -= M_PI / 36;
 		if (meta_data->pixel.cam_theta_y < 0)
 			meta_data->pixel.cam_theta_y = 2 * M_PI;
 	}
 	if (meta_data->rot_reset)
 	{
-		printf("pressed reset\n");
+		printf("RESET\n");
 		meta_data->pixel.cam_theta_x = 0;
 		meta_data->pixel.cam_theta_y = 0;
 		meta_data->pixel.cam_theta_z = 0;
 	}
 	rotate_camera_vectors(meta_data);
-
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   navigate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:51:15 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/25 19:53:28 by emaravil         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:19:37 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	navigate_cy(t_meta *meta_data, int key)
 		else
 			meta_data->obj = (void *)meta_data->cy;
 	}
-	navigate_cn(meta_data, key);
 }
 
 void	navigate_cn(t_meta *meta_data, int key)

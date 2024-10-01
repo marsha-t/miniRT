@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/27 17:10:26 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/01 16:19:32 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 		light components to get final colour for pixel */
 void	gen_img(t_meta *meta_data)
 {
-	int			x;
-	int			y;
-	int			count;
+	int	x;
+	int	y;
+	int	count;
 
 	y = 0;
 	while (y < WINDOW_HEIGHT)
@@ -42,7 +42,7 @@ void	gen_img(t_meta *meta_data)
 
 void	init_colours(t_meta *meta_data)
 {
-	int			count;
+	int	count;
 
 	count = 0;
 	if (meta_data->low_quality)
@@ -83,12 +83,14 @@ void	ray_dir(int i, int j, t_meta *meta_data)
 				/ (double)(WINDOW_WIDTH)) - 1) * (meta_data->img_width / 2)
 		* meta_data->aspect_ratio);
 	vec_add(&temp2, &meta_data->img_forward, &temp1);
-
 	vec_multiply_scalar(&temp1, &meta_data->img_up, (meta_data->img_width / 2)
 		* (1 - (2 * ((double)j + 0.5) / (double)WINDOW_HEIGHT)));
 	vec_add(&temp2, &temp2, &temp1);
 	vec_add(&pixel, &temp2, &meta_data->camera->coord);
 	vec_subtract(&meta_data->pixel.ray, &pixel, &meta_data->camera->coord);
-	meta_data->pixel.ray.z = FOCAL_LENGTH;
+	if (meta_data->img_forward.z < 0)
+		meta_data->pixel.ray.z = -1 * FOCAL_LENGTH;
+	else
+		meta_data->pixel.ray.z = FOCAL_LENGTH;
 	vec_normalise(&meta_data->pixel.ray);
 }

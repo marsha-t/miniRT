@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:39:56 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/27 17:25:25 by mateo            ###   ########.fr       */
+/*   Updated: 2024/09/27 18:08:40 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	rotate_y(t_vector *orientation, double theta_y)
 	new_z = (-sin_theta * orientation->x) + (cos_theta * orientation->z);
 	orientation->x = new_x;
 	orientation->z = new_z;
+	vec_normalise(orientation);
 }
 
 void	rotate_x(t_vector *orientation, double theta_x)
@@ -44,6 +45,7 @@ void	rotate_x(t_vector *orientation, double theta_x)
 	new_z = (sin_theta * orientation->y) + (cos_theta * orientation->z);
 	orientation->y = new_y;
 	orientation->z = new_z;
+	vec_normalise(orientation);
 }
 
 void	rotate_z(t_vector *orientation, double theta_z)
@@ -61,6 +63,7 @@ void	rotate_z(t_vector *orientation, double theta_z)
 	new_y = (sin_theta * orientation->x) + (cos_theta * orientation->y);
 	orientation->x = new_x;
 	orientation->y = new_y;
+	vec_normalise(orientation);
 }
 
 void	ft_rotation_status(t_meta *meta_data, int key, bool status)

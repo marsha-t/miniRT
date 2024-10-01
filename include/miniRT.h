@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/27 17:27:14 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/01 16:22:07 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 # define SF_CONE_BASE 7
 # define SQSIZE_FLAT 5
 
-# define WINDOW_WIDTH 1000
-# define WINDOW_HEIGHT 800
+# define WINDOW_WIDTH 300
+# define WINDOW_HEIGHT 300
 # define FOCAL_LENGTH 0.5
 # define LOW_RES 45
 # define MID_RES 22
@@ -517,7 +517,6 @@ void					prepare_cy(t_cy *start);
 void					prepare_cn(t_cn *start);
 
 // Rotate camera: rotation_camera.c
-// void	rotate_camera_vectors(t_meta *meta_data, double	theta, rotate_ft ft);
 void	rotate_camera_vectors(t_meta *meta_data);
 void	rotate_camera_x(t_meta *meta_data);
 void	rotate_camera_y(t_meta *meta_data);
