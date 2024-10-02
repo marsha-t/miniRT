@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 09:58:44 by mateo             #+#    #+#             */
-/*   Updated: 2024/10/02 12:11:27 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/02 12:24:21 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	ray_dir(int i, int j, t_meta *meta_data)
 	t_vector	temp1;
 	t_vector	temp2;
 	t_vector	pixel;
-	int			axis;
 
 	vec_multiply_scalar(&temp1, &meta_data->img_right, ((2 * ((double)i + 0.5)
 				/ (double)(WINDOW_WIDTH)) - 1) * (meta_data->img_width / 2)
@@ -89,7 +88,5 @@ void	ray_dir(int i, int j, t_meta *meta_data)
 	vec_add(&temp2, &temp2, &temp1);
 	vec_add(&pixel, &temp2, &meta_data->camera->coord);
 	vec_subtract(&meta_data->pixel.ray, &pixel, &meta_data->camera->coord);
-	axis = largest_component(meta_data->img_forward);
-	rejig_forward(meta_data, axis);
 	vec_normalise(&meta_data->pixel.ray);
 }

@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/10/02 12:11:51 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/02 12:41:46 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@
 # define SF_CONE_BASE 7
 # define SQSIZE_FLAT 5
 
-# define WINDOW_WIDTH 300
-# define WINDOW_HEIGHT 300
-# define FOCAL_LENGTH 0.5
+# define WINDOW_WIDTH 2000
+# define WINDOW_HEIGHT 1000
+# define FOCAL_LENGTH 1
 # define LOW_RES 45
 # define MID_RES 22
 # define HIGH_RES 5
