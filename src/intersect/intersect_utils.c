@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:03:25 by mateo             #+#    #+#             */
-/*   Updated: 2024/09/19 00:28:43 by marvin           ###   ########.fr       */
+/*   Updated: 2024/10/02 12:12:10 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,45 @@ void	get_ray_pt(t_vector *dest, t_vector *ray, t_vector *origin, double t)
 
 	vec_multiply_scalar(&temp, ray, t);
 	vec_add(dest, origin, &temp);
+}
+
+int	largest_component(t_vector vector)
+{
+	if (vector.x < 0)
+		vector.x *= -1;
+	if (vector.y < 0)
+		vector.y *= -1;
+	if (vector.z < 0)
+		vector.z *= -1;
+	if (vector.x > vector.y && vector.x > vector.z)
+		return (1);
+	else if (vector.y > vector.x && vector.y > vector.z)
+		return (2);
+	else
+		return (3);
+}
+
+void	rejig_forward(t_meta *meta_data, int axis)
+{
+	if (axis == 1)
+	{
+		if (meta_data->img_forward.x < 0)
+			meta_data->pixel.ray.x = -1 * FOCAL_LENGTH;
+		else
+			meta_data->pixel.ray.x = FOCAL_LENGTH;
+	}
+	else if (axis == 2)
+	{
+		if (meta_data->img_forward.y < 0)
+			meta_data->pixel.ray.y = -1 * FOCAL_LENGTH;
+		else
+			meta_data->pixel.ray.y = FOCAL_LENGTH;
+	}
+	else
+	{
+		if (meta_data->img_forward.z < 0)
+			meta_data->pixel.ray.z = -1 * FOCAL_LENGTH;
+		else
+			meta_data->pixel.ray.z = FOCAL_LENGTH;
+	}
 }

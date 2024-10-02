@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 15:04:13 by emaravil          #+#    #+#             */
-/*   Updated: 2024/10/01 16:41:03 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/02 12:11:51 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -580,6 +580,8 @@ t_vector				get_cn_curve_normal(t_pixel *pixel, t_cn *cone);
 double					quadratic_formula(double a, double b, double c);
 void					get_ray_pt(t_vector *dest, t_vector *ray,
 							t_vector *origin, double t);
+int						largest_component(t_vector vector);
+void					rejig_forward(t_meta *meta_data, int axis);
 
 // Calculate final colour at intersection: final_colour.c
 void					gen_final_colour(t_meta *meta_data);

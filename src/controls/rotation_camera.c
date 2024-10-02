@@ -6,7 +6,7 @@
 /*   By: mateo <mateo@student.42abudhabi.ae>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 16:10:24 by mateo             #+#    #+#             */
-/*   Updated: 2024/10/01 16:19:26 by mateo            ###   ########.fr       */
+/*   Updated: 2024/10/02 11:58:47 by mateo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,5 @@ void	rotate_camera_z(t_meta *meta_data)
 		meta_data->pixel.cam_theta_z = 0;
 	}
 	rotate_camera_vectors(meta_data);
+	print_vector("forward: ", &meta_data->img_forward);
 }
