@@ -30,7 +30,7 @@ void	ft_check_args(int argc, char **argv)
 		ft_putendl_fd(RED"\tNo .rt extension..."RST, 2);
 		exit(EXIT_FAILURE);
 	}
-	if (ft_strncmp(extnsn, ".rt", 3) && ft_strlen(extnsn) != 3)
+	if (ft_strncmp(extnsn, ".rt", 3) == 0 && ft_strlen(extnsn) != 3)
 	{
 		ft_putendl_fd(RED"\tWrong extension (no .rt extension)"RST, 2);
 		exit(EXIT_FAILURE);
