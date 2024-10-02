@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: emaravil <emaravil@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 13:47:33 by emaravil          #+#    #+#             */
-/*   Updated: 2024/09/26 11:22:19 by marvin           ###   ########.fr       */
+/*   Updated: 2024/10/02 12:07:50 by emaravil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	parse_data(t_meta *meta_data, int argc, char **argv)
 	ft_printf(M"PARSING DATA  ...\t\t OK\n"RST);
 	if (!meta_data->camera_allocated)
 	{
-		free_exit(meta_data);
 		printf(RED"No camera allocated!\n"RST);
 		exit(EXIT_FAILURE);
 	}
